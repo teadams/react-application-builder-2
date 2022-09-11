@@ -4,6 +4,7 @@
 /node_modules
 /.pnp
 .pnp.js
+                                               
 
 # testing
 /coverage
@@ -35,5 +36,7 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+
 # custom
 *sudoku
+**/docs/**
