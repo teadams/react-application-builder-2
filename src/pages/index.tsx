@@ -1,7 +1,7 @@
-import type { NextPage } from 'next'
-import Head from 'next/head'
-import styles from '../../styles/Home.module.css'
-import {Cell}  from "../sudoku/components"
+import type { NextPage } from "next";
+import Head from "next/head";
+import styles from "../../styles/Home.module.css";
+import { PlayBoard } from "../sudoku/components";
 
 const Home: NextPage = () => {
   return (
@@ -13,19 +13,16 @@ const Home: NextPage = () => {
       </Head>
 
       <main className={styles.main}>
-        <h1 className={styles.title}>
-          <Cell ></Cell>
-        </h1>
+        <h1 className={styles.title}></h1>
 
         <div className={styles.grid}>
-  
+          <PlayBoard rows={9} columns={9}></PlayBoard>
         </div>
       </main>
 
-      <footer className={styles.footer}>
-      </footer>
+      <footer className={styles.footer}></footer>
     </div>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;

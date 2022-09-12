@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "doc": "npx typedoc --entryPointStrategy expand --out public/docs /Users/tracy/programming/react-application-builder-2/src",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
