@@ -16,9 +16,8 @@ export const AcsMetaContextProvider = (props: any) => {
       setAcsMetaModel(acsMetaModel);
     };
     fetchMetaData().catch(console.error);
-    // TODO Cleaup
   }, []);
-  if (acsMetaModel) {
+  if (!acsMetaModel) {
     return null;
   } else {
     return (

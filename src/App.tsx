@@ -4,11 +4,7 @@ import React from "react";
 import AcsMetaContextProvider from "./contextProviders/AcsMetaContextProvider";
 
 function AcsApp(props) {
-  return (
-    <AcsMetaContextProvider>
-      This is a test {props.children}
-    </AcsMetaContextProvider>
-  );
+  return <AcsMetaContextProvider>{props.children}</AcsMetaContextProvider>;
 }
 
 export default AcsApp;
