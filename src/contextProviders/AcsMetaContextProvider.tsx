@@ -17,15 +17,12 @@ export const AcsMetaContextProvider = (props: any) => {
     };
     fetchMetaData().catch(console.error);
   }, []);
-  if (!acsMetaModel) {
-    return null;
-  } else {
-    return (
-      <AcsMetaContext.Provider value={acsMetaModel}>
-        {props.children}
-      </AcsMetaContext.Provider>
-    );
-  }
+
+  return (
+    <AcsMetaContext.Provider value={acsMetaModel}>
+      {props.children}
+    </AcsMetaContext.Provider>
+  );
 };
 
 export default AcsMetaContextProvider;
