@@ -1,26 +1,26 @@
 import "react-app-polyfill/ie9";
 import "react-app-polyfill/stable";
 import React from "react";
-import { QueryClient, QueryClientProvider, QueryFunction } from "react-query";
-import AcsMetaContextProvider from "./contextProviders/AcsMetaContextProvider";
-
 import {
-  useQuery,
-  useMutation,
-  useQueryClient,
   QueryClient,
   QueryClientProvider,
+  QueryFunction,
   QueryFunctionContext,
+  useQuery,
 } from "react-query";
+import AcsMetaContextProvider from "./contextProviders/AcsMetaContextProvider";
 
 const getObjectType = (queryFunctionContext: QueryFunctionContext) => {
   const { queryKey } = queryFunctionContext;
-  console.log(queryKey);
+  const [objectType, filters] = queryKey;
+  console.log(objectType);
+  console.log(filters);
 };
 
+// objectType, {id: 1}
 const TestQuery = (props: { objectType: string }) => {
   const { objectType } = props;
-  const { data } = useQuery([objectType], getObjectType);
+  const { data } = useQuery([objectType, { id: 1 }], getObjectType);
 };
 
 // Write getObject
@@ -34,7 +34,7 @@ function AcsApp(props) {
   return (
     <AcsMetaContextProvider>
       <QueryClientProvider client={queryClient}>
-        <TestQuery />
+        <TestQuery objectType="jobStages" />
         {props.children}
       </QueryClientProvider>
     </AcsMetaContextProvider>
