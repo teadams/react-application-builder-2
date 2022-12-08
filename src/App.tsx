@@ -1,32 +1,19 @@
 import "react-app-polyfill/ie9";
 import "react-app-polyfill/stable";
 import React from "react";
-import {
-  QueryClient,
-  QueryClientProvider,
-  QueryFunction,
-  QueryFunctionContext,
-  useQuery,
-} from "react-query";
-import AcsMetaContextProvider from "./contextProviders/AcsMetaContextProvider";
+import { QueryClient, QueryClientProvider } from "react-query";
 
-const getObjectType = (queryFunctionContext: QueryFunctionContext) => {
-  const { queryKey } = queryFunctionContext;
-  const [objectType, filters] = queryKey;
-  console.log(objectType);
-  console.log(filters);
-};
+import { AcsMetaContextProvider } from "./contextProviders";
+import { useGetObjectDataById } from "./hooks";
 
-// objectType, {id: 1}
 const TestQuery = (props: { objectType: string }) => {
   const { objectType } = props;
-  const { data } = useQuery([objectType, { id: 1 }], getObjectType);
+  const { data } = useGetObjectDataById(
+    objectType,
+    "a518aa59-8256-41e3-b4df-51de10cd74df"
+  );
+  console.log(data);
 };
-
-// Write getObject
-// Look up parateters to use query
-// Decide on the parameters to getRemote
-//    ojbectType, id, get
 
 const queryClient = new QueryClient();
 

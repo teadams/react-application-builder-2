@@ -5,7 +5,7 @@ import { ACSObjectType } from "../types";
 import * as u from "./utils";
 
 type APIMethod = "GET" | "POST" | "PUT" | "DELETE";
-type ACSApiParam = "acsCount" | "acsMax";
+type ACSApiParam = "acsCount" | "acsMax" | unknown;
 interface API {
   path?: string;
   params?: { [index in ACSApiParam]?: unknown };
@@ -52,13 +52,13 @@ export async function callAPI({
 
   // TODO :  add env instuctions
   const domain = process.env.NEXT_PUBLIC_API_LOCATION;
-  console.log("THIS IS THE DOMAIN");
-  console.log(domain);
+  // Temp until dev environments are hooked together
+  if (!domain) return null;
 
   // TODO: params
   // TODO: jwt token
+  console.log("starting query");
   console.log("path is " + path);
-  console.log("domain is " + domain);
 
   const apiResult = await axios({
     method: method,
