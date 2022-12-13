@@ -8,7 +8,7 @@ type APIMethod = "GET" | "POST" | "PUT" | "DELETE";
 type ACSApiParam = "acsCount" | "acsMax" | unknown;
 interface API {
   path?: string;
-  params?: { [index in ACSApiParam]?: unknown };
+  params?: { [index: string]: unknown };
   data?: { [index: string]: unknown };
   method?: APIMethod;
 }
