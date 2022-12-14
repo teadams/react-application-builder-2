@@ -1,6 +1,5 @@
 import "react-app-polyfill/ie9";
 import "react-app-polyfill/stable";
-import { QueryFunctionContext } from "react-query";
 import { ACSMetaModel } from "../types";
 import * as api from "./api";
 
