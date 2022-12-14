@@ -26,7 +26,7 @@ export const getObjectDataById = async (
 ): Promise<unknown> => {
   const apiResult = await getObjectData(acsMeta, objectType, { id }, filters);
 
-  return apiResult;
+  return apiResult[0];
 };
 
 export default { getObjectData };
