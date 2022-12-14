@@ -10,9 +10,9 @@ export const getObjectData = async (
   filters: { [index: string]: unknown } = {}
 ): Promise<unknown> => {
   // TODO incorporate params
+  console.log("params is " + params);
   const path = "acs/" + objectType;
   const apiResult = await api.callAPI({ path, params });
-  console.log("api result is");
   console.log(apiResult);
 
   return apiResult;
