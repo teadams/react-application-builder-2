@@ -13,7 +13,6 @@ export const getObjectData = async (
   console.log("params is " + params);
   const path = "acs/" + objectType;
   const apiResult = await api.callAPI({ path, params });
-  console.log(apiResult);
 
   return apiResult;
 };
@@ -25,7 +24,6 @@ export const getObjectDataById = async (
   filters: { [index: string]: unknown } = {}
 ): Promise<unknown> => {
   const apiResult = await getObjectData(acsMeta, objectType, { id }, filters);
-
   return apiResult[0];
 };
 
