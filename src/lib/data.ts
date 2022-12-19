@@ -24,7 +24,7 @@ export const getObjectDataById = async (
   filters: { [index: string]: unknown } = {}
 ): Promise<unknown> => {
   const apiResult = await getObjectData(acsMeta, objectType, { id }, filters);
-  return apiResult[0];
+  return apiResult;
 };
 
 export default { getObjectData };
