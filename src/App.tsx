@@ -7,7 +7,7 @@ import { AcsMetaContextProvider } from "./contextProviders";
 
 const queryClient = new QueryClient();
 
-function AcsApp(props) {
+function AcsApp(props: any) {
   return (
     <AcsMetaContextProvider>
       <QueryClientProvider client={queryClient}>
