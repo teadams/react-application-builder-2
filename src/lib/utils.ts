@@ -41,8 +41,8 @@ export function aa(...params) {
   if (params.length > 1) {
     params = params.slice(1);
   }
-  let { alert_text, i, var_name, var_alert } = {
-    alert_text: [],
+  const alert_text = [];
+  let { i, var_name, var_alert } = {
     i: 0,
     var_name: "",
     var_alert: "",
