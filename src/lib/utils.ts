@@ -7,7 +7,7 @@ export function capitalize(string) {
 
 export function isEmptyObject(object) {
   if (object) {
-    for (var key in object) {
+    for (const key in object) {
       if (hasOwnProperty.call(object, key)) return false;
     }
   }
@@ -19,10 +19,9 @@ export function a(...params) {
   if (params.length === 0) {
     return;
   }
-  let { alert_text, i, var_name, var_alert } = {
-    alert_text: [],
+  const alert_text = [];
+  let { i, var_alert } = {
     i: 0,
-    var_name: "",
     var_alert: "",
   };
   for (i in params) {
