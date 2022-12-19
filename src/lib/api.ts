@@ -76,11 +76,11 @@ export async function callAPI({
   // TODO link in correct error handling
   if (apiResult) {
     if (apiResult.data.status === "validationError") {
-      u.a("Validation Error", apiResult.data.validation_errors);
+      //u.a("Validation Error", apiResult.data.validation_errors);
     }
     if (apiResult.data.status === "error") {
       if (apiResult.data.validation_errors) {
-        u.a("Validation Error", apiResult.data.validation_errors);
+        //u.a("Validation Error", apiResult.data.validation_errors);
       }
       // TODO handle this differently?
       if (apiResult.data.authorization_errors) {
