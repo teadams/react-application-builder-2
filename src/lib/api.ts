@@ -73,7 +73,7 @@ export async function callAPI({
      data: ${dataStr}`;
     alert(error_prompt + error.message + " " + error.stack);
   });
-  // TODO link in correct error handling
+  // TODO user friendly correct error handling
   if (apiResult) {
     if (apiResult.data.status === "validationError") {
       //u.a("Validation Error", apiResult.data.validation_errors);
@@ -82,7 +82,8 @@ export async function callAPI({
       if (apiResult.data.validation_errors) {
         //u.a("Validation Error", apiResult.data.validation_errors);
       }
-      // TODO handle this differently?
+      // The login is incorrect
+      // Log the user out and retry without login
       if (apiResult.data.authorization_errors) {
         localStorage.removeItem("user");
         //** Authorization failed. Call the same API with no username */
