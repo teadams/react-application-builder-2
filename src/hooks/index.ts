@@ -1,3 +1,3 @@
 export * from "./useGetAcsMeta";
-export * from "./useGetObjectDataById";
-export * from "./useGetObjectTypeData";
+export * from "./useGetDataById";
+export * from "./useGetData";

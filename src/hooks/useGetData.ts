@@ -4,7 +4,7 @@ import { useGetAcsMeta } from ".";
 import { getObjectData } from "../lib/data";
 import { ACSMetaModel } from "../types";
 
-export const useGetObjectTypeData = (objectType: string) => {
+export const useGetData = (objectType: string) => {
   const acsMeta = useGetAcsMeta();
   return useQuery(
     [objectType],
@@ -17,4 +17,4 @@ export const useGetObjectTypeData = (objectType: string) => {
   );
 };
 
-export default useGetObjectTypeData;
+export default useGetData;
