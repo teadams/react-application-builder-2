@@ -27,4 +27,16 @@ export const getObjectDataById = async (
   return apiResult;
 };
 
+
+export const deleteObjectDataById = async (
+  acsMeta: ACSMetaModel,
+  objectType: string,
+  id: unknown,
+): Promise<unknown> => {
+  const path = "acs/" + objectType + "/" + id;
+  const method = "DELETE"
+  const apiResult = await api.callAPI({ path ,method });
+  return apiResult;
+};
+
 export default { getObjectData };
