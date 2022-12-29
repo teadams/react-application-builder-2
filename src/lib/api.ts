@@ -12,6 +12,15 @@ interface API {
   method?: APIMethod;
 }
 
+const getHeaders = () => {
+  const jwtToken = JSON.parse(localStorage.getItem("user") as string);
+  let authHeader;
+  if (jwtToken) {
+    authHeader = { "x-access-token": jwtToken };
+  }
+  return authHeader;
+};
+
 export async function callAPI({
   path = "",
   params = {},
@@ -55,16 +64,13 @@ export async function callAPI({
   if (!domain) return null;
 
   // TODO: params
-  // TODO: jwt token
-  console.log("starting query");
-  console.log("path is " + path);
 
   const apiResult = await axios({
     method: method,
     url: `${domain}/${path}`,
     data: data,
     params: params,
-    //headers: auth_header,
+    headers: getHeaders(),
   }).catch((error) => {
     const paramStr = JSON.stringify(params);
     const dataStr = JSON.stringify(data);
@@ -91,10 +97,6 @@ export async function callAPI({
       }
       data = {};
     } else {
-      if (apiResult.data.jwt_token) {
-        //** New user session */
-        localStorage.setItem("user", JSON.stringify(apiResult.data.jwt_token));
-      }
       data = apiResult.data;
     }
   }

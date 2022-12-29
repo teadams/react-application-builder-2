@@ -3,17 +3,22 @@ import "react-app-polyfill/stable";
 import React from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 
-import { AcsMetaContextProvider } from "./contextProviders";
+import {
+  AcsMetaContextProvider,
+  AcsAuthContextProvider,
+} from "./contextProviders";
 
 const queryClient = new QueryClient();
 
 function AcsApp(props: any) {
   return (
-    <AcsMetaContextProvider>
-      <QueryClientProvider client={queryClient}>
-        {props.children}
-      </QueryClientProvider>
-    </AcsMetaContextProvider>
+    <AcsAuthContextProvider>
+      <AcsMetaContextProvider>
+        <QueryClientProvider client={queryClient}>
+          {props.children}
+        </QueryClientProvider>
+      </AcsMetaContextProvider>
+    </AcsAuthContextProvider>
   );
 }
 
