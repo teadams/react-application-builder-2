@@ -60,8 +60,7 @@ export async function callAPI({
 
   // TODO :  add env instuctions
   const domain = process.env.NEXT_PUBLIC_API_LOCATION;
-  console.log("DOMAIN");
-  console.log(domain);
+
   // Temp until dev environments are hooked together
   if (!domain) return null;
 

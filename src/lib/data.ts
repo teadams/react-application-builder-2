@@ -51,4 +51,9 @@ export const updateObjectDataById = async (
   return apiResult;
 };
 
-export default { getObjectData };
+export default {
+  getObjectData,
+  getObjectDataById,
+  updateObjectDataById,
+  deleteObjectDataById,
+};
