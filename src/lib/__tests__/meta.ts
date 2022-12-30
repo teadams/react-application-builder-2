@@ -3,9 +3,11 @@
 import AcsMetaContext from "../../contextProviders/AcsMetaContext";
 import meta from "../meta";
 
-describe("Validating  Testing Framework  ", () => {
-  test("Get Meta", () => {
-    const acsMetaData = meta.load("all");
-    console.log(meta);
+describe("Meta Data  ", () => {
+  test("Get Meta", async () => {
+    const acsMetaData = await meta.load("all");
+    console.log(JSON.stringify(acsMetaData.objectTypes.acsTest));
+    const acsTestObjectType = acsMetaData.objectTypes.acsTest;
+    expect(acsTestObjectType.prettyName).toBe("Testing");
   });
 });

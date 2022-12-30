@@ -10,7 +10,7 @@ export const getObjectData = async (
   filters: { [index: string]: unknown } = {}
 ): Promise<unknown> => {
   // TODO incorporate params
-  console.log("params is " + params);
+
   const path = "acs/" + objectType;
   const apiResult = await api.callAPI({ path, params });
 
@@ -27,27 +27,25 @@ export const getObjectDataById = async (
   return apiResult;
 };
 
-
 export const deleteObjectDataById = async (
   acsMeta: ACSMetaModel,
   objectType: string,
-  id: unknown,
+  id: unknown
 ): Promise<unknown> => {
   const path = "acs/" + objectType + "/" + id;
-  const method = "DELETE"
-  const apiResult = await api.callAPI({ path ,method });
+  const method = "DELETE";
+  const apiResult = await api.callAPI({ path, method });
   return apiResult;
 };
-
 
 export const updateObjectDataById = async (
   acsMeta: ACSMetaModel,
   objectType: string,
   id: unknown,
-  objectTypeFields:object
+  objectTypeFields: object
 ): Promise<unknown> => {
   const path = "acs/" + objectType + "/" + id;
-  const params = {...objectTypeFields};
+  const params = { ...objectTypeFields };
   const method = "PUT";
   const apiResult = await api.callAPI({ path, params, method });
   return apiResult;
