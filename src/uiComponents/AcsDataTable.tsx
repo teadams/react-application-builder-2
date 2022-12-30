@@ -1,13 +1,13 @@
 import moment from "moment";
-import { useEffect, useState } from "react";
-import DataTable from "react-data-table-component";
 import { toast } from "react-toastify";
-import close from '../../public/img/close.png';
-import { useGetAcsMeta } from "../acs_enterprise_core/src/hooks";
-import { deleteObjectDataById } from "../acs_enterprise_core/src/lib/data";
-import { ACSMetaModel } from "../acs_enterprise_core/src/types";
+import { ACSMetaModel } from "../types";
+import { useGetAcsMeta } from "../hooks";
+import { useCallback, useEffect, useState } from "react";
+import DataTable from "react-data-table-component";
+import { deleteObjectDataById } from "../lib/data";
 import AcsDataTableEditModal from "./AcsDataTableEditModal";
-import edit from '../../public/img/edit.png';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faXmark , faPenToSquare} from '@fortawesome/free-solid-svg-icons'
 
 
 type acsObjectInterface = {
@@ -70,9 +70,7 @@ const AcsDataTable = ({ data, title , objectTypeFields,objectType }: any) => {
     getCustomColumns(allData ,objectTypeFields);
   }, [allData]);
 
-  const hideEditModal = () =>{
-    setShowEditModalForAField({});
-  }
+  const hideEditModal = useCallback(() => setShowEditModalForAField({}),[]);
 
   const deleteRow = async(id:string) =>{
      const result =  await deleteObjectDataById(acsMeta as ACSMetaModel, objectType as string, id);
@@ -82,6 +80,7 @@ const AcsDataTable = ({ data, title , objectTypeFields,objectType }: any) => {
        className:"text-sm"
      });
   }
+
 
   const columnCmp = (value:string, rowId:object, objectTypeFieldMeta:object,objectTypeFields:any) =>{
     let object = {
@@ -99,7 +98,7 @@ const AcsDataTable = ({ data, title , objectTypeFields,objectType }: any) => {
   // get custom (names/header cells) for data table
   const getCustomColumns = (data: Array<object>,objectTypeFields: Array<object>) => {
     const singleData:acsObjectInterface = data[0];
-    if(singleData){
+    if(objectTypeFields){
       const customColumns:Array<object> =  Object.keys(objectTypeFields).map((field) => {        
         const objectTypeFieldMeta:acsObjectInterface = objectTypeFields[field as unknown as number];
         const fieldPrettyName = objectTypeFieldMeta.prettyName;
@@ -113,31 +112,29 @@ const AcsDataTable = ({ data, title , objectTypeFields,objectType }: any) => {
         return columnObject;
       });
 
-      const deleteRowColumn = {
-        name:"",
-        width: "30px", 
-        selector: (row:any) => <img className="w-3 h-3 object-contain" src={close.src} alt="close icon" onClick={() => deleteRow(row.id) } />
-      }
-      customColumns.unshift(deleteRowColumn);
+        const actionsColumn = {
+          name:"Actions",
+          width: "100px", 
+          selector: (row:any) =>{
+            let object = {
+              value:"",
+              objectTypeFieldMeta:{},
+              objectTypeFields:objectTypeFields,
+              editRow:true,
+              rowId:row["id"],
+              allData:data
+            }
 
-      const editRowColumn = {
-        name:"",
-        width: "30px", 
-        selector: (row:any) => {
-          let object = {
-            value:"",
-            objectTypeFieldMeta:{},
-            objectTypeFields:objectTypeFields,
-            editRow:true,
-            rowId:row["id"],
-            allData:data
+            return(
+              <div className="flex items-center">
+               <FontAwesomeIcon icon={faXmark} style={{color:"#eb0808"}} className="h-5" onClick={() => deleteRow(row.id) }/>
+               <FontAwesomeIcon icon={faPenToSquare} style={{color:"#302b2bd4"}} className="h-4 mx-4" onClick={() => setShowEditModalForAField(object)} />
+              </div>
+            )
           }
-
-          return <img className="w-3 h-3 object-contain" src={edit.src} alt="close icon" onClick={() => setShowEditModalForAField(object) } />
         }
-      }
-      customColumns.unshift(editRowColumn);
 
+      customColumns.unshift(actionsColumn);
       setColumns(customColumns);
     }else{
       return []

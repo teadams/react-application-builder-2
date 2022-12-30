@@ -1,19 +1,23 @@
 import React from 'react';
-import { useForm } from 'react-hook-form';
-import EditRowForm from './EditRowForm';
-import EditSingleFieldForm from './EditSingleFieldForm';
-import { updateObjectDataById } from '../acs_enterprise_core/src/lib/data';
-import { ACSMetaModel } from '../acs_enterprise_core/src/types';
-import { useGetAcsMeta } from '../acs_enterprise_core/src/hooks';
 import { toast } from 'react-toastify';
+import { ACSMetaModel } from '../types';
+import EditRowForm from './EditRowForm';
+import { useGetAcsMeta } from '../hooks';
+import { useForm } from 'react-hook-form';
+import { updateObjectDataById } from '../lib/data';
+import EditSingleFieldForm from './EditSingleFieldForm';
+
+type objectTypeFieldMetaInterface = {
+  [key: string]: any;
+};
 
 interface dataProp {
-  value:string,
-  objectTypeFieldMeta:object,
-  objectTypeFields:object,
-  editRow:boolean,
-  rowId:string,
-  allData:object
+  value?:string,
+  objectTypeFieldMeta?:objectTypeFieldMetaInterface,
+  objectTypeFields?:object,
+  editRow?:boolean,
+  rowId?:string,
+  allData?:object
 }
 
 interface modalProps {
@@ -39,7 +43,6 @@ const AcsDataTableEditModal = (
       data?.rowId,
       {...formData}
     );    
-    console.log("response",response);
     toast.success("Record Successfully Updated",{
       className:"text-sm"
     });

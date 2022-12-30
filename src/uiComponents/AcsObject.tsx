@@ -5,7 +5,7 @@ import React  from "react";
 import {
   useGetDataById,
   useGetAcsMetaObjectType,
-} from "../acs_enterprise_core/src/hooks";
+} from "../hooks";
 import moment from 'moment';
 
 export const AcsObject = ({
@@ -42,12 +42,12 @@ export const AcsObject = ({
                   {
                   (data && objectTypeFields)
                   ?
-                  Object.keys(objectTypeFields).map((field) => {
+                  Object.keys(objectTypeFields).map((field:any , index:number) => {
                     const objectTypeFieldMeta = objectTypeFields[field];
                     const fieldPrettyName = objectTypeFieldMeta.prettyName;
                     const fieldValue = data[field];
                     return (
-                      <tr className="bg-white border-b">
+                      <tr className="bg-white border-b" key={index}>
                         <td
                           className="text-dark px-6 py-4 whitespace-nowrap font-medium text-sm border"
                           style={{ width: "10%" }}

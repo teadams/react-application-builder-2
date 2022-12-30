@@ -2,7 +2,7 @@ import React from "react";
 import {
   useGetData,
   useGetAcsMetaObjectType,
-} from "../acs_enterprise_core/src/hooks";
+} from "../hooks";
 import AcsDataTable from "./AcsDataTable";
 
 
@@ -11,7 +11,7 @@ export const AcsObjectType = ({ objectType }: { objectType: string }) => {
   const { data }  = useGetData(objectType);
   if (!data || !objectTypeMeta || !objectType) {
     return null;
-  }
+  }  
 
   const objectTypeFields = objectTypeMeta.fields;
 
