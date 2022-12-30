@@ -39,4 +39,18 @@ export const deleteObjectDataById = async (
   return apiResult;
 };
 
+
+export const updateObjectDataById = async (
+  acsMeta: ACSMetaModel,
+  objectType: string,
+  id: unknown,
+  objectTypeFields:object
+): Promise<unknown> => {
+  const path = "acs/" + objectType + "/" + id;
+  const params = {...objectTypeFields};
+  const method = "PUT";
+  const apiResult = await api.callAPI({ path, params, method });
+  return apiResult;
+};
+
 export default { getObjectData };
