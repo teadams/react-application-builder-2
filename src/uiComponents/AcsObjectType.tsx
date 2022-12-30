@@ -1,0 +1,25 @@
+import React from "react";
+import {
+  useGetData,
+  useGetAcsMetaObjectType,
+} from "../acs_enterprise_core/src/hooks";
+import AcsDataTable from "./AcsDataTable";
+
+
+export const AcsObjectType = ({ objectType }: { objectType: string }) => {
+  const objectTypeMeta = useGetAcsMetaObjectType(objectType);
+  const { data }  = useGetData(objectType);
+  if (!data || !objectTypeMeta || !objectType) {
+    return null;
+  }
+
+  const objectTypeFields = objectTypeMeta.fields;
+
+  return (
+    <div>
+      <AcsDataTable data={data} title={objectTypeMeta?.prettyPlural} objectTypeFields={objectTypeFields} objectType={objectType} />
+    </div>
+  );
+};
+
+export default AcsObjectType;
