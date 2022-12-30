@@ -13,7 +13,7 @@ interface API {
 }
 
 const getHeaders = () => {
-  const jwtToken = JSON.parse(localStorage.getItem("user") as string);
+  const jwtToken = JSON.parse(window.localStorage.getItem("user") as string);
   let authHeader;
   if (jwtToken) {
     authHeader = { "x-access-token": jwtToken };
@@ -91,7 +91,7 @@ export async function callAPI({
       // The login is incorrect
       // Log the user out and retry without login
       if (apiResult.data.authorization_errors) {
-        localStorage.removeItem("user");
+        window.localStorage.removeItem("user");
         //** Authorization failed. Call the same API with no username */
         return callAPI({ path, params, data, method });
       }
