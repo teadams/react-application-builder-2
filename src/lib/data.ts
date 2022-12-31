@@ -9,10 +9,14 @@ export const getObjectData = async (
   params: { [index: string]: unknown } = {},
   filters: { [index: string]: unknown } = {}
 ): Promise<unknown> => {
-  // TODO incorporate params
-
-  const path = "acs/" + objectType;
-  const apiResult = await api.callAPI({ path, params });
+  let apiResult;
+  if (process.env.NEXT_PUBLIC_DATA_FOLDER) {
+    const filePath = `../../../${process.env.NEXT_PUBLIC_DATA_FOLDER}/${objectType}.json`;
+    apiResult = require(filePath);
+  } else {
+    const path = "acs/" + objectType;
+    apiResult = await api.callAPI({ path, params });
+  }
 
   return apiResult;
 };
