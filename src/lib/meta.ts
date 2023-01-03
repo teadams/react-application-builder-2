@@ -6,9 +6,8 @@ import * as api from "./api";
 
 export async function load(type = "all"): Promise<ACSMetaModel> {
   let metaResult;
-  if (process.env.NEXT_PUBLIC_META_FOLDER) {
-    const filePath = `../../../${process.env.NEXT_PUBLIC_META_FOLDER}/meta.json`;
-    metaResult = require(filePath);
+  if (process.env.NEXT_PUBLIC_LOCAL_META) {
+    metaResult = require(`../../../meta/meta.json`);
   } else {
     const path = "acs/acsMeta/" + type;
     metaResult = await api.callAPI({ path });
