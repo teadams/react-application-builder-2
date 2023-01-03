@@ -3,7 +3,7 @@
 // Copyright © 2019-2023 ACSPropel and Tracy Adams. All rights reserved.
 
 export interface ACSAuthContext {
-  userId?: number;
+  userId?: number | string;
   user?: { [key: string]: unknown };
   logout?: () => void;
   login?: (acsUserAuthContext: { [key: string]: unknown }) => void;

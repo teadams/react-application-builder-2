@@ -1,24 +1,16 @@
 import React from 'react';
-import { useForm } from 'react-hook-form';
-import EditRowForm from './EditRowForm';
-import EditSingleFieldForm from './EditSingleFieldForm';
-import { updateObjectDataById } from '../acs_enterprise_core/src/lib/data';
-import { ACSMetaModel } from '../acs_enterprise_core/src/types';
-import { useGetAcsMeta } from '../acs_enterprise_core/src/hooks';
 import { toast } from 'react-toastify';
-
-interface dataProp {
-  value:string,
-  objectTypeFieldMeta:object,
-  objectTypeFields:object,
-  editRow:boolean,
-  rowId:string,
-  allData:object
-}
+import { ACSMetaModel } from '../types';
+import { useGetAcsMeta } from '../hooks';
+import { useForm } from 'react-hook-form';
+import { updateObjectDataById } from '../lib/data';
+import EditSingleFieldForm from './EditSingleFieldForm';
+import EditRowForm from './EditRowForm';
+import { dataObjectForEditInterface } from '../types/ACSobjectTypesForUI';
 
 interface modalProps {
-	data: dataProp;
-	hideEditModal:Function;
+	data: dataObjectForEditInterface;
+	hideEditModal:any;
   objectType:string
 }
 
@@ -31,15 +23,14 @@ const AcsDataTableEditModal = (
 ) => {  
   
   const acsMeta = useGetAcsMeta();
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { register, handleSubmit } = useForm();
   const onSubmit = async(formData:any) =>{
-    const response = await updateObjectDataById(
+    await updateObjectDataById(
       acsMeta as ACSMetaModel,
       objectType as string,
       data?.rowId,
       {...formData}
     );    
-    console.log("response",response);
     toast.success("Record Successfully Updated",{
       className:"text-sm"
     });

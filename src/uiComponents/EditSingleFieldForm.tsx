@@ -1,18 +1,12 @@
 import React from 'react'
 import { TextBox } from './formFields'
+import { EditFormPropsInterface } from '../types/ACSobjectTypesForUI';
 
-interface EditSingleFieldFormProps {
-  register:object;
-  data:object
-}
-
-
-const EditSingleFieldForm = ({ register, data}:EditSingleFieldFormProps) => { 
-  const {prettyName , dataType} = data?.objectTypeFieldMeta;
+const EditSingleFieldForm = ({ register, data}:EditFormPropsInterface) => { 
   return (
     <TextBox 
-      type={dataType}
-      label={prettyName} 
+      type={data.objectTypeFieldMeta?.dataType}
+      label={data.objectTypeFieldMeta?.prettyName} 
       value={data?.value} 
       register={register}
     />
