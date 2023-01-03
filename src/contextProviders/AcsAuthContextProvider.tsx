@@ -1,16 +1,23 @@
 import React, { useState, useEffect } from "react";
-import { ACSAuthContext } from "../types";
 import AcsAuthContext from "./AcsAuthContext";
+import { useGetData } from "../hooks";
 
 export const AcsAuthContextProvider = (props: any) => {
   const [user, setUser] = useState({});
   const [userId, setUserId] = useState("");
+
+  const tenantSetup: { [index: string]: unknown } = {};
+  const { data = [] } = useGetData("acsTenantSetup");
+  for (const row of data) {
+    tenantSetup[row.parameter as string] = row.value;
+  }
 
   return (
     <AcsAuthContext.Provider
       value={{
         userId: userId,
         user: user,
+        tenantSetup: tenantSetup,
         logout: () => {
           localStorage.removeItem("user");
           setUser({});

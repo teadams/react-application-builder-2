@@ -12,13 +12,11 @@ const queryClient = new QueryClient();
 
 function AcsApp(props: any) {
   return (
-    <AcsAuthContextProvider>
+    <QueryClientProvider client={queryClient}>
       <AcsMetaContextProvider>
-        <QueryClientProvider client={queryClient}>
-          {props.children}
-        </QueryClientProvider>
+        <AcsAuthContextProvider>{props.children}</AcsAuthContextProvider>
       </AcsMetaContextProvider>
-    </AcsAuthContextProvider>
+    </QueryClientProvider>
   );
 }
 

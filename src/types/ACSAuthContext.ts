@@ -5,6 +5,7 @@
 export interface ACSAuthContext {
   userId?: number | string;
   user?: { [key: string]: unknown };
+  tenantSetup: { [key: string]: unknown };
   logout?: () => void;
   login?: (acsUserAuthContext: { [key: string]: unknown }) => void;
 }
