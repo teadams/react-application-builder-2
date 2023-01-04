@@ -26,9 +26,9 @@ export const getObjectDataById = async (
   objectType: string,
   id: unknown,
   filters: { [index: string]: unknown } = {}
-): Promise<unknown> => {
+): Promise<Record<string, unknown>> => {
   const apiResult = await getObjectData(acsMeta, objectType, { id }, filters);
-  return apiResult;
+  return apiResult[0];
 };
 
 export const deleteObjectDataById = async (

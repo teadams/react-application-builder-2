@@ -6,7 +6,7 @@ import { ACSMetaModel } from "../types";
 
 export const useGetDataById = (objectType: string, id: unknown) => {
   const acsMeta = useGetAcsMeta();
-  return useQuery(
+  return useQuery<Record<string, unknown>, Error>(
     [objectType],
     () => {
       return getObjectDataById(
@@ -16,7 +16,7 @@ export const useGetDataById = (objectType: string, id: unknown) => {
       );
     },
     {
-      enabled: objectType ? true : false,
+      enabled: objectType && id ? true : false,
     }
   );
 };
