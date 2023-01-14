@@ -1,4 +1,7 @@
-const arrayOfJsonToObject = (
+/*** converts an array to a
+ * JSON object keyed by keyAttribute
+ */
+export const arrayOfJsonToObject = (
   array: Record<string, unknown>[],
   keyAttribute: string
 ) => {
@@ -9,5 +12,22 @@ const arrayOfJsonToObject = (
   }
   return object;
 };
+export const getElementByAttribute = (
+  array: Record<string, unknown>[],
+  value: unknown,
+  attribute: string
+) => {
+  const selectedElement =
+    array.filter((element: any) => element[attribute] === value)[0] ?? {};
 
-export default { arrayOfJsonToObject };
+  return selectedElement;
+};
+
+export const getElementById = (
+  array: Record<string, unknown>[],
+  value: unknown
+) => {
+  return getElementByAttribute(array, value, "id");
+};
+
+export default { arrayOfJsonToObject, getElementByAttribute, getElementById };
