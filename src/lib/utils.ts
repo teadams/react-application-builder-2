@@ -1,3 +1,5 @@
+import { uniq } from "lodash";
+
 /*** converts an array to a
  * JSON object keyed by keyAttribute
  */
@@ -12,6 +14,18 @@ export const arrayOfJsonToObject = (
   }
   return object;
 };
+
+export const getElementsByAttribute = (
+  array: Record<string, unknown>[],
+  value: unknown,
+  attribute: string
+) => {
+  const selectedElement =
+    array.filter((element: any) => element[attribute] === value) ?? [];
+
+  return selectedElement;
+};
+
 export const getElementByAttribute = (
   array: Record<string, unknown>[],
   value: unknown,
@@ -30,4 +44,24 @@ export const getElementById = (
   return getElementByAttribute(array, value, "id");
 };
 
-export default { arrayOfJsonToObject, getElementByAttribute, getElementById };
+export const uniqueByAttribute = (
+  array: Record<string, unknown>[],
+  attribute = "id"
+) => {
+  return array
+    .map((row) => row[attribute])
+    .filter((value, index, self) => self.indexOf(value) === index);
+};
+
+export const uniqueIds = (array: Record<string, unknown>[]): unknown[] => {
+  return uniqueByAttribute(array, "id");
+};
+
+export default {
+  arrayOfJsonToObject,
+  getElementByAttribute,
+  getElementsByAttribute,
+  getElementById,
+  uniqueIds,
+  uniqueByAttribute,
+};
