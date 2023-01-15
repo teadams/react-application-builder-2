@@ -1,4 +1,4 @@
-import { uniq } from "lodash";
+import { indexOf, uniq } from "lodash";
 
 /*** converts an array to a
  * JSON object keyed by keyAttribute
@@ -57,6 +57,33 @@ export const uniqueIds = (array: Record<string, unknown>[]): unknown[] => {
   return uniqueByAttribute(array, "id");
 };
 
+export const indexOfByAttribute = (
+  array: Record<string, unknown>[],
+  value: unknown,
+  attribute = "id"
+) => {
+  let i = 0;
+  for (const element of array) {
+    if (element[attribute as string] === value) {
+      return i;
+    }
+    i++;
+  }
+};
+
+export const indexOfById = (
+  array: Record<string, unknown>[],
+  value: unknown
+) => {
+  return indexOfByAttribute(array, value, "id");
+};
+
+export const reverse = (arrays: unknown[]): unknown[] => {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  //@ts-ignore
+  return arrays.reduce((acc, item) => [item].concat(acc), []);
+};
+
 export default {
   arrayOfJsonToObject,
   getElementByAttribute,
@@ -64,4 +91,7 @@ export default {
   getElementById,
   uniqueIds,
   uniqueByAttribute,
+  indexOfByAttribute,
+  indexOfById,
+  reverse,
 };
