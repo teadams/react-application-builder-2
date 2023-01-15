@@ -10,7 +10,7 @@ export const arrayOfJsonToObject = (
   const object = {} as Record<string, Record<string, unknown>>;
   for (const element of array) {
     const key = element[keyAttribute] as string;
-    object[key as string] = element;
+    object[key as number | string] = element;
   }
   return object;
 };
