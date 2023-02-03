@@ -2,7 +2,6 @@ import React, { useRef } from "react";
 import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHome } from "@fortawesome/free-solid-svg-icons";
-import logo from "../../public/logo.png";
 import profile from "../../public/profile.png";
 
 interface SideBarProps {
@@ -40,7 +39,7 @@ const SideBar = ({ children, username, logout }: SideBarProps) => {
           <h1 className="text-dark mb-6 font-bold">Greetr</h1>
           {children}
 
-          <div className="flex gap-4 justify-center flex-col flex-wrap items-center mt-52">
+          <div className="flex gap-4 justify-center flex-col flex-wrap items-center mt-20">
             <div className="mt-4 flex flex-col items-center">
               <Image
                 src={profile}
@@ -95,11 +94,31 @@ const SideBar = ({ children, username, logout }: SideBarProps) => {
           onClick={toggleMenu}
         />
 
-        <div className="flex flex-wrap flex-col justify-start items-start gap-6 mt-6">
+        <div className="flex gap-4 justify-center flex-col flex-wrap items-center">
+          <div className="mt-4 flex flex-col items-center">
+            <Image
+              src={profile}
+              alt="profile"
+              className="rounded-full w-12 h-12 object-cover"
+            />
+            <p className="text-dark m-0 p-0 mt-2 mb-2">
+              {username ? username : ""}
+            </p>
+          </div>
+        </div>
+
+        <div className="flex flex-wrap flex-col justify-start items-start gap-6 mt-6 mb-30">
           <div className="flex flex-col flex-wrap gap-2 bg-transparent p-2 rounded-[8px] transition duration-200 ease-in">
             {children}
           </div>
         </div>
+        <button
+          type="button"
+          onClick={logout}
+          className="inline-flex mt-16 justify-center rounded-md border border-transparent bg-red-600 px-2 py-1 text-base font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:w-auto sm:text-xs"
+        >
+          Logout
+        </button>
       </div>
     </>
   );

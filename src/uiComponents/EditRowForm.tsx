@@ -3,7 +3,52 @@ import { RadioButton, TextBox } from "./formFields";
 import {
   EditFormPropsInterface,
   objectTypeFieldMetaInterface,
+  dataObjectForEditInterface,
 } from "../types/ACSobjectTypesForUI";
+
+const formField = (
+  field: string,
+  index: number,
+  register: any,
+  data: dataObjectForEditInterface
+) => {
+  const objectTypeFields: objectTypeFieldMetaInterface = data.objectTypeFields
+    ? data.objectTypeFields
+    : [];
+  const objectTypeFieldMeta: objectTypeFieldMetaInterface =
+    objectTypeFields[field as unknown as number];
+  const dataType = objectTypeFieldMeta.dataType;
+  const label = objectTypeFieldMeta.prettyName;
+  let value;
+  if (data.rowId) {
+    const currentRow: any = data.allData?.find(
+      (item: any) => item.id === data.rowId
+    );
+    value =
+      dataType === "timestamp"
+        ? new Date(currentRow[field]).toISOString().substring(0, 10)
+        : currentRow[field];
+  } else {
+    value = null;
+  }
+
+  const standardProps = {
+    register: { ...register(objectTypeFieldMeta.name, { value: value }) },
+    label: label,
+    value: value,
+  };
+
+  switch (dataType) {
+    case "string":
+      return <TextBox key={index} {...standardProps} />;
+    case "timestamp":
+      return <TextBox key={index} type="date" {...standardProps} />;
+    case "boolean":
+      return <RadioButton key={index} {...standardProps} />;
+    default:
+      return null;
+  }
+};
 
 const EditRowForm = ({
   register,
@@ -11,45 +56,6 @@ const EditRowForm = ({
   onSubmit,
   hideEditModal,
 }: EditFormPropsInterface) => {
-  const formField = (field: string, index: number) => {
-    const objectTypeFields: objectTypeFieldMetaInterface = data.objectTypeFields
-      ? data.objectTypeFields
-      : [];
-    const objectTypeFieldMeta: objectTypeFieldMetaInterface =
-      objectTypeFields[field as unknown as number];
-    const dataType = objectTypeFieldMeta.dataType;
-    const label = objectTypeFieldMeta.prettyName;
-    let value;
-    if (data.rowId) {
-      const currentRow: any = data.allData?.find(
-        (item: any) => item.id === data.rowId
-      );
-      value =
-        dataType === "timestamp"
-          ? new Date(currentRow[field]).toISOString().substring(0, 10)
-          : currentRow[field];
-    } else {
-      value = null;
-    }
-
-    const standardProps = {
-      register: { ...register(objectTypeFieldMeta.name, { value: value }) },
-      label: label,
-      value: value,
-    };
-
-    switch (dataType) {
-      case "string":
-        return <TextBox key={index} {...standardProps} />;
-      case "timestamp":
-        return <TextBox key={index} type="date" {...standardProps} />;
-      case "boolean":
-        return <RadioButton key={index} {...standardProps} />;
-      default:
-        return null;
-    }
-  };
-
   return (
     <form onSubmit={onSubmit}>
       <div>
@@ -66,7 +72,7 @@ const EditRowForm = ({
                 {data.objectTypeFields
                   ? Object.keys(data.objectTypeFields).map(
                       (field: string, index: number) => {
-                        return formField(field, index);
+                        return formField(field, index, register, data);
                       }
                     )
                   : null}

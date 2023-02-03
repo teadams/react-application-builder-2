@@ -84,46 +84,40 @@ const AcsDataTable = ({
   const hideEditModal = useCallback(() => setShowEditModalForAField({}), []);
   const hideAddModal = useCallback(() => setShowAddRowModal({}), []);
 
-  const onSubmitAdd = useCallback(
-    async (formData: any, rowId?: string, formState?: object) => {
-      const addRowResponse: any = await createNewObjectDataRow(
-        acsMeta as ACSMetaModel,
-        objectType as string,
-        { ...formData }
-      );
+  const onSubmitAdd = useCallback(async (formData: any) => {
+    const addRowResponse: any = await createNewObjectDataRow(
+      acsMeta as ACSMetaModel,
+      objectType as string,
+      { ...formData }
+    );
 
-      if ("persistResults" in addRowResponse) {
-        toast.success("Record Successfully Added", {
-          className: "text-sm",
-        });
-      }
-      hideAddModal();
-    },
-    []
-  );
+    if ("persistResults" in addRowResponse) {
+      toast.success("Record Successfully Added", {
+        className: "text-sm",
+      });
+    }
+    hideAddModal();
+  }, []);
 
-  const onSubmitEdit = useCallback(
-    async (formData: any, rowId?: string, formState?: object) => {
-      const editResponse: any = await updateObjectDataById(
-        acsMeta as ACSMetaModel,
-        objectType as string,
-        rowId,
-        { ...formData }
-      );
+  const onSubmitEdit = useCallback(async (formData: any, rowId?: string) => {
+    const editResponse: any = await updateObjectDataById(
+      acsMeta as ACSMetaModel,
+      objectType as string,
+      rowId,
+      { ...formData }
+    );
 
-      if ("persistResults" in editResponse) {
-        toast.success("Record Successfully Updated", {
-          className: "text-sm",
-        });
-      } else {
-        toast.error("Record Can not be Updated", {
-          className: "text-sm",
-        });
-      }
-      hideEditModal();
-    },
-    []
-  );
+    if ("persistResults" in editResponse) {
+      toast.success("Record Successfully Updated", {
+        className: "text-sm",
+      });
+    } else {
+      toast.error("Record Can not be Updated", {
+        className: "text-sm",
+      });
+    }
+    hideEditModal();
+  }, []);
 
   const deleteRow = async (id: string) => {
     await deleteObjectDataById(
@@ -176,7 +170,7 @@ const AcsDataTable = ({
       const arrayOfFields = Object.keys(objectTypeFields);
 
       for (let i = 0; i < arrayOfFields?.length; i++) {
-        let field = arrayOfFields[i];
+        const field = arrayOfFields[i];
 
         if (fieldsToDisplay.includes(field) || fieldsToDisplay.length === 0) {
           const objectTypeFieldMeta: objectTypeFieldMetaInterface =
@@ -280,7 +274,7 @@ const AcsDataTable = ({
               })
             }
           />
-          Add Row
+          Add
         </div>
       )}
       <div className={`mb-10 ${allData.length > 0 ? "border shadow-lg" : ""}`}>
