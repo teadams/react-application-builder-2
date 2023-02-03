@@ -7,7 +7,13 @@ import DataTable from "react-data-table-component";
 import { deleteObjectDataById } from "../lib/data";
 import AcsDataTableEditModal from "./AcsDataTableEditModal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faXmark , faPenToSquare} from '@fortawesome/free-solid-svg-icons'
+import { createNewObjectDataRow, updateObjectDataById } from "../lib/data";
+
+import {
+  faXmark,
+  faPenToSquare,
+  faCirclePlus,
+} from "@fortawesome/free-solid-svg-icons";
 import { objectTypeFieldMetaInterface } from "../types/ACSobjectTypesForUI";
 
 const customStyles = {
@@ -56,89 +62,199 @@ const customStyles = {
   },
 };
 
-const AcsDataTable = ({ data, title , objectTypeFields,objectType }: any) => {
+const AcsDataTable = ({
+  data,
+  title,
+  objectTypeFields,
+  objectType,
+  fieldsToDisplay = [],
+}: any) => {
   const acsMeta = useGetAcsMeta();
   const [columns, setColumns] = useState<object[]>([]);
-  const [allData , setAllData] = useState<object[]>(data);
-  const [showEditModalForAField, setShowEditModalForAField] = useState<object>({});
+  const [allData, setAllData] = useState<object[]>(data);
+  const [showAddRowModal, setShowAddRowModal] = useState<object>({});
+  const [showEditModalForAField, setShowEditModalForAField] = useState<object>(
+    {}
+  );
 
   useEffect(() => {
-    getCustomColumns(allData ,objectTypeFields);
+    getCustomColumns(allData, objectTypeFields);
   }, [allData]);
 
-  console.log("allData",allData);
-  
+  const hideEditModal = useCallback(() => setShowEditModalForAField({}), []);
+  const hideAddModal = useCallback(() => setShowAddRowModal({}), []);
 
-  const hideEditModal = useCallback(() => setShowEditModalForAField({}),[]);
+  const onSubmitAdd = useCallback(
+    async (formData: any, rowId?: string, formState?: object) => {
+      const addRowResponse: any = await createNewObjectDataRow(
+        acsMeta as ACSMetaModel,
+        objectType as string,
+        { ...formData }
+      );
 
-  const deleteRow = async(id:string) =>{
-     await deleteObjectDataById(acsMeta as ACSMetaModel, objectType as string, id);
-     const filteredDataAfterDeletion = allData.filter((item:any) => item.id != id);
-     setAllData(filteredDataAfterDeletion);
-     toast.success("Record Successfully Deleted",{
-       className:"text-sm"
-     });
-  }
+      if ("persistResults" in addRowResponse) {
+        toast.success("Record Successfully Added", {
+          className: "text-sm",
+        });
+      }
+      hideAddModal();
+    },
+    []
+  );
 
+  const onSubmitEdit = useCallback(
+    async (formData: any, rowId?: string, formState?: object) => {
+      const editResponse: any = await updateObjectDataById(
+        acsMeta as ACSMetaModel,
+        objectType as string,
+        rowId,
+        { ...formData }
+      );
 
-  const columnCmp = (value:string, rowId:object, objectTypeFieldMeta:object,objectTypeFields:any) =>{
+      if ("persistResults" in editResponse) {
+        toast.success("Record Successfully Updated", {
+          className: "text-sm",
+        });
+      } else {
+        toast.error("Record Can not be Updated", {
+          className: "text-sm",
+        });
+      }
+      hideEditModal();
+    },
+    []
+  );
+
+  const deleteRow = async (id: string) => {
+    await deleteObjectDataById(
+      acsMeta as ACSMetaModel,
+      objectType as string,
+      id
+    );
+
+    const filteredDataAfterDeletion = allData.filter(
+      (item: any) => item.id != id
+    );
+    setAllData(filteredDataAfterDeletion);
+    toast.success("Record Successfully Deleted", {
+      className: "text-sm",
+    });
+  };
+
+  const columnCmp = (
+    value: string,
+    rowId: object,
+    objectTypeFieldMeta: object,
+    objectTypeFields: any
+  ) => {
     const object = {
-      value:value,
-      objectTypeFieldMeta:objectTypeFieldMeta,
-      objectTypeFields:objectTypeFields,
-      editRow:false,
-      rowId:rowId,
-      allData:[]
-    }
-   
-    return <p onClick={()=> setShowEditModalForAField(object)}>{value}</p>
-  }
+      value: value,
+      objectTypeFieldMeta: objectTypeFieldMeta,
+      objectTypeFields: objectTypeFields,
+      editRow: false,
+      rowId: rowId,
+      allData: [],
+    };
+
+    return (
+      <p
+        title={value as string}
+        onClick={() => setShowEditModalForAField(object)}
+      >
+        {value}
+      </p>
+    );
+  };
 
   // get custom (names/header cells) for data table
-  const getCustomColumns = (data: Array<object> = [],objectTypeFields: Array<object> = []) => {
-    if(objectTypeFields){
-      const customColumns:Array<object> =  Object.keys(objectTypeFields).map((field) => {        
-        const objectTypeFieldMeta:objectTypeFieldMetaInterface = objectTypeFields[field as unknown as number];
-        const fieldPrettyName = objectTypeFieldMeta.prettyName;
-        const columnObject = {
-            name:fieldPrettyName,
-            selector: (row:any) => {
-              const fieldValue = objectTypeFieldMeta.dataType === "timestamp" ?  moment(row[field]).format('MM-DD-YYYY') : row[field];
-              return columnCmp(fieldValue, row["id"], objectTypeFieldMeta,objectTypeFields)
-            }
-        }
-        return columnObject;
-      });
+  const getCustomColumns = (
+    data: Array<object> = [],
+    objectTypeFields: Array<object> = []
+  ) => {
+    if (objectTypeFields) {
+      const customColumns: Array<object> = [];
+      const arrayOfFields = Object.keys(objectTypeFields);
 
-      const actionsColumn = {
-        name:"Actions",
-        width: "100px", 
-        selector: (row:any) =>{
-          const object = {
-            value:"",
-            objectTypeFieldMeta:{},
-            objectTypeFields:objectTypeFields,
-            editRow:true,
-            rowId:row["id"],
-            allData:data
-          }
+      for (let i = 0; i < arrayOfFields?.length; i++) {
+        let field = arrayOfFields[i];
 
-          return(
-            <div className="flex items-center">
-              <FontAwesomeIcon icon={faXmark} style={{color:"#eb0808"}} className="h-5" onClick={() => deleteRow(row.id) }/>
-              <FontAwesomeIcon icon={faPenToSquare} style={{color:"#302b2bd4"}} className="h-4 mx-4" onClick={() => setShowEditModalForAField(object)} />
-            </div>
-          )
+        if (fieldsToDisplay.includes(field) || fieldsToDisplay.length === 0) {
+          const objectTypeFieldMeta: objectTypeFieldMetaInterface =
+            objectTypeFields[field as unknown as number];
+          const fieldPrettyName = objectTypeFieldMeta.prettyName;
+
+          const columnObject = {
+            name: fieldPrettyName,
+            sortable: true,
+            selector: (row: any) => row[field],
+            cell: (row: any) => {
+              const fieldValue =
+                row[field] === null
+                  ? "--"
+                  : typeof row[field] === "object"
+                  ? row[field][objectTypeFieldMeta.referencesDisplayField] ===
+                    null
+                    ? "--"
+                    : row[field][objectTypeFieldMeta.referencesDisplayField]
+                  : objectTypeFieldMeta.dataType === "timestamp"
+                  ? moment(row[field]).format("MM-DD-YYYY")
+                  : row[field];
+
+              return columnCmp(
+                fieldValue,
+                row["id"],
+                objectTypeFieldMeta,
+                objectTypeFields
+              );
+            },
+          };
+
+          customColumns.push(columnObject);
         }
       }
 
-      customColumns.unshift(actionsColumn);
+      const actionsColumn = {
+        name: "Actions",
+        width: "100px",
+        selector: (row: any) => {
+          const object = {
+            value: "",
+            objectTypeFieldMeta: {},
+            objectTypeFields: objectTypeFields,
+            editRow: true,
+            rowId: row["id"],
+            allData: data,
+          };
+
+          return (
+            <div className="flex items-center">
+              <div className="inline" title="delete row">
+                <FontAwesomeIcon
+                  icon={faXmark}
+                  style={{ color: "#eb0808" }}
+                  className="h-5"
+                  onClick={() => deleteRow(row.id)}
+                />
+              </div>
+              <div className="inline" title="delete row">
+                <FontAwesomeIcon
+                  icon={faPenToSquare}
+                  style={{ color: "#302b2bd4" }}
+                  className="h-4 mx-4"
+                  onClick={() => setShowEditModalForAField(object)}
+                />
+              </div>
+            </div>
+          );
+        },
+      };
+
+      customColumns.push(actionsColumn);
       setColumns(customColumns);
-    }else{
-      return []
+    } else {
+      return [];
     }
   };
-
 
   return (
     <div className="px-14">
@@ -147,20 +263,55 @@ const AcsDataTable = ({ data, title , objectTypeFields,objectType }: any) => {
           {title}
         </h5>
       )}
+      {allData.length > 0 && (
+        <div className="flex justify-end items-center mb-6">
+          <FontAwesomeIcon
+            icon={faCirclePlus}
+            style={{ color: "#302b2bd4" }}
+            className="h-4 mr-2"
+            onClick={() =>
+              setShowAddRowModal({
+                value: "",
+                objectTypeFieldMeta: {},
+                objectTypeFields: objectTypeFields,
+                editRow: true,
+                rowId: "",
+                allData: [],
+              })
+            }
+          />
+          Add Row
+        </div>
+      )}
       <div className={`mb-10 ${allData.length > 0 ? "border shadow-lg" : ""}`}>
         <DataTable
           columns={columns}
           data={allData}
           pagination
           customStyles={customStyles}
-          noDataComponent={<h4 className="text-sm font-regular text-dark px-6 py-4 whitespace-nowrap text-center">There are no records to display</h4>}
+          noDataComponent={
+            <h4 className="text-sm font-regular text-dark px-6 py-4 whitespace-nowrap text-center">
+              There are no records to display
+            </h4>
+          }
         />
       </div>
-      {
-        Object.keys(showEditModalForAField).length > 0 
-        &&
-        <AcsDataTableEditModal hideEditModal={hideEditModal} data={showEditModalForAField} objectType={objectType} />
-      }
+      {Object.keys(showEditModalForAField).length > 0 && (
+        <AcsDataTableEditModal
+          hideEditModal={hideEditModal}
+          data={showEditModalForAField}
+          objectType={objectType}
+          onSubmit={onSubmitEdit}
+        />
+      )}
+      {Object.keys(showAddRowModal).length > 0 && (
+        <AcsDataTableEditModal
+          hideEditModal={hideAddModal}
+          data={showAddRowModal}
+          objectType={objectType}
+          onSubmit={onSubmitAdd}
+        />
+      )}
     </div>
   );
 };
