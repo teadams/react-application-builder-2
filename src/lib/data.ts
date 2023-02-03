@@ -9,7 +9,7 @@ export const getObjectData = async (
   params: { [index: string]: unknown } = {},
   filters: { [index: string]: unknown } = {}
 ): Promise<Record<string, unknown>[]> => {
-  let apiResult;
+  let apiResult: any;
   if (process.env.NEXT_PUBLIC_LOCAL_DATA) {
     apiResult = require(`../../../sample_data/sampleData.json`);
     apiResult = apiResult[objectType];
@@ -55,9 +55,46 @@ export const updateObjectDataById = async (
   return apiResult;
 };
 
+export const createNewObjectDataRow = async (
+  acsMeta: ACSMetaModel,
+  objectType: string,
+  objectTypeFields: object
+): Promise<unknown> => {
+  const path = "acs/" + objectType;
+  const params = { ...objectTypeFields };
+  const method = "POST";
+  const apiResult = await api.callAPI({ path, params, method });
+  return apiResult;
+};
+
+export const createAccount = async (
+  acsMeta: ACSMetaModel,
+  objectTypeFields: object
+): Promise<unknown> => {
+  const path = "acs/auth/createUserByEmailAndPassword";
+  const params = { ...objectTypeFields };
+  const method = "POST";
+  const apiResult = await api.callAPI({ path, params, method });
+  return apiResult;
+};
+
+export const SignIn = async (
+  acsMeta: ACSMetaModel,
+  objectTypeFields: object
+): Promise<unknown> => {
+  const path = "acs/auth/loginByEmailAndPassword";
+  const params = { ...objectTypeFields };
+  const method = "POST";
+  const apiResult = await api.callAPI({ path, params, method });
+  return apiResult;
+};
+
 export default {
   getObjectData,
   getObjectDataById,
   updateObjectDataById,
   deleteObjectDataById,
+  createNewObjectDataRow,
+  createAccount,
+  SignIn,
 };

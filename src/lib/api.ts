@@ -2,6 +2,7 @@ import "react-app-polyfill/ie9";
 import "react-app-polyfill/stable";
 import axios from "axios";
 import { ACSObjectType } from "../types";
+import { toast } from "react-toastify";
 
 type APIMethod = "GET" | "POST" | "PUT" | "DELETE";
 type ACSApiParam = "acsCount" | "acsMax" | unknown;
@@ -13,9 +14,10 @@ interface API {
 }
 
 const getHeaders = () => {
-  const jwtToken = JSON.parse(window.localStorage.getItem("user") as string);
-  let authHeader;
-  if (jwtToken) {
+  const user = localStorage.getItem("user");
+  let authHeader={};
+  if (user !== "undefined") {    
+    const jwtToken = JSON.parse(user as string);
     authHeader = { "x-access-token": jwtToken };
   }
   return authHeader;
@@ -78,7 +80,10 @@ export async function callAPI({
     const error_prompt = `error connecting to server with url: ${domain}/${path} method: ${method}
      params: ${paramStr} 
      data: ${dataStr}`;
-    alert(error_prompt + error.message + " " + error.stack);
+    // alert(error_prompt + error.message + " " + error.stack);
+    toast.error(error.message?.toString(), {
+      className: "text-sm",
+    });
   });
   // TODO user friendly correct error handling
   if (apiResult) {
