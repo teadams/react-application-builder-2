@@ -31,6 +31,7 @@ export const useGetAcsMetaObjectTypes = ():
 export const useGetAcsMetaObjectType = (
   objectType: string
 ): ACSObjectType | Record<string, never> => {
+   
   const acsMetaContext = useContext(AcsMetaContext);
   return acsMetaContext ? acsMetaContext.objectTypes[objectType] : {};
 };
