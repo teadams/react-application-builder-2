@@ -1,6 +1,4 @@
-import { type } from "os";
 import React from "react";
-import { Text } from "./Text";
 
 interface RadioButtonProps {
   type?: string;
@@ -12,11 +10,7 @@ interface RadioButtonProps {
   register: object;
 }
 
-const RadioButton = ({
-  label = "label",
-  value,
-  register,
-}: RadioButtonProps) => {
+const RadioButton = ({ value, register }: RadioButtonProps) => {
   return (
     <div className="flex">
       <input

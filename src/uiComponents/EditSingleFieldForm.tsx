@@ -1,6 +1,32 @@
 import React from "react";
-import { TextBox } from "./formFields";
+import { RadioButton, TextBox } from "./formFields";
 import { EditFormPropsInterface } from "../types/ACSobjectTypesForUI";
+
+import { ReferencesDisplayFields } from "./ReferencesDisplayFields";
+
+const formField = (
+  value: string | undefined,
+  prettyName: string,
+  dataType: string,
+  register: any
+) => {
+  const standardProps = {
+    register: { ...register },
+    label: prettyName,
+    value: value,
+  };
+
+  switch (dataType) {
+    case "string":
+      return <TextBox {...standardProps} />;
+    case "timestamp":
+      return <TextBox type="date" {...standardProps} />;
+    case "boolean":
+      return <RadioButton {...standardProps} />;
+    default:
+      return null;
+  }
+};
 
 const EditSingleFieldForm = ({
   register,
@@ -20,12 +46,20 @@ const EditSingleFieldForm = ({
               Edit
             </h3>
             <div className="mt-6">
-              <TextBox
-                type={data.objectTypeFieldMeta?.dataType}
-                label={data.objectTypeFieldMeta?.prettyName}
-                value={data?.value}
-                register={register}
-              />
+              {data.objectTypeFieldMeta?.referencesDisplayField ? (
+                <ReferencesDisplayFields
+                  register={register}
+                  label={data.objectTypeFieldMeta?.prettyName}
+                  referencesTable={data.objectTypeFieldMeta.referencesTable}
+                />
+              ) : (
+                formField(
+                  data?.value,
+                  data.objectTypeFieldMeta?.prettyName,
+                  data.objectTypeFieldMeta?.dataType,
+                  register
+                )
+              )}
             </div>
           </div>
         </div>

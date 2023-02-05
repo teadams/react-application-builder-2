@@ -1,6 +1,4 @@
 import React from "react";
-import { toast } from "react-toastify";
-import { ACSMetaModel } from "../types";
 import { useGetAcsMeta } from "../hooks";
 import { useForm } from "react-hook-form";
 import EditSingleFieldForm from "./EditSingleFieldForm";
@@ -10,7 +8,7 @@ import { dataObjectForEditInterface } from "../types/ACSobjectTypesForUI";
 interface modalProps {
   data: dataObjectForEditInterface;
   hideEditModal: any;
-  objectType: string;
+  objectType?: string;
   onSubmit: (
     formData: any,
     rowId?: string | undefined,
@@ -21,10 +19,8 @@ interface modalProps {
 const AcsDataTableEditModal = ({
   data,
   hideEditModal,
-  objectType,
   onSubmit,
 }: modalProps) => {
-  const acsMeta = useGetAcsMeta();
   const { register, handleSubmit, formState } = useForm();
 
   const standardProps = {

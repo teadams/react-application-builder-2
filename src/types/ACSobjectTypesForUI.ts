@@ -8,7 +8,13 @@ export interface objectTypeFieldMetaInterface {
 
 export interface EditFormPropsInterface {
   register:any;
-  data:dataObjectForEditInterface
+  data:dataObjectForEditInterface;
+  onSubmit: (
+    formData: any,
+    rowId?: string | undefined,
+    formState?: object,
+  ) => Promise<void>;
+  hideEditModal:() => void;
 }
 
 export interface dataObjectForEditInterface { 

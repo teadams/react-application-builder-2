@@ -1,7 +1,6 @@
 import "react-app-polyfill/ie9";
 import "react-app-polyfill/stable";
 import axios from "axios";
-import { ACSObjectType } from "../types";
 import { toast } from "react-toastify";
 
 type APIMethod = "GET" | "POST" | "PUT" | "DELETE";
