@@ -171,6 +171,7 @@ const AcsDataTable = ({
 
       for (let i = 0; i < arrayOfFields?.length; i++) {
         const field = arrayOfFields[i];
+        console.log("field", field);
 
         if (fieldsToDisplay.includes(field) || fieldsToDisplay.length === 0) {
           const objectTypeFieldMeta: objectTypeFieldMetaInterface =

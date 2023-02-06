@@ -7,6 +7,6 @@ export const fieldsForObjectType: Record<string, any> = {
     offers: ["application","creator","status","closed_at","sent_at"],
     interviews: ["job_interview_stage","application","organizer","interviewers","location","start_at","end_at","status"],
     greetrAssessments: ["application","greetrstage","greetrSubstage","description"],
-    atsUsers: ["first_name","last_name","email","remote_created_at","access_role"],
+    acsUsers: ["firstName","lastName","email","createdAt","mergeid"],
     departments: ["name","createdAt"],
 };

@@ -5,6 +5,7 @@ import {
   objectTypeFieldMetaInterface,
   dataObjectForEditInterface,
 } from "../types/ACSobjectTypesForUI";
+import moment from "moment";
 
 const formField = (
   field: string,
@@ -24,8 +25,15 @@ const formField = (
     const currentRow: any = data.allData?.find(
       (item: any) => item.id === data.rowId
     );
+
     value =
-      dataType === "timestamp"
+      currentRow[field] === null
+        ? "--"
+        : typeof currentRow[field] === "object"
+        ? currentRow[field][objectTypeFieldMeta.referencesDisplayField] === null
+          ? "--"
+          : currentRow[field][objectTypeFieldMeta.referencesDisplayField]
+        : objectTypeFieldMeta.dataType === "timestamp"
         ? new Date(currentRow[field]).toISOString().substring(0, 10)
         : currentRow[field];
   } else {
