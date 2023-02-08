@@ -171,8 +171,10 @@ const AcsDataTable = ({
 			const customColumns: Array<object> = [];
 			const arrayOfFields = Object.keys(objectTypeFields);
 
+
 			for (let i = 0; i < arrayOfFields?.length; i++) {
 				const field = arrayOfFields[i];
+
 
 				if (fieldsToDisplay.includes(field) || fieldsToDisplay.length === 0) {
 					const objectTypeFieldMeta: objectTypeFieldMetaInterface =
