@@ -99,7 +99,7 @@ const AcsDrillDown = () => {
               <Icon icon="home" className="h-4 mr-2" />
               <p
                 className="text-dark m-0 p-0"
-                onClick={() => setObjectType("atsUsers")}
+                onClick={() => setObjectType("acsUsers")}
               >
                 Users
               </p>

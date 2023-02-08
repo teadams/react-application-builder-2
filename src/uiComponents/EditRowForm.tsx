@@ -5,6 +5,7 @@ import {
 	objectTypeFieldMetaInterface,
 	dataObjectForEditInterface,
 } from "../types/ACSobjectTypesForUI";
+import moment from "moment";
 
 const formField = (
 	field: string,
@@ -12,25 +13,34 @@ const formField = (
 	register: any,
 	data: dataObjectForEditInterface
 ) => {
-	const objectTypeFields: objectTypeFieldMetaInterface = data.objectTypeFields
-		? data.objectTypeFields
-		: [];
-	const objectTypeFieldMeta: objectTypeFieldMetaInterface =
-		objectTypeFields[field as unknown as number];
-	const dataType = objectTypeFieldMeta.dataType;
-	const label = objectTypeFieldMeta.prettyName;
-	let value;
-	if (data.rowId) {
-		const currentRow: any = data.allData?.find(
-			(item: any) => item.id === data.rowId
-		);
-		value =
-			dataType === "timestamp"
-				? new Date(currentRow[field]).toISOString().substring(0, 10)
-				: currentRow[field];
-	} else {
-		value = null;
-	}
+
+  const objectTypeFields: objectTypeFieldMetaInterface = data.objectTypeFields
+    ? data.objectTypeFields
+    : [];
+  const objectTypeFieldMeta: objectTypeFieldMetaInterface =
+    objectTypeFields[field as unknown as number];
+  const dataType = objectTypeFieldMeta.dataType;
+  const label = objectTypeFieldMeta.prettyName;
+  let value;
+  if (data.rowId) {
+    const currentRow: any = data.allData?.find(
+      (item: any) => item.id === data.rowId
+    );
+
+    value =
+      currentRow[field] === null
+        ? "--"
+        : typeof currentRow[field] === "object"
+        ? currentRow[field][objectTypeFieldMeta.referencesDisplayField] === null
+          ? "--"
+          : currentRow[field][objectTypeFieldMeta.referencesDisplayField]
+        : objectTypeFieldMeta.dataType === "timestamp"
+        ? new Date(currentRow[field]).toISOString().substring(0, 10)
+        : currentRow[field];
+  } else {
+    value = null;
+  }
+
 
 	const standardProps = {
 		register: { ...register(objectTypeFieldMeta.name, { value: value }) },
