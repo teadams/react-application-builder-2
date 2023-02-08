@@ -1,3 +1,4 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 import React from "react";
 
 import moment from "moment";
@@ -171,10 +172,8 @@ const AcsDataTable = ({
 			const customColumns: Array<object> = [];
 			const arrayOfFields = Object.keys(objectTypeFields);
 
-
 			for (let i = 0; i < arrayOfFields?.length; i++) {
 				const field = arrayOfFields[i];
-
 
 				if (fieldsToDisplay.includes(field) || fieldsToDisplay.length === 0) {
 					const objectTypeFieldMeta: objectTypeFieldMetaInterface =
@@ -191,6 +190,7 @@ const AcsDataTable = ({
 									? "--"
 									: typeof row[field] === "object"
 									? row[field][objectTypeFieldMeta.referencesDisplayField] ===
+									  // eslint-disable-next-line no-mixed-spaces-and-tabs
 									  null
 										? "--"
 										: row[field][objectTypeFieldMeta.referencesDisplayField]
