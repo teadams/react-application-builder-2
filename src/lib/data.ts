@@ -27,7 +27,11 @@ export const getObjectDataById = async (
   id: unknown,
   filters: { [index: string]: unknown } = {}
 ): Promise<Record<string, unknown>> => {
+  console.log("Get data by id");
   const apiResult = await getObjectData(acsMeta, objectType, { id }, filters);
+  if (process.env.NEXT_PUBLIC_LOCAL_DATA) {
+    return apiResult.filter((row) => row.id == id)[0];
+  }
   return apiResult[0];
 };
 
