@@ -14,12 +14,16 @@ interface API {
 
 const getHeaders = () => {
   const user = localStorage.getItem("user");
-  let authHeader={};
-  if (user !== "undefined") {    
+  let authHeader = {};
+  if (user !== "undefined") {
     const jwtToken = JSON.parse(user as string);
     authHeader = { "x-access-token": jwtToken };
   }
   return authHeader;
+};
+
+const getDomain = () => {
+  return process.env.NEXT_PUBLIC_API_LOCATION ?? "http://localhost:2000";
 };
 
 export async function callAPI({
@@ -60,7 +64,7 @@ export async function callAPI({
   // }
 
   // TODO :  add env instuctions
-  const domain = process.env.NEXT_PUBLIC_API_LOCATION;
+  const domain = getDomain();
 
   // Temp until dev environments are hooked together
   if (!domain) return null;

@@ -84,6 +84,8 @@ export const reverse = (arrays: unknown[]): unknown[] => {
   return arrays.reduce((acc, item) => [item].concat(acc), []);
 };
 
+export const get;
+
 export default {
   arrayOfJsonToObject,
   getElementByAttribute,

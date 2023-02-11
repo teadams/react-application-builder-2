@@ -11,6 +11,8 @@ export async function load(type = "all"): Promise<ACSMetaModel> {
   } else {
     const path = "acs/acsMeta/" + type;
     metaResult = await api.callAPI({ path });
+    console.log("META RESULT");
+    console.log(metaResult);
   }
   return metaResult as ACSMetaModel;
 }

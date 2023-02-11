@@ -5,6 +5,7 @@ import { fieldsForObjectType } from "../lib/acsDataTableParams";
 
 export const AcsObjectType = ({ objectType = "" }: { objectType: string }) => {
 	const objectTypeMeta = useGetAcsMetaObjectType(objectType);
+	console.log(objectTypeMeta);
 	const { data } = useGetData(objectType);
 	if (!data || !objectTypeMeta || !objectType) {
 		return null;
