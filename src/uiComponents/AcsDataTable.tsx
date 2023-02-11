@@ -1,5 +1,6 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import React from "react";
+import { useQueryClient } from "react-query";
 
 import moment from "moment";
 import { toast } from "react-toastify";
@@ -7,10 +8,13 @@ import { ACSMetaModel } from "../types";
 import { useGetAcsMeta } from "../hooks";
 import { useCallback, useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
-import { deleteObjectDataById } from "../lib/data";
 import AcsDataTableEditModal from "./AcsDataTableEditModal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { createNewObjectDataRow, updateObjectDataById } from "../lib/data";
+import {
+	createNewObjectDataRow,
+	updateObjectDataById,
+	deleteObjectDataById,
+} from "../lib/data";
 
 import {
 	faXmark,
@@ -74,11 +78,14 @@ const AcsDataTable = ({
 }: any) => {
 	const acsMeta = useGetAcsMeta();
 	const [columns, setColumns] = useState<object[]>([]);
-	const [allData, setAllData] = useState<object[]>(data);
 	const [showAddRowModal, setShowAddRowModal] = useState<object>({});
 	const [showEditModalForAField, setShowEditModalForAField] = useState<object>(
 		{}
 	);
+	const allData = data;
+	console.log("All data ");
+	console.log(allData);
+	const queryClient = useQueryClient();
 
 	useEffect(() => {
 		getCustomColumns(allData, objectTypeFields);
@@ -105,6 +112,7 @@ const AcsDataTable = ({
 	const onSubmitEdit = useCallback(async (formData: any, rowId?: string) => {
 		const editResponse: any = await updateObjectDataById(
 			acsMeta as ACSMetaModel,
+			queryClient,
 			objectType as string,
 			rowId,
 			{ ...formData }
@@ -132,7 +140,7 @@ const AcsDataTable = ({
 		const filteredDataAfterDeletion = allData.filter(
 			(item: any) => item.id != id
 		);
-		setAllData(filteredDataAfterDeletion);
+		//setAllData(filteredDataAfterDeletion);
 		toast.success("Record Successfully Deleted", {
 			className: "text-sm",
 		});
@@ -260,7 +268,7 @@ const AcsDataTable = ({
 					{title}
 				</h5>
 			)}
-			{allData.length > 0 && (
+			{allData && allData.length > 0 && (
 				<div className="flex justify-end items-center mb-6">
 					<FontAwesomeIcon
 						icon={faCirclePlus}
@@ -280,7 +288,11 @@ const AcsDataTable = ({
 					Add
 				</div>
 			)}
-			<div className={`mb-10 ${allData.length > 0 ? "border shadow-lg" : ""}`}>
+			<div
+				className={`mb-10 ${
+					allData && allData.length > 0 ? "border shadow-lg" : ""
+				}`}
+			>
 				<DataTable
 					columns={columns}
 					data={allData}

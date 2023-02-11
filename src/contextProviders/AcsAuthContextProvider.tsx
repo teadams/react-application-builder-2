@@ -10,7 +10,7 @@ export const AcsAuthContextProvider = (props: any) => {
 
 	const tenantSetup: { [index: string]: unknown } = {};
 	const { data = [] } = useGetData("acsTenantSetup");
-	console.log(data);
+
 	for (const row of data ?? []) {
 		tenantSetup[row.parameter as string] = row.value;
 	}

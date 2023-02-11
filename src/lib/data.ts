@@ -1,5 +1,6 @@
 import "react-app-polyfill/ie9";
 import "react-app-polyfill/stable";
+import { QueryClient, QueryKey } from "react-query";
 import { ACSMetaModel } from "../types";
 import * as api from "./api";
 
@@ -48,6 +49,7 @@ export const deleteObjectDataById = async (
 
 export const updateObjectDataById = async (
   acsMeta: ACSMetaModel,
+  queryClient: QueryClient,
   objectType: string,
   id: unknown,
   objectTypeFields: object
@@ -56,6 +58,8 @@ export const updateObjectDataById = async (
   const params = { ...objectTypeFields };
   const method = "PUT";
   const apiResult = await api.callAPI({ path, params, method });
+  queryClient.invalidateQueries([objectType]);
+
   return apiResult;
 };
 
