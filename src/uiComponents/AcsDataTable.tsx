@@ -83,8 +83,7 @@ const AcsDataTable = ({
 		{}
 	);
 	const allData = data;
-	console.log("All data ");
-	console.log(allData);
+
 	const queryClient = useQueryClient();
 
 	useEffect(() => {
