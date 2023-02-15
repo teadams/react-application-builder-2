@@ -51,6 +51,9 @@ const EditSingleFieldForm = ({
                   register={register}
                   label={data.objectTypeFieldMeta?.prettyName}
                   referencesTable={data.objectTypeFieldMeta.referencesTable}
+                  referencesDisplayField={
+                    data.objectTypeFieldMeta?.referencesDisplayField
+                  }
                 />
               ) : (
                 formField(

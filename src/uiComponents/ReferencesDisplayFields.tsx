@@ -7,19 +7,19 @@ import { Text } from "./formFields";
 interface ReferencesDisplayFieldsProps {
   label?: string;
   referencesTable?: string;
-  register: object;
+  referencesDisplayField?: string;
+  register?: object;
 }
 
 const ReferencesDisplayFields = ({
   label = "Select",
   register,
   referencesTable,
+  referencesDisplayField,
 }: ReferencesDisplayFieldsProps) => {
   const [objectData, setObjectData] = useState<Array<object>>([]);
   const acsMeta = useGetAcsMeta();
   const getDataForObjectType = async () => {
-    console.log("name", name);
-
     const data = await getObjectData(
       acsMeta as ACSMetaModel,
       referencesTable as string
@@ -42,11 +42,13 @@ const ReferencesDisplayFields = ({
           <>
             <option value="">{`Select ${label}`}</option>
             {objectData?.map((option: any, i: number) => {
-              console.log("option", option);
-
               return (
-                <option key={i} value={option?.id as string}>
-                  {option?.id as string}
+                <option key={i} value={option?.id}>
+                  {
+                    option[
+                      referencesDisplayField as unknown as number
+                    ] as string
+                  }
                 </option>
               );
             })}

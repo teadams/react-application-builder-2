@@ -11,8 +11,8 @@ const AcsDrillDown = () => {
   const AcsAuthContextObject: any = useContext(AcsAuthContext);
 
   const logout = () => {
-    AcsAuthContextObject.logout();
     router.push("/acs/auth/login");
+    AcsAuthContextObject.logout();
   };
 
   return (

@@ -38,12 +38,14 @@ export const getObjectDataById = async (
 
 export const deleteObjectDataById = async (
   acsMeta: ACSMetaModel,
+  queryClient: QueryClient,
   objectType: string,
   id: unknown
 ): Promise<unknown> => {
   const path = "acs/" + objectType + "/" + id;
   const method = "DELETE";
   const apiResult = await api.callAPI({ path, method });
+  queryClient.invalidateQueries([objectType]);
   return apiResult;
 };
 
@@ -65,6 +67,7 @@ export const updateObjectDataById = async (
 
 export const createNewObjectDataRow = async (
   acsMeta: ACSMetaModel,
+  queryClient: QueryClient,
   objectType: string,
   objectTypeFields: object
 ): Promise<unknown> => {
@@ -72,6 +75,7 @@ export const createNewObjectDataRow = async (
   const params = { ...objectTypeFields };
   const method = "POST";
   const apiResult = await api.callAPI({ path, params, method });
+  queryClient.invalidateQueries([objectType]);
   return apiResult;
 };
 
