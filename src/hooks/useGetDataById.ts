@@ -4,7 +4,12 @@ import { useGetAcsMeta } from ".";
 import { getObjectDataById } from "../lib/data";
 import { ACSMetaModel } from "../types";
 
-export const useGetDataById = (objectType: string, id: unknown) => {
+export const useGetDataById = (
+  objectType: string,
+  id: unknown,
+  useQueryConfig?: any,
+  enabled = true
+) => {
   const acsMeta = useGetAcsMeta();
   return useQuery<Record<string, unknown>, Error>(
     [objectType],
@@ -16,7 +21,8 @@ export const useGetDataById = (objectType: string, id: unknown) => {
       );
     },
     {
-      enabled: objectType && id ? true : false,
+      enabled: objectType && id && enabled ? true : false,
+      ...useQueryConfig,
     }
   );
 };
