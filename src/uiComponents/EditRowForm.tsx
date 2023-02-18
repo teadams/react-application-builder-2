@@ -27,13 +27,14 @@ export const formField = (
       return <TextBox {...standardProps} />;
     case "timestamp":
       return <TextBox type="date" {...standardProps} />;
-    case "boolean":
-      let data = [
+    case "boolean": {
+      const data = [
         { key: "True", value: true },
         { key: "False", value: false },
       ];
       standardProps["data"] = data;
       return <DropDown {...standardProps} />;
+    }
     default:
       console.log("new data typee found");
       return null;

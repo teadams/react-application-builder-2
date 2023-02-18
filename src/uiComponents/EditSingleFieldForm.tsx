@@ -10,7 +10,7 @@ const EditSingleFieldForm = ({
   onSubmit,
   hideEditModal,
 }: EditFormPropsInterface) => {
-  let fieldValue =
+  const fieldValue =
     data.objectTypeFieldMeta?.dataType === "timestamp" && data?.value
       ? new Date(data.value).toISOString().substring(0, 10)
       : data.value;
