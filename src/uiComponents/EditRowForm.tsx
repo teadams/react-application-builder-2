@@ -6,15 +6,16 @@ import {
   dataObjectForEditInterface,
 } from "../types/ACSobjectTypesForUI";
 import { ReferencesDisplayFields } from "./ReferencesDisplayFields";
+import { DropDown } from "./formFields/DropDown";
 
-const formField = (
+export const formField = (
   value: string | undefined,
   prettyName: string,
   dataType: string,
   register: any,
   readOnly?: boolean
 ) => {
-  const standardProps = {
+  const standardProps: any = {
     register: { ...register },
     label: prettyName,
     value: value,
@@ -27,8 +28,14 @@ const formField = (
     case "timestamp":
       return <TextBox type="date" {...standardProps} />;
     case "boolean":
-      return <RadioButton {...standardProps} />;
+      let data = [
+        { key: "True", value: true },
+        { key: "False", value: false },
+      ];
+      standardProps["data"] = data;
+      return <DropDown {...standardProps} />;
     default:
+      console.log("new data typee found");
       return null;
   }
 };

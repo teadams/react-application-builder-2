@@ -1,34 +1,8 @@
 import React from "react";
 import { RadioButton, TextBox } from "./formFields";
 import { EditFormPropsInterface } from "../types/ACSobjectTypesForUI";
-
 import { ReferencesDisplayFields } from "./ReferencesDisplayFields";
-
-const formField = (
-  value: string | undefined,
-  prettyName: string,
-  dataType: string,
-  register: any,
-  readOnly: boolean
-) => {
-  const standardProps = {
-    register: { ...register },
-    label: prettyName,
-    value: value,
-    readOnly: readOnly ? readOnly : false,
-  };
-
-  switch (dataType) {
-    case "string":
-      return <TextBox {...standardProps} />;
-    case "timestamp":
-      return <TextBox type="date" {...standardProps} />;
-    case "boolean":
-      return <RadioButton {...standardProps} />;
-    default:
-      return null;
-  }
-};
+import { formField } from "./EditRowForm";
 
 const EditSingleFieldForm = ({
   register,
