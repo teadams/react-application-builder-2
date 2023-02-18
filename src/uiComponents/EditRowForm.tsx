@@ -11,12 +11,14 @@ const formField = (
   value: string | undefined,
   prettyName: string,
   dataType: string,
-  register: any
+  register: any,
+  readOnly?: boolean
 ) => {
   const standardProps = {
     register: { ...register },
     label: prettyName,
     value: value,
+    readOnly: readOnly ? readOnly : false,
   };
 
   switch (dataType) {
@@ -69,6 +71,11 @@ const EditRowForm = ({
                               referencesDisplayField={
                                 objectTypeFieldMeta?.referencesDisplayField
                               }
+                              readOnly={
+                                objectTypeFieldMeta?.readOnly
+                                  ? objectTypeFieldMeta?.readOnly
+                                  : false
+                              }
                             />
                           );
                         } else {
@@ -91,7 +98,8 @@ const EditRowForm = ({
                             value,
                             label,
                             dataType,
-                            register(objectTypeFieldMeta?.name)
+                            register(objectTypeFieldMeta?.name),
+                            objectTypeFieldMeta?.readOnly
                           );
                         }
                       }

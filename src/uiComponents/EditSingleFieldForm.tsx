@@ -8,12 +8,14 @@ const formField = (
   value: string | undefined,
   prettyName: string,
   dataType: string,
-  register: any
+  register: any,
+  readOnly: boolean
 ) => {
   const standardProps = {
     register: { ...register },
     label: prettyName,
     value: value,
+    readOnly: readOnly ? readOnly : false,
   };
 
   switch (dataType) {
@@ -34,6 +36,10 @@ const EditSingleFieldForm = ({
   onSubmit,
   hideEditModal,
 }: EditFormPropsInterface) => {
+  let fieldValue =
+    data.objectTypeFieldMeta?.dataType === "timestamp" && data?.value
+      ? new Date(data.value).toISOString().substring(0, 10)
+      : data.value;
   return (
     <form onSubmit={onSubmit}>
       <div>
@@ -54,13 +60,19 @@ const EditSingleFieldForm = ({
                   referencesDisplayField={
                     data.objectTypeFieldMeta?.referencesDisplayField
                   }
+                  readOnly={
+                    data?.objectTypeFieldMeta?.readOnly
+                      ? data?.objectTypeFieldMeta?.readOnly
+                      : false
+                  }
                 />
               ) : (
                 formField(
-                  data?.value,
+                  fieldValue,
                   data.objectTypeFieldMeta?.prettyName,
                   data.objectTypeFieldMeta?.dataType,
-                  register
+                  register,
+                  data.objectTypeFieldMeta?.readOnly
                 )
               )}
             </div>

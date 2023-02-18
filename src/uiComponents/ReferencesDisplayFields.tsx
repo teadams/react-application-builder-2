@@ -9,6 +9,7 @@ interface ReferencesDisplayFieldsProps {
   referencesTable?: string;
   referencesDisplayField?: string;
   register?: object;
+  readOnly?: boolean;
 }
 
 const ReferencesDisplayFields = ({
@@ -16,6 +17,7 @@ const ReferencesDisplayFields = ({
   register,
   referencesTable,
   referencesDisplayField,
+  readOnly = false,
 }: ReferencesDisplayFieldsProps) => {
   const [objectData, setObjectData] = useState<Array<object>>([]);
   const acsMeta = useGetAcsMeta();
@@ -33,11 +35,14 @@ const ReferencesDisplayFields = ({
     <div className="mb-8">
       <Text fontSizeClass="text-sm">{label}</Text>
 
-      <div className="w-full">
+      <div className="w-full flex">
         <select
-          className={`mt-1 px-3 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1`}
+          className={`mt-1 px-3 py-2 ${
+            readOnly ? "bg-slate-200" : "bg-white"
+          } border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1`}
           aria-label="Default select example"
           {...register}
+          disabled={readOnly}
         >
           <>
             <option value="">{`Select ${label}`}</option>
