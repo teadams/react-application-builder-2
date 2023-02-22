@@ -6,17 +6,20 @@ import {
   dataObjectForEditInterface,
 } from "../types/ACSobjectTypesForUI";
 import { ReferencesDisplayFields } from "./ReferencesDisplayFields";
+import { DropDown } from "./formFields/DropDown";
 
-const formField = (
+export const formField = (
   value: string | undefined,
   prettyName: string,
   dataType: string,
-  register: any
+  register: any,
+  readOnly?: boolean
 ) => {
-  const standardProps = {
+  const standardProps: any = {
     register: { ...register },
     label: prettyName,
     value: value,
+    readOnly: readOnly ? readOnly : false,
   };
 
   switch (dataType) {
@@ -24,9 +27,16 @@ const formField = (
       return <TextBox {...standardProps} />;
     case "timestamp":
       return <TextBox type="date" {...standardProps} />;
-    case "boolean":
-      return <RadioButton {...standardProps} />;
+    case "boolean": {
+      const data = [
+        { key: "True", value: true },
+        { key: "False", value: false },
+      ];
+      standardProps["data"] = data;
+      return <DropDown {...standardProps} />;
+    }
     default:
+      console.log("new data typee found");
       return null;
   }
 };
@@ -69,6 +79,11 @@ const EditRowForm = ({
                               referencesDisplayField={
                                 objectTypeFieldMeta?.referencesDisplayField
                               }
+                              readOnly={
+                                objectTypeFieldMeta?.readOnly
+                                  ? objectTypeFieldMeta?.readOnly
+                                  : false
+                              }
                             />
                           );
                         } else {
@@ -91,7 +106,8 @@ const EditRowForm = ({
                             value,
                             label,
                             dataType,
-                            register(objectTypeFieldMeta?.name)
+                            register(objectTypeFieldMeta?.name),
+                            objectTypeFieldMeta?.readOnly
                           );
                         }
                       }

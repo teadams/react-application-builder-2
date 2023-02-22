@@ -3,6 +3,7 @@ import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHome } from "@fortawesome/free-solid-svg-icons";
 import profile from "../../public/profile.png";
+import Icon from "./Icon";
 
 interface SideBarProps {
   children: JSX.Element;
@@ -64,18 +65,11 @@ const SideBar = ({ children, username, logout }: SideBarProps) => {
       <section className="py-2 block md:hidden bg-theme-light-gray px-2 md:px-0">
         <div className="container mx-auto">
           <nav className="flex justify-between items-center">
-            {/* <div>
-              <Image
-                src={logo}
-                alt="logo"
-                className="mx-auto object-contain p-2 w-24 h-12"
-              />
-            </div> */}
             <div>
-              <FontAwesomeIcon
-                icon={faHome}
-                style={{ color: "#000" }}
-                className="h-4 mx-4"
+              <Icon
+                icon="home"
+                className="mx-4"
+                size="lg"
                 onClick={toggleMenu}
               />
             </div>
@@ -87,10 +81,10 @@ const SideBar = ({ children, username, logout }: SideBarProps) => {
         ref={ref}
         className="h-full overflow-auto fixed top-0 right-0 bg-theme-light-gray p-10 translate-x-full transition-transform transform w-80 z-20"
       >
-        <FontAwesomeIcon
-          icon={"xmark"}
-          style={{ color: "#000" }}
-          className="h-4 absolute top-10 right-10"
+        <Icon
+          icon="xmark"
+          className="absolute top-10 right-10"
+          size="lg"
           onClick={toggleMenu}
         />
 

@@ -1,32 +1,8 @@
 import React from "react";
 import { RadioButton, TextBox } from "./formFields";
 import { EditFormPropsInterface } from "../types/ACSobjectTypesForUI";
-
 import { ReferencesDisplayFields } from "./ReferencesDisplayFields";
-
-const formField = (
-  value: string | undefined,
-  prettyName: string,
-  dataType: string,
-  register: any
-) => {
-  const standardProps = {
-    register: { ...register },
-    label: prettyName,
-    value: value,
-  };
-
-  switch (dataType) {
-    case "string":
-      return <TextBox {...standardProps} />;
-    case "timestamp":
-      return <TextBox type="date" {...standardProps} />;
-    case "boolean":
-      return <RadioButton {...standardProps} />;
-    default:
-      return null;
-  }
-};
+import { formField } from "./EditRowForm";
 
 const EditSingleFieldForm = ({
   register,
@@ -34,6 +10,10 @@ const EditSingleFieldForm = ({
   onSubmit,
   hideEditModal,
 }: EditFormPropsInterface) => {
+  const fieldValue =
+    data.objectTypeFieldMeta?.dataType === "timestamp" && data?.value
+      ? new Date(data.value).toISOString().substring(0, 10)
+      : data.value;
   return (
     <form onSubmit={onSubmit}>
       <div>
@@ -54,13 +34,19 @@ const EditSingleFieldForm = ({
                   referencesDisplayField={
                     data.objectTypeFieldMeta?.referencesDisplayField
                   }
+                  readOnly={
+                    data?.objectTypeFieldMeta?.readOnly
+                      ? data?.objectTypeFieldMeta?.readOnly
+                      : false
+                  }
                 />
               ) : (
                 formField(
-                  data?.value,
+                  fieldValue,
                   data.objectTypeFieldMeta?.prettyName,
                   data.objectTypeFieldMeta?.dataType,
-                  register
+                  register,
+                  data.objectTypeFieldMeta?.readOnly
                 )
               )}
             </div>

@@ -24,6 +24,7 @@ import {
 import { objectTypeFieldMetaInterface } from "../types/ACSobjectTypesForUI";
 import { ReferencesDisplayFields } from "./ReferencesDisplayFields";
 import { useForm } from "react-hook-form";
+import Icon from "./Icon";
 
 const customStyles = {
   headCells: {
@@ -96,6 +97,79 @@ const columnCmp = (value: string, callBack: () => void) => {
   );
 };
 
+const getFilterComponent = (
+  filterText: string,
+  fieldsToDisplay: Array<object>,
+  objectTypeFields: any,
+  selectFilterCallback: (value: string) => void,
+  cancelCallback: () => void,
+  filterDataCallback: (value: string, type: string) => void
+) => {
+  const { register, getValues } = useForm();
+  const objectTypeFieldMeta: objectTypeFieldMetaInterface =
+    objectTypeFields[filterText as unknown as number];
+
+  const filterDataByObjectField = () => {
+    const value = getValues("filter");
+    filterDataCallback(value, "object");
+  };
+
+  return (
+    <>
+      <div className="w-full mb-10">
+        <div className="flex items-center">
+          <select
+            className={`mr-5 px-3 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1`}
+            aria-label="Default select example"
+            onChange={(e) => selectFilterCallback(e.target.value)}
+          >
+            <>
+              <option value="">Filter By</option>
+              {fieldsToDisplay?.map((option: any, i: number) => {
+                return (
+                  <option key={i} value={option as string}>
+                    {option as string}
+                  </option>
+                );
+              })}
+            </>
+          </select>
+          <div className="border px-2" onClick={cancelCallback}>
+            X
+          </div>
+        </div>
+
+        {filterText && objectTypeFieldMeta?.referencesDisplayField && (
+          <div className="flex items-center mt-4">
+            <div className="w-full mr-5">
+              <ReferencesDisplayFields
+                register={register("filter")}
+                label={objectTypeFieldMeta?.prettyName}
+                referencesTable={objectTypeFieldMeta.referencesTable}
+                referencesDisplayField={
+                  objectTypeFieldMeta?.referencesDisplayField
+                }
+              />
+            </div>
+            <div className="border px-2" onClick={filterDataByObjectField}>
+              search
+            </div>
+          </div>
+        )}
+
+        {filterText && !objectTypeFieldMeta?.referencesDisplayField && (
+          <input
+            placeholder={`Search by ${filterText}`}
+            type="search"
+            onBlur={(e) => filterDataCallback(e.target.value, "string")}
+            className="mt-1 px-3 py-2 text-xs text-dark bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:ring-gray-400 block w-full rounded-md sm:text-sm focus:ring-1"
+          />
+        )}
+      </div>
+    </>
+  );
+};
+
 const AcsDataTable = ({
   data,
   title,
@@ -109,13 +183,15 @@ const AcsDataTable = ({
   const [showEditModalForAField, setShowEditModalForAField] = useState<object>(
     {}
   );
+  const [allData, setAllData] = useState<object[]>(data);
+  const [filterText, setFilterText] = useState("");
 
-  const allData = data;
   const queryClient = useQueryClient();
 
   useEffect(() => {
+    setAllData(data);
     getCustomColumns(allData, objectTypeFields);
-  }, [allData]);
+  }, [data]);
 
   const hideEditModal = useCallback(() => setShowEditModalForAField({}), []);
   const hideAddModal = useCallback(() => setShowAddRowModal({}), []);
@@ -156,6 +232,25 @@ const AcsDataTable = ({
     }
     hideEditModal();
   }, []);
+
+  const filterTheData = useCallback(
+    (searchText: string, searchType?: string) => {
+      if (searchText) {
+        const filteredItems = data.filter((item: any) =>
+          searchType === "object"
+            ? item && item[filterText]["id"] === searchText
+            : item &&
+              item[filterText]
+                ?.toLowerCase()
+                .includes(searchText?.toLowerCase())
+        );
+        setAllData(filteredItems);
+      } else {
+        setAllData(data);
+      }
+    },
+    [filterText]
+  );
 
   // get custom (names/header cells) for data table
   const getCustomColumns = (
@@ -226,10 +321,10 @@ const AcsDataTable = ({
           return (
             <div className="flex items-center">
               <div className="inline" title="delete row">
-                <FontAwesomeIcon
-                  icon={faXmark}
-                  style={{ color: "#eb0808" }}
-                  className="h-5"
+                <Icon
+                  icon="xmark"
+                  className="text-rose-400"
+                  size="xl"
                   onClick={() =>
                     deleteRow(
                       row.id,
@@ -241,10 +336,10 @@ const AcsDataTable = ({
                 />
               </div>
               <div className="inline" title="delete row">
-                <FontAwesomeIcon
-                  icon={faPenToSquare}
-                  style={{ color: "#302b2bd4" }}
-                  className="h-4 mx-4"
+                <Icon
+                  icon="pen-to-square"
+                  className="text-[#302b2bd4] mx-4"
+                  size="lg"
                   onClick={() => setShowEditModalForAField(object)}
                 />
               </div>
@@ -267,12 +362,23 @@ const AcsDataTable = ({
           {title}
         </h5>
       )}
+      {getFilterComponent(
+        filterText,
+        fieldsToDisplay,
+        objectTypeFields,
+        (value: string) => setFilterText(value),
+        () => {
+          setFilterText("");
+          setAllData(data);
+        },
+        (value: string, type: string) => filterTheData(value, type)
+      )}
       {allData && allData.length > 0 && (
         <div className="flex justify-end items-center mb-6">
-          <FontAwesomeIcon
-            icon={faCirclePlus}
-            style={{ color: "#302b2bd4" }}
-            className="h-4 mr-2"
+          <Icon
+            icon="circle-plus"
+            className="text-[#302b2bd4] mr-2"
+            size="lg"
             onClick={() =>
               setShowAddRowModal({
                 value: "",
