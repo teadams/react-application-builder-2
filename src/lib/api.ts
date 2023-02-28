@@ -84,6 +84,8 @@ export async function callAPI({
      params: ${paramStr} 
      data: ${dataStr}`;
     // alert(error_prompt + error.message + " " + error.stack);
+    console.log("error",error);
+    
     toast.error(error.message?.toString(), {
       className: "text-sm",
     });

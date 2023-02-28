@@ -9,4 +9,5 @@ export const fieldsForObjectType: Record<string, any> = {
     greetrAssessments: ["application","greetrstage","greetrSubstage","description"],
     acsUsers: ["firstName","lastName","email","createdAt","mergeid"],
     departments: ["name","createdAt"],
+    acsMessages: ["acsUser","applicantMessage","candidate","application","createdAt"],
 };

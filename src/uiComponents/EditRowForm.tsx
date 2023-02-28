@@ -68,6 +68,21 @@ const EditRowForm = ({
                         const objectTypeFieldMeta: objectTypeFieldMetaInterface =
                           objectTypeFields[field as unknown as number];
                         const label = objectTypeFieldMeta.prettyName;
+                        const dataType = objectTypeFieldMeta.dataType;
+                        let value;
+                        if (data.rowId) {
+                          const currentRow: any = data.allData?.find(
+                            (item: any) => item.id === data.rowId
+                          );
+                          value =
+                            dataType === "timestamp"
+                              ? new Date(currentRow[field])
+                                  .toISOString()
+                                  .substring(0, 10)
+                              : currentRow[field];
+                        } else {
+                          value = null;
+                        }
                         if (objectTypeFieldMeta?.referencesDisplayField) {
                           return (
                             <ReferencesDisplayFields
@@ -84,24 +99,11 @@ const EditRowForm = ({
                                   ? objectTypeFieldMeta?.readOnly
                                   : false
                               }
+                              value={value ? value?.id : value}
+                              key={index}
                             />
                           );
                         } else {
-                          const dataType = objectTypeFieldMeta.dataType;
-                          let value;
-                          if (data.rowId) {
-                            const currentRow: any = data.allData?.find(
-                              (item: any) => item.id === data.rowId
-                            );
-                            value =
-                              dataType === "timestamp"
-                                ? new Date(currentRow[field])
-                                    .toISOString()
-                                    .substring(0, 10)
-                                : currentRow[field];
-                          } else {
-                            value = null;
-                          }
                           return formField(
                             value,
                             label,
