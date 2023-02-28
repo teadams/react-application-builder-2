@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { RadioButton, TextBox } from "./formFields";
 import { EditFormPropsInterface } from "../types/ACSobjectTypesForUI";
 import { ReferencesDisplayFields } from "./ReferencesDisplayFields";
@@ -10,10 +10,11 @@ const EditSingleFieldForm = ({
   onSubmit,
   hideEditModal,
 }: EditFormPropsInterface) => {
-  const fieldValue =
+  const fieldValue: any =
     data.objectTypeFieldMeta?.dataType === "timestamp" && data?.value
       ? new Date(data.value).toISOString().substring(0, 10)
       : data.value;
+
   return (
     <form onSubmit={onSubmit}>
       <div>
@@ -39,6 +40,7 @@ const EditSingleFieldForm = ({
                       ? data?.objectTypeFieldMeta?.readOnly
                       : false
                   }
+                  value={fieldValue}
                 />
               ) : (
                 formField(

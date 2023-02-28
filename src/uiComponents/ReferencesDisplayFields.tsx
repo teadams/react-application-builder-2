@@ -10,6 +10,7 @@ interface ReferencesDisplayFieldsProps {
   referencesDisplayField?: string;
   register?: object;
   readOnly?: boolean;
+  value?: any;
 }
 
 const ReferencesDisplayFields = ({
@@ -18,6 +19,7 @@ const ReferencesDisplayFields = ({
   referencesTable,
   referencesDisplayField,
   readOnly = false,
+  value = null,
 }: ReferencesDisplayFieldsProps) => {
   const [objectData, setObjectData] = useState<Array<object>>([]);
   const acsMeta = useGetAcsMeta();
@@ -31,6 +33,7 @@ const ReferencesDisplayFields = ({
   useEffect(() => {
     getDataForObjectType();
   }, []);
+
   return (
     <div className="mb-8">
       <Text fontSizeClass="text-sm">{label}</Text>
@@ -46,17 +49,22 @@ const ReferencesDisplayFields = ({
         >
           <>
             <option value="">{`Select ${label}`}</option>
-            {objectData?.map((option: any, i: number) => {
-              return (
-                <option key={i} value={option?.id}>
-                  {
-                    option[
-                      referencesDisplayField as unknown as number
-                    ] as string
-                  }
-                </option>
-              );
-            })}
+            {objectData &&
+              objectData?.map((option: any, i: number) => {
+                return (
+                  <option
+                    key={i}
+                    value={option?.id}
+                    selected={option?.id === value ? true : false}
+                  >
+                    {
+                      option[
+                        referencesDisplayField as unknown as number
+                      ] as string
+                    }
+                  </option>
+                );
+              })}
           </>
         </select>
       </div>

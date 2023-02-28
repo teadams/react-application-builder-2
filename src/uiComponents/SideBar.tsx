@@ -9,9 +9,10 @@ interface SideBarProps {
   children: JSX.Element;
   username: string;
   logout: () => void;
+  title?: string;
 }
 
-const SideBar = ({ children, username, logout }: SideBarProps) => {
+const SideBar = ({ children, username, logout, title }: SideBarProps) => {
   const ref = useRef<HTMLDivElement>(null);
 
   const toggleMenu = () => {
@@ -37,7 +38,7 @@ const SideBar = ({ children, username, logout }: SideBarProps) => {
             className="mx-auto object-contain p-2 w-24 h-12 mb-6"
           /> */}
 
-          <h1 className="text-dark mb-6 font-bold">Greetr</h1>
+          <h1 className="text-dark mb-6 font-bold">{title}</h1>
           {children}
 
           <div className="flex gap-4 justify-center flex-col flex-wrap items-center mt-20">

@@ -105,6 +105,7 @@ const getFilterComponent = (
   cancelCallback: () => void,
   filterDataCallback: (value: string, type: string) => void
 ) => {
+  const [searchInputText, setSearchInputText] = useState("");
   const { register, getValues } = useForm();
   const objectTypeFieldMeta: objectTypeFieldMetaInterface =
     objectTypeFields[filterText as unknown as number];
@@ -125,17 +126,22 @@ const getFilterComponent = (
           >
             <>
               <option value="">Filter By</option>
-              {fieldsToDisplay?.map((option: any, i: number) => {
+              {fieldsToDisplay?.map((option: any, index: number) => {
                 return (
-                  <option key={i} value={option as string}>
+                  <option key={Math.random() + index} value={option as string}>
                     {option as string}
                   </option>
                 );
               })}
             </>
           </select>
-          <div className="border px-2" onClick={cancelCallback}>
-            X
+          <div className="border px-2 py-1 rounded">
+            <Icon
+              icon="xmark"
+              className="text-theme-blue"
+              size="xl"
+              onClick={cancelCallback}
+            />
           </div>
         </div>
 
@@ -151,19 +157,30 @@ const getFilterComponent = (
                 }
               />
             </div>
-            <div className="border px-2" onClick={filterDataByObjectField}>
-              search
-            </div>
+            <Icon
+              icon="search"
+              className="text-theme-blue"
+              size="xl"
+              onClick={filterDataByObjectField}
+            />
           </div>
         )}
 
         {filterText && !objectTypeFieldMeta?.referencesDisplayField && (
-          <input
-            placeholder={`Search by ${filterText}`}
-            type="search"
-            onBlur={(e) => filterDataCallback(e.target.value, "string")}
-            className="mt-1 px-3 py-2 text-xs text-dark bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:ring-gray-400 block w-full rounded-md sm:text-sm focus:ring-1"
-          />
+          <div className="flex items-center mt-4">
+            <input
+              placeholder={`Search by ${filterText}`}
+              type="search"
+              onBlur={(e) => setSearchInputText(e.target.value)}
+              className="mt-1 mr-5 px-3 py-2 text-xs text-dark bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:ring-gray-400 block w-full rounded-md sm:text-sm focus:ring-1"
+            />
+            <Icon
+              icon="search"
+              className="text-theme-blue"
+              size="xl"
+              onClick={() => filterDataCallback(searchInputText, "string")}
+            />
+          </div>
         )}
       </div>
     </>
@@ -190,48 +207,80 @@ const AcsDataTable = ({
 
   useEffect(() => {
     setAllData(data);
-    getCustomColumns(allData, objectTypeFields);
+    getCustomColumns(data, objectTypeFields);
   }, [data]);
 
   const hideEditModal = useCallback(() => setShowEditModalForAField({}), []);
   const hideAddModal = useCallback(() => setShowAddRowModal({}), []);
 
   const onSubmitAdd = useCallback(async (formData: any) => {
-    const addRowResponse: any = await createNewObjectDataRow(
-      acsMeta as ACSMetaModel,
-      queryClient,
-      objectType as string,
-      { ...formData }
-    );
+    const dataToAdd: any = {};
 
-    if ("persistResults" in addRowResponse) {
-      toast.success("Record Successfully Added", {
+    Object.keys(formData).map((formField) => {
+      if (formData[formField as string] === "") {
+        return null;
+      } else {
+        dataToAdd[formField] = formData[formField as string];
+      }
+    });
+
+    if (Object.keys(dataToAdd).length > 0) {
+      const addRowResponse: any = await createNewObjectDataRow(
+        acsMeta as ACSMetaModel,
+        queryClient,
+        objectType as string,
+        { ...dataToAdd }
+      );
+
+      if ("persistResults" in addRowResponse) {
+        toast.success("Record Successfully Added", {
+          className: "text-sm",
+        });
+      }
+    } else {
+      toast.error("Nothing to insert", {
         className: "text-sm",
       });
     }
+
     hideAddModal();
   }, []);
 
-  const onSubmitEdit = useCallback(async (formData: any, rowId?: string) => {
-    const editResponse: any = await updateObjectDataById(
-      acsMeta as ACSMetaModel,
-      queryClient,
-      objectType as string,
-      rowId,
-      { ...formData }
-    );
+  const onSubmitEdit = useCallback(
+    async (formData: any, rowId?: string, formState?: any) => {
+      const dataToEdit: any = {};
 
-    if ("persistResults" in editResponse) {
-      toast.success("Record Successfully Updated", {
-        className: "text-sm",
+      Object.keys(formState.dirtyFields).map((formField) => {
+        if (formData[formField as string] === "") {
+          return null;
+        } else {
+          dataToEdit[formField] = formData[formField as string];
+        }
       });
-    } else {
-      toast.error("Record Can not be Updated", {
-        className: "text-sm",
-      });
-    }
-    hideEditModal();
-  }, []);
+
+      if (Object.keys(dataToEdit).length > 0) {
+        const editResponse: any = await updateObjectDataById(
+          acsMeta as ACSMetaModel,
+          queryClient,
+          objectType as string,
+          rowId,
+          { ...formData }
+        );
+
+        if ("persistResults" in editResponse) {
+          toast.success("Record Successfully Updated", {
+            className: "text-sm",
+          });
+        } else {
+          toast.error("Record Can not be Updated", {
+            className: "text-sm",
+          });
+        }
+      }
+      hideEditModal();
+    },
+    []
+  );
 
   const filterTheData = useCallback(
     (searchText: string, searchType?: string) => {
@@ -373,26 +422,24 @@ const AcsDataTable = ({
         },
         (value: string, type: string) => filterTheData(value, type)
       )}
-      {allData && allData.length > 0 && (
-        <div className="flex justify-end items-center mb-6">
-          <Icon
-            icon="circle-plus"
-            className="text-[#302b2bd4] mr-2"
-            size="lg"
-            onClick={() =>
-              setShowAddRowModal({
-                value: "",
-                objectTypeFieldMeta: {},
-                objectTypeFields: objectTypeFields,
-                editRow: true,
-                rowId: "",
-                allData: [],
-              })
-            }
-          />
-          Add
-        </div>
-      )}
+      <div className="flex justify-end items-center mb-6">
+        <Icon
+          icon="circle-plus"
+          className="text-[#302b2bd4] mr-2"
+          size="lg"
+          onClick={() =>
+            setShowAddRowModal({
+              value: "",
+              objectTypeFieldMeta: {},
+              objectTypeFields: objectTypeFields,
+              editRow: true,
+              rowId: "",
+              allData: [],
+            })
+          }
+        />
+        Add
+      </div>
       <div
         className={`mb-10 ${
           allData && allData.length > 0 ? "border shadow-lg" : ""

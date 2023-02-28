@@ -35,7 +35,7 @@ function DropDown({
               return (
                 <option
                   key={i}
-                  value={option?.value}
+                  // value={option?.value}
                   selected={option?.value === value ? true : false}
                 >
                   {option?.key}

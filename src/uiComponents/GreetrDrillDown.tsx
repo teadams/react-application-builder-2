@@ -5,7 +5,7 @@ import AcsAuthContext from "../contextProviders/AcsAuthContext";
 import SideBar from "./SideBar";
 import Icon from "./Icon";
 
-const AcsDrillDown = () => {
+const GreetrDrillDown = () => {
   const router = useRouter();
   const [objectType, setObjectType] = useState("");
   const AcsAuthContextObject: any = useContext(AcsAuthContext);
@@ -21,7 +21,7 @@ const AcsDrillDown = () => {
         <SideBar
           logout={logout}
           username={`${AcsAuthContextObject.userInfo?.firstName} ${AcsAuthContextObject.userInfo?.lastName}`}
-          title="Acs"
+          title="Greetr"
         >
           <>
             <div className="flex items-center mb-2">
@@ -55,9 +55,9 @@ const AcsDrillDown = () => {
               <Icon icon="home" className="h-4 mr-2" />
               <p
                 className="text-dark m-0 p-0"
-                onClick={() => setObjectType("jobStages")}
+                onClick={() => setObjectType("greetrStages")}
               >
-                Job Stages
+                Greetr Stages
               </p>
             </div>
             <div className="flex items-center mb-2">
@@ -69,22 +69,14 @@ const AcsDrillDown = () => {
                 offices
               </p>
             </div>
+
             <div className="flex items-center mb-2">
               <Icon icon="home" className="h-4 mr-2" />
               <p
                 className="text-dark m-0 p-0"
-                onClick={() => setObjectType("offers")}
+                onClick={() => setObjectType("greetrInterviews")}
               >
-                Offers
-              </p>
-            </div>
-            <div className="flex items-center mb-2">
-              <Icon icon="home" className="h-4 mr-2" />
-              <p
-                className="text-dark m-0 p-0"
-                onClick={() => setObjectType("interviews")}
-              >
-                Interviews
+                Greetr Interviews
               </p>
             </div>
             <div className="flex items-center mb-2">
@@ -93,7 +85,7 @@ const AcsDrillDown = () => {
                 className="text-dark m-0 p-0"
                 onClick={() => setObjectType("greetrAssessments")}
               >
-                Assessment
+                Greetr Assessments
               </p>
             </div>
             <div className="flex items-center mb-2">
@@ -103,15 +95,6 @@ const AcsDrillDown = () => {
                 onClick={() => setObjectType("acsUsers")}
               >
                 Users
-              </p>
-            </div>
-            <div className="flex items-center mb-2">
-              <Icon icon="home" className="h-4 mr-2" />
-              <p
-                className="text-dark m-0 p-0"
-                onClick={() => setObjectType("departments")}
-              >
-                Departments
               </p>
             </div>
             <div className="flex items-center mb-2">
@@ -137,4 +120,4 @@ const AcsDrillDown = () => {
   );
 };
 
-export default AcsDrillDown;
+export default GreetrDrillDown;
