@@ -27,7 +27,7 @@ const GreetrDrillDown = () => {
             <div className="flex items-center mb-2">
               <Icon icon="home" className="h-4 mr-2" />
               <p
-                className="text-dark m-0 p-0"
+                className="text-dark m-0 p-0 "
                 onClick={() => setObjectType("jobs")}
               >
                 Jobs
@@ -104,6 +104,78 @@ const GreetrDrillDown = () => {
                 onClick={() => setObjectType("acsMessages")}
               >
                 Messages
+              </p>
+            </div>
+            <div className="flex items-center mb-2">
+              <Icon icon="home" className="h-4 mr-2" />
+              <p
+                className="text-dark m-0 p-0"
+                onClick={() => setObjectType("recruiterApplicationMap")}
+              >
+                recruiterApplicationMap
+              </p>
+            </div>
+            <div className="flex items-center mb-2">
+              <Icon icon="home" className="h-4 mr-2" />
+              <p
+                className="text-dark m-0 p-0"
+                onClick={() => setObjectType("interviewerInterviewMap")}
+              >
+                interviewerInterviewMap
+              </p>
+            </div>
+            <div className="flex items-center mb-2">
+              <Icon icon="home" className="h-4 mr-2" />
+              <p
+                className="text-dark m-0 p-0"
+                onClick={() => setObjectType("greetrContent")}
+              >
+                greetrContent
+              </p>
+            </div>
+            <div className="flex items-center mb-2">
+              <Icon icon="home" className="h-4 mr-2" />
+              <p
+                className="text-dark m-0 p-0"
+                onClick={() => setObjectType("greetrContentMappings")}
+              >
+                greetrContentMappings
+              </p>
+            </div>
+            <div className="flex items-center mb-2">
+              <Icon icon="home" className="h-4 mr-2" />
+              <p
+                className="text-dark m-0 p-0"
+                onClick={() => setObjectType("surveyStageMap")}
+              >
+                surveyStageMap
+              </p>
+            </div>
+            <div className="flex items-center mb-2">
+              <Icon icon="home" className="h-4 mr-2" />
+              <p
+                className="text-dark m-0 p-0"
+                onClick={() => setObjectType("acsSurveys")}
+              >
+                acsSurveys
+              </p>
+            </div>
+            <div className="flex items-center mb-2">
+              <Icon icon="home" className="h-4 mr-2" />
+              <p
+                className="text-dark m-0 p-0"
+                onClick={() => setObjectType("acsSurveyQuestions")}
+              >
+                acsSurveyQuestions
+              </p>
+            </div>
+            <div className="flex items-center mb-2">
+              <Icon icon="home" className="h-4 mr-2" />
+              <p
+                className="text-dark m-0 p-0 break-words"
+                onClick={() => setObjectType("acsSurveyResponses")}
+              >
+                acsSurveyResponses
               </p>
             </div>
           </>
