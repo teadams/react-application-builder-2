@@ -135,14 +135,16 @@ const getFilterComponent = (
               })}
             </>
           </select>
-          <div className="border px-2 py-1 rounded">
-            <Icon
-              icon="xmark"
-              className="text-theme-blue"
-              size="xl"
-              onClick={cancelCallback}
-            />
-          </div>
+          {filterText && (
+            <div className="border px-2 py-1 rounded">
+              <Icon
+                icon="xmark"
+                className="text-theme-blue"
+                size="xl"
+                onClick={cancelCallback}
+              />
+            </div>
+          )}
         </div>
 
         {filterText && objectTypeFieldMeta?.referencesDisplayField && (
@@ -250,13 +252,26 @@ const AcsDataTable = ({
     async (formData: any, rowId?: string, formState?: any) => {
       const dataToEdit: any = {};
 
-      Object.keys(formState.dirtyFields).map((formField) => {
-        if (formData[formField as string] === "") {
+      // Object.keys(formState.dirtyFields).map((formField) => {
+      //   if (formData[formField as string] === "") {
+      //     return null;
+      //   } else {
+      //     dataToEdit[formField] = formData[formField as string];
+      //   }
+      // });
+
+      Object.keys(formData).map((formField) => {
+        if (objectTypeFields[formField as string]?.readOnly) return;
+        if (objectTypeFields[formField as string]?.dataType === "boolean") {
+          dataToEdit[formField] =
+            formData[formField as string] === "" ? false : true;
           return null;
         } else {
           dataToEdit[formField] = formData[formField as string];
         }
       });
+
+      console.log("dataToEdit", dataToEdit);
 
       if (Object.keys(dataToEdit).length > 0) {
         const editResponse: any = await updateObjectDataById(
@@ -264,7 +279,7 @@ const AcsDataTable = ({
           queryClient,
           objectType as string,
           rowId,
-          { ...formData }
+          { ...dataToEdit }
         );
 
         if ("persistResults" in editResponse) {

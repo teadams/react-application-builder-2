@@ -35,6 +35,8 @@ export const formField = (
       standardProps["data"] = data;
       return <DropDown {...standardProps} />;
     }
+    case "integer":
+      return <TextBox type="number" {...standardProps} />;
     default:
       console.log("new data typee found");
       return null;
