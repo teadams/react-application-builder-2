@@ -96,6 +96,9 @@ const EditRowForm = ({
                               referencesDisplayField={
                                 objectTypeFieldMeta?.referencesDisplayField
                               }
+                              referencesField={
+                                objectTypeFieldMeta?.referencesField
+                              }
                               readOnly={
                                 objectTypeFieldMeta?.readOnly
                                   ? objectTypeFieldMeta?.readOnly

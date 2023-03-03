@@ -11,6 +11,7 @@ interface ReferencesDisplayFieldsProps {
   register?: object;
   readOnly?: boolean;
   value?: any;
+  referencesField?: string;
 }
 
 const ReferencesDisplayFields = ({
@@ -20,6 +21,7 @@ const ReferencesDisplayFields = ({
   referencesDisplayField,
   readOnly = false,
   value = null,
+  referencesField = "",
 }: ReferencesDisplayFieldsProps) => {
   const [objectData, setObjectData] = useState<Array<object>>([]);
   const acsMeta = useGetAcsMeta();
@@ -54,7 +56,7 @@ const ReferencesDisplayFields = ({
                 return (
                   <option
                     key={i}
-                    value={option?.id}
+                    value={option ? option[referencesField] : ""}
                     selected={option?.id === value ? true : false}
                   >
                     {

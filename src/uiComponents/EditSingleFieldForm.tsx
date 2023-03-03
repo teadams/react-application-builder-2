@@ -35,6 +35,7 @@ const EditSingleFieldForm = ({
                   referencesDisplayField={
                     data.objectTypeFieldMeta?.referencesDisplayField
                   }
+                  referencesField={data.objectTypeFieldMeta?.referencesField}
                   readOnly={
                     data?.objectTypeFieldMeta?.readOnly
                       ? data?.objectTypeFieldMeta?.readOnly
