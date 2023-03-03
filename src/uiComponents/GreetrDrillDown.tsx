@@ -17,7 +17,7 @@ const GreetrDrillDown = () => {
 
   return (
     <div>
-      <section className="grid lg:grid-cols-[12%,_1fr] md:grid-cols-[20%,_1fr] sm:grid-cols-[30%,_1fr] grid-cols-1 md:h-[100vh]">
+      <section className="grid lg:grid-cols-[14%,_1fr] md:grid-cols-[20%,_1fr] sm:grid-cols-[30%,_1fr] grid-cols-1 md:h-[100vh]">
         <SideBar
           logout={logout}
           username={`${AcsAuthContextObject.userInfo?.firstName} ${AcsAuthContextObject.userInfo?.lastName}`}
@@ -27,7 +27,7 @@ const GreetrDrillDown = () => {
             <div className="flex items-center mb-2">
               <Icon icon="home" className="h-4 mr-2" />
               <p
-                className="text-dark m-0 p-0 "
+                className="text-dark m-0 p-0 break-words break-all "
                 onClick={() => setObjectType("jobs")}
               >
                 Jobs
@@ -36,7 +36,7 @@ const GreetrDrillDown = () => {
             <div className="flex items-center mb-2">
               <Icon icon="home" className="h-4 mr-2" />
               <p
-                className="text-dark m-0 p-0"
+                className="text-dark m-0 p-0 break-words break-all"
                 onClick={() => setObjectType("applications")}
               >
                 Applications
@@ -45,7 +45,7 @@ const GreetrDrillDown = () => {
             <div className="flex items-center mb-2">
               <Icon icon="home" className="h-4 mr-2" />
               <p
-                className="text-dark m-0 p-0"
+                className="text-dark m-0 p-0 break-words break-all"
                 onClick={() => setObjectType("candidates")}
               >
                 Candidates
@@ -54,7 +54,7 @@ const GreetrDrillDown = () => {
             <div className="flex items-center mb-2">
               <Icon icon="home" className="h-4 mr-2" />
               <p
-                className="text-dark m-0 p-0"
+                className="text-dark m-0 p-0 break-words break-all"
                 onClick={() => setObjectType("greetrStages")}
               >
                 Greetr Stages
@@ -63,7 +63,7 @@ const GreetrDrillDown = () => {
             <div className="flex items-center mb-2">
               <Icon icon="home" className="h-4 mr-2" />
               <p
-                className="text-dark m-0 p-0"
+                className="text-dark m-0 p-0 break-words break-all"
                 onClick={() => setObjectType("offices")}
               >
                 offices
@@ -73,7 +73,7 @@ const GreetrDrillDown = () => {
             <div className="flex items-center mb-2">
               <Icon icon="home" className="h-4 mr-2" />
               <p
-                className="text-dark m-0 p-0"
+                className="text-dark m-0 p-0 break-words break-all"
                 onClick={() => setObjectType("greetrInterviews")}
               >
                 Greetr Interviews
@@ -82,7 +82,7 @@ const GreetrDrillDown = () => {
             <div className="flex items-center mb-2">
               <Icon icon="home" className="h-4 mr-2" />
               <p
-                className="text-dark m-0 p-0"
+                className="text-dark m-0 p-0 break-words break-all"
                 onClick={() => setObjectType("greetrAssessments")}
               >
                 Greetr Assessments
@@ -91,7 +91,7 @@ const GreetrDrillDown = () => {
             <div className="flex items-center mb-2">
               <Icon icon="home" className="h-4 mr-2" />
               <p
-                className="text-dark m-0 p-0"
+                className="text-dark m-0 p-0 break-words break-all"
                 onClick={() => setObjectType("acsUsers")}
               >
                 Users
@@ -100,7 +100,7 @@ const GreetrDrillDown = () => {
             <div className="flex items-center mb-2">
               <Icon icon="home" className="h-4 mr-2" />
               <p
-                className="text-dark m-0 p-0"
+                className="text-dark m-0 p-0 break-words break-all"
                 onClick={() => setObjectType("acsMessages")}
               >
                 Messages
@@ -109,7 +109,7 @@ const GreetrDrillDown = () => {
             <div className="flex items-center mb-2">
               <Icon icon="home" className="h-4 mr-2" />
               <p
-                className="text-dark m-0 p-0"
+                className="text-dark m-0 p-0 break-words break-all"
                 onClick={() => setObjectType("recruiterApplicationMap")}
               >
                 recruiterApplicationMap
@@ -118,7 +118,7 @@ const GreetrDrillDown = () => {
             <div className="flex items-center mb-2">
               <Icon icon="home" className="h-4 mr-2" />
               <p
-                className="text-dark m-0 p-0"
+                className="text-dark m-0 p-0 break-words break-all"
                 onClick={() => setObjectType("interviewerInterviewMap")}
               >
                 interviewerInterviewMap
@@ -127,7 +127,7 @@ const GreetrDrillDown = () => {
             <div className="flex items-center mb-2">
               <Icon icon="home" className="h-4 mr-2" />
               <p
-                className="text-dark m-0 p-0"
+                className="text-dark m-0 p-0 break-words break-all"
                 onClick={() => setObjectType("greetrContent")}
               >
                 greetrContent
@@ -136,7 +136,7 @@ const GreetrDrillDown = () => {
             <div className="flex items-center mb-2">
               <Icon icon="home" className="h-4 mr-2" />
               <p
-                className="text-dark m-0 p-0"
+                className="text-dark m-0 p-0 break-words break-all"
                 onClick={() => setObjectType("greetrContentMappings")}
               >
                 greetrContentMappings
@@ -145,7 +145,7 @@ const GreetrDrillDown = () => {
             <div className="flex items-center mb-2">
               <Icon icon="home" className="h-4 mr-2" />
               <p
-                className="text-dark m-0 p-0"
+                className="text-dark m-0 p-0 break-words break-all"
                 onClick={() => setObjectType("surveyStageMap")}
               >
                 surveyStageMap
@@ -154,7 +154,7 @@ const GreetrDrillDown = () => {
             <div className="flex items-center mb-2">
               <Icon icon="home" className="h-4 mr-2" />
               <p
-                className="text-dark m-0 p-0"
+                className="text-dark m-0 p-0 break-words break-all"
                 onClick={() => setObjectType("acsSurveys")}
               >
                 acsSurveys
@@ -163,7 +163,7 @@ const GreetrDrillDown = () => {
             <div className="flex items-center mb-2">
               <Icon icon="home" className="h-4 mr-2" />
               <p
-                className="text-dark m-0 p-0"
+                className="text-dark m-0 p-0 break-words break-all"
                 onClick={() => setObjectType("acsSurveyQuestions")}
               >
                 acsSurveyQuestions
@@ -172,10 +172,19 @@ const GreetrDrillDown = () => {
             <div className="flex items-center mb-2">
               <Icon icon="home" className="h-4 mr-2" />
               <p
-                className="text-dark m-0 p-0 break-words"
+                className="text-dark m-0 p-0 break-words break-all"
                 onClick={() => setObjectType("acsSurveyResponses")}
               >
                 acsSurveyResponses
+              </p>
+            </div>
+            <div className="flex items-center mb-2">
+              <Icon icon="home" className="h-4 mr-2" />
+              <p
+                className="text-dark m-0 p-0 break-words break-all "
+                onClick={() => setObjectType("acsTenantSetup")}
+              >
+                acsTenantSetup
               </p>
             </div>
           </>

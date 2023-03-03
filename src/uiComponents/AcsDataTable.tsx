@@ -157,6 +157,7 @@ const getFilterComponent = (
                 referencesDisplayField={
                   objectTypeFieldMeta?.referencesDisplayField
                 }
+                referencesField={objectTypeFieldMeta?.referencesField}
               />
             </div>
             <Icon
@@ -252,26 +253,19 @@ const AcsDataTable = ({
     async (formData: any, rowId?: string, formState?: any) => {
       const dataToEdit: any = {};
 
-      // Object.keys(formState.dirtyFields).map((formField) => {
-      //   if (formData[formField as string] === "") {
-      //     return null;
-      //   } else {
-      //     dataToEdit[formField] = formData[formField as string];
-      //   }
-      // });
-
       Object.keys(formData).map((formField) => {
-        if (objectTypeFields[formField as string]?.readOnly) return;
-        if (objectTypeFields[formField as string]?.dataType === "boolean") {
+        // if (objectTypeFields[formField as string]?.readOnly) return;
+
+        if (formData[formField as string] === "") {
+          const dataType = objectTypeFields[formField as string]?.dataType;
           dataToEdit[formField] =
-            formData[formField as string] === "" ? false : true;
-          return null;
+            dataType === "boolean" ? false : dataType === "integer" ? 0 : "";
         } else {
           dataToEdit[formField] = formData[formField as string];
         }
       });
 
-      console.log("dataToEdit", dataToEdit);
+      console.log("dataToEdit", objectType);
 
       if (Object.keys(dataToEdit).length > 0) {
         const editResponse: any = await updateObjectDataById(
@@ -302,7 +296,9 @@ const AcsDataTable = ({
       if (searchText) {
         const filteredItems = data.filter((item: any) =>
           searchType === "object"
-            ? item && item[filterText]["id"] === searchText
+            ? item &&
+              item[filterText]["id"]?.toLowerCase() ===
+                searchText?.toLowerCase()
             : item &&
               item[filterText]
                 ?.toLowerCase()
