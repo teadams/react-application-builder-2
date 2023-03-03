@@ -211,43 +211,46 @@ const AcsDataTable = ({
   useEffect(() => {
     setAllData(data);
     getCustomColumns(data, objectTypeFields);
-  }, [data]);
+  }, [data, objectType]);
 
   const hideEditModal = useCallback(() => setShowEditModalForAField({}), []);
   const hideAddModal = useCallback(() => setShowAddRowModal({}), []);
 
-  const onSubmitAdd = useCallback(async (formData: any) => {
-    const dataToAdd: any = {};
+  const onSubmitAdd = useCallback(
+    async (formData: any) => {
+      const dataToAdd: any = {};
 
-    Object.keys(formData).map((formField) => {
-      if (formData[formField as string] === "") {
-        return null;
+      Object.keys(formData).map((formField) => {
+        if (formData[formField as string] === "") {
+          return null;
+        } else {
+          dataToAdd[formField] = formData[formField as string];
+        }
+      });
+
+      if (Object.keys(dataToAdd).length > 0) {
+        const addRowResponse: any = await createNewObjectDataRow(
+          acsMeta as ACSMetaModel,
+          queryClient,
+          objectType as string,
+          { ...dataToAdd }
+        );
+
+        if ("persistResults" in addRowResponse) {
+          toast.success("Record Successfully Added", {
+            className: "text-sm",
+          });
+        }
       } else {
-        dataToAdd[formField] = formData[formField as string];
-      }
-    });
-
-    if (Object.keys(dataToAdd).length > 0) {
-      const addRowResponse: any = await createNewObjectDataRow(
-        acsMeta as ACSMetaModel,
-        queryClient,
-        objectType as string,
-        { ...dataToAdd }
-      );
-
-      if ("persistResults" in addRowResponse) {
-        toast.success("Record Successfully Added", {
+        toast.error("Nothing to insert", {
           className: "text-sm",
         });
       }
-    } else {
-      toast.error("Nothing to insert", {
-        className: "text-sm",
-      });
-    }
 
-    hideAddModal();
-  }, []);
+      hideAddModal();
+    },
+    [objectType]
+  );
 
   const onSubmitEdit = useCallback(
     async (formData: any, rowId?: string, formState?: any) => {
@@ -288,7 +291,7 @@ const AcsDataTable = ({
       }
       hideEditModal();
     },
-    []
+    [objectType]
   );
 
   const filterTheData = useCallback(
@@ -309,7 +312,7 @@ const AcsDataTable = ({
         setAllData(data);
       }
     },
-    [filterText]
+    [filterText, objectType]
   );
 
   // get custom (names/header cells) for data table
