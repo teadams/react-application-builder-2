@@ -68,7 +68,8 @@ export async function callAPI({
 
   // Temp until dev environments are hooked together
   if (!domain) return null;
-
+  console.log(domain);
+  console.log(path);
   // TODO: params
 
   const apiResult = await axios({
@@ -84,8 +85,8 @@ export async function callAPI({
      params: ${paramStr} 
      data: ${dataStr}`;
     // alert(error_prompt + error.message + " " + error.stack);
-    console.log("error",error);
-    
+    console.log("error", error);
+
     toast.error(error.message?.toString(), {
       className: "text-sm",
     });
