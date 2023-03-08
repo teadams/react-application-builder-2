@@ -109,6 +109,8 @@ export async function callAPI({
       }
       data = {};
     } else {
+      console.log("api results");
+      console.log(apiResult.data);
       data = apiResult.data;
     }
   }
