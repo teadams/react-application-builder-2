@@ -73,4 +73,22 @@ export const fieldsForObjectType: Record<string, any> = {
     "isCurrentStage",
     "icon",
   ],
+  greetrContent: [
+    "title",
+    "type",
+    "createdAt"
+  ],
+  greetrContentMappings: [
+    "greetrcontent",
+    "atsapplication",
+    "greetrstage",
+    "atsstage",
+    "atsjob"],
+  acsSurveyQuestions:[
+    "survey",
+    "order",
+    "question",
+    "questionType",
+    "createdAt"
+  ]
 };
