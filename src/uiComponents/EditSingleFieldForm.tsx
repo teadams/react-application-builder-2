@@ -14,6 +14,7 @@ const EditSingleFieldForm = ({
     data.objectTypeFieldMeta?.dataType === "timestamp" && data?.value
       ? new Date(data.value).toISOString().substring(0, 10)
       : data.value;
+  console.log("data.value => ", data.value);
 
   return (
     <form onSubmit={onSubmit}>

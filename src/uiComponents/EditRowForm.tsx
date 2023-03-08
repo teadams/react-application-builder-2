@@ -39,7 +39,7 @@ export const formField = (
       return <TextBox type="number" {...standardProps} />;
     default:
       console.log("new data typee found");
-      return null;
+      return "new data typee found";
   }
 };
 

@@ -57,13 +57,17 @@ const ReferencesDisplayFields = ({
                   <option
                     key={i}
                     value={option ? option[referencesField] : ""}
-                    selected={option?.id === value ? true : false}
-                  >
-                    {
-                      option[
-                        referencesDisplayField as unknown as number
-                      ] as string
+                    selected={
+                      option[referencesField as unknown as number] === value
+                        ? true
+                        : false
                     }
+                  >
+                    {option[referencesDisplayField as unknown as number]
+                      ? (option[
+                          referencesDisplayField as unknown as number
+                        ] as string)
+                      : "null"}
                   </option>
                 );
               })}

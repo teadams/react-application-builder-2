@@ -268,8 +268,6 @@ const AcsDataTable = ({
         }
       });
 
-      console.log("dataToEdit", objectType);
-
       if (Object.keys(dataToEdit).length > 0) {
         const editResponse: any = await updateObjectDataById(
           acsMeta as ACSMetaModel,
@@ -290,6 +288,7 @@ const AcsDataTable = ({
         }
       }
       hideEditModal();
+      setFilterText("");
     },
     [objectType]
   );
@@ -300,10 +299,11 @@ const AcsDataTable = ({
         const filteredItems = data.filter((item: any) =>
           searchType === "object"
             ? item &&
-              item[filterText]["id"]?.toLowerCase() ===
+              item[filterText]["id"]?.toString()?.toLowerCase() ===
                 searchText?.toLowerCase()
             : item &&
               item[filterText]
+                ?.toString()
                 ?.toLowerCase()
                 .includes(searchText?.toLowerCase())
         );
@@ -358,7 +358,7 @@ const AcsDataTable = ({
                 allData: [],
               };
 
-              return columnCmp(fieldValue, () =>
+              return columnCmp(fieldValue?.toString(), () =>
                 setShowEditModalForAField(columnMetaData)
               );
             },
@@ -420,11 +420,10 @@ const AcsDataTable = ({
 
   return (
     <div className="px-14">
-      {title && (
-        <h5 className="font-medium py-8 lg:-mt-2 lg:mb-2 lg:text-3xl mb-1 text-2xl text-gray-900 text-center">
-          {title}
-        </h5>
-      )}
+      <h5 className="font-medium py-8 lg:-mt-2 lg:mb-2 lg:text-3xl mb-1 text-2xl text-gray-900 text-center">
+        {title ? title : objectType}
+      </h5>
+
       {getFilterComponent(
         filterText,
         fieldsToDisplay,
