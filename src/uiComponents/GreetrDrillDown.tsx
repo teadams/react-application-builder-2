@@ -28,7 +28,7 @@ const GreetrDrillDown = () => {
 							<Icon icon="home" className="h-4 mr-2" />
 							<p
 								className="text-dark m-0 p-0 break-words break-all "
-								onClick={() => setObjectType("atsJob")}
+								onClick={() => setObjectType("atsJobs")}
 							>
 								Jobs
 							</p>

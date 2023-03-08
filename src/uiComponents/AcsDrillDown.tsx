@@ -37,7 +37,7 @@ const AcsDrillDown = () => {
 							<Icon icon="home" className="h-4 mr-2" />
 							<p
 								className="text-dark m-0 p-0"
-								onClick={() => setObjectType("atsApplications")}
+								onClick={() => setObjectType("atsApplication")}
 							>
 								Applications
 							</p>
@@ -55,7 +55,7 @@ const AcsDrillDown = () => {
 							<Icon icon="home" className="h-4 mr-2" />
 							<p
 								className="text-dark m-0 p-0"
-								onClick={() => setObjectType("atsJobStages")}
+								onClick={() => setObjectType("atsJobStage")}
 							>
 								Job Stages
 							</p>
