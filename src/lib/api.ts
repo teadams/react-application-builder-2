@@ -68,8 +68,6 @@ export async function callAPI({
 
   // Temp until dev environments are hooked together
   if (!domain) return null;
-  console.log(domain);
-  console.log(path);
   // TODO: params
 
   const apiResult = await axios({
