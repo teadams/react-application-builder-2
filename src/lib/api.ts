@@ -49,7 +49,7 @@ export const getServerDomainFromHostname = () => {
     0,
     hostnameSplit.length - serverDomainLength
   );
-  const finalHostname = `http://${splicedHostname
+  const finalHostname = `https://${splicedHostname
     .concat(serverDomain)
     .join(".")}`;
   return finalHostname;
