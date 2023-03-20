@@ -24,20 +24,25 @@ const getHeaders = () => {
 };
 
 export const getDomain = () => {
-  getServerDomainFromHostname();
   return process.env.NEXT_PUBLIC_API_LOCATION
     ? process.env.NEXT_PUBLIC_API_LOCATION
-    : !process.env.NEXT_PUBLIC_DOMAIN
-    ? "http://localhost:2000"
     : getServerDomainFromHostname();
 };
 
 export const getServerDomainFromHostname = () => {
   const serverDomain = getServerDomain();
   console.log("SEVER DOMAIN IS " + serverDomain);
+  console.log(
+    "PRoess env next_public Domain " + process.env.NEXT_PUBLIC_DOMAIN
+  );
+  console.log("window location " + window.location.hostname);
   const hostname = process.env.NEXT_PUBLIC_DOMAIN
     ? process.env.NEXT_PUBLIC_DOMAIN
     : window.location.hostname;
+
+  if (hostname === "localhost") {
+    return "http://localhost:2000";
+  }
   const hostnameSplit = hostname.split(".");
   const serverDomainLength = serverDomain?.split(".").length ?? 0;
   const splicedHostname = hostnameSplit.slice(
