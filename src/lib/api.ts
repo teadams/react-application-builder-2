@@ -2,6 +2,7 @@ import "react-app-polyfill/ie9";
 import "react-app-polyfill/stable";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { getServerDomain } from "../../../lib/acsHooks";
 
 type APIMethod = "GET" | "POST" | "PUT" | "DELETE";
 type ACSApiParam = "acsCount" | "acsMax" | unknown;
@@ -22,8 +23,31 @@ const getHeaders = () => {
   return authHeader;
 };
 
-const getDomain = () => {
-  return process.env.NEXT_PUBLIC_API_LOCATION ?? "http://localhost:2000";
+export const getDomain = () => {
+  getServerDomainFromHostname();
+  return process.env.NEXT_PUBLIC_API_LOCATION
+    ? process.env.NEXT_PUBLIC_API_LOCATION
+    : !process.env.NEXT_PUBLIC_DOMAIN
+    ? "http://localhost:2000"
+    : getServerDomainFromHostname();
+};
+
+export const getServerDomainFromHostname = () => {
+  const serverDomain = getServerDomain();
+  console.log("SEVER DOMAIN IS " + serverDomain);
+  const hostname = process.env.NEXT_PUBLIC_DOMAIN
+    ? process.env.NEXT_PUBLIC_DOMAIN
+    : window.location.hostname;
+  const hostnameSplit = hostname.split(".");
+  const serverDomainLength = serverDomain?.split(".").length ?? 0;
+  const splicedHostname = hostnameSplit.slice(
+    0,
+    hostnameSplit.length - serverDomainLength
+  );
+  const finalHostname = `http://${splicedHostname
+    .concat(serverDomain)
+    .join(".")}`;
+  return finalHostname;
 };
 
 export async function callAPI({
@@ -63,12 +87,15 @@ export async function callAPI({
   //   auth_header = { "x-access-token": jwt_token };
   // }
 
-  // TODO :  add env instuctions
   const domain = getDomain();
-
+  console.log("DOMAIn IS " + domain);
+  console.log("PATH IS " + path);
   // Temp until dev environments are hooked together
   if (!domain) return null;
   // TODO: params
+
+  console.log("getting from ");
+  console.log(`${domain}/${path}`);
 
   const apiResult = await axios({
     method: method,
