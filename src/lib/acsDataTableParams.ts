@@ -32,7 +32,7 @@ export const fieldsForObjectType: Record<string, any> = {
   offices: ["name", "location", "createdAt"],
   offers: ["application", "creator", "status", "closed_at", "sent_at"],
   atsInterviews: [
-    "job_interview_stage",
+    "atsJobStage",
     "application",
     "organizer",
     "interviewers",
@@ -73,22 +73,19 @@ export const fieldsForObjectType: Record<string, any> = {
     "isCurrentStage",
     "icon",
   ],
-  greetrContent: [
-    "title",
-    "type",
-    "createdAt"
-  ],
+  greetrContent: ["title", "type", "createdAt"],
   greetrContentMappings: [
     "greetrcontent",
     "atsapplication",
     "greetrstage",
     "atsstage",
-    "atsjob"],
-  acsSurveyQuestions:[
+    "atsjob",
+  ],
+  acsSurveyQuestions: [
     "survey",
     "order",
     "question",
     "questionType",
-    "createdAt"
-  ]
+    "createdAt",
+  ],
 };
