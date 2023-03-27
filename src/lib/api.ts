@@ -24,12 +24,16 @@ const getHeaders = () => {
 };
 
 export const getDomain = () => {
+  console.log("get domain");
+  console.log("env is " + process.env.NEXT_PUBLIC_API_LOCATION);
+
   return process.env.NEXT_PUBLIC_API_LOCATION
     ? process.env.NEXT_PUBLIC_API_LOCATION
     : getServerDomainFromHostname();
 };
 
 export const getServerDomainFromHostname = () => {
+  console.log("get server domain from hosting");
   const serverDomain = getServerDomain();
   console.log("SEVER DOMAIN IS " + serverDomain);
   console.log(
@@ -61,6 +65,8 @@ export async function callAPI({
   data = {},
   method = "GET",
 }: API): Promise<unknown> {
+  console.log("calling api " + path);
+
   // if (data_object) {
   //   Generically handles file uploads,which requires special handling */
   //   let multi_object = new FormData();
