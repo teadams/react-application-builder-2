@@ -39,7 +39,7 @@ export const getServerDomainFromHostname = () => {
   console.log(
     "PRoess env next_public Domain " + process.env.NEXT_PUBLIC_DOMAIN
   );
-  console.log("window location " + window.location.hostname);
+  // console.log("window location " + window.location.hostname);
   const hostname = process.env.NEXT_PUBLIC_DOMAIN
     ? process.env.NEXT_PUBLIC_DOMAIN
     : window.location.hostname;
