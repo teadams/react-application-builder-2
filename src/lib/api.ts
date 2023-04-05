@@ -35,14 +35,14 @@ export const getDomain = () => {
 export const getServerDomainFromHostname = () => {
   console.log("get server domain from hosting");
   const serverDomain = getServerDomain();
-  console.log("SEVER DOMAIN IS " + serverDomain);
+  // console.log("SEVER DOMAIN IS " + serverDomain);
   console.log(
     "PRoess env next_public Domain " + process.env.NEXT_PUBLIC_DOMAIN
   );
   // console.log("window location " + window.location.hostname);
   const hostname = process.env.NEXT_PUBLIC_DOMAIN
     ? process.env.NEXT_PUBLIC_DOMAIN
-    : window.location.hostname;
+    :  typeof window !== "undefined" ? window.location.hostname : "localhost";
 
   if (hostname === "localhost") {
     return "http://localhost:2000";
@@ -139,7 +139,9 @@ export async function callAPI({
       // The login is incorrect
       // Log the user out and retry without login
       if (apiResult.data.authorization_errors) {
-        window.localStorage.removeItem("user");
+        if(typeof window !== "undefined"){
+          window.localStorage.removeItem("user");
+        }
         //** Authorization failed. Call the same API with no username */
         return callAPI({ path, params, data, method });
       }
