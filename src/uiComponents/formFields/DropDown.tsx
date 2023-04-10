@@ -7,6 +7,8 @@ interface DropDownProps {
   readOnly?: boolean;
   data: Array<object>;
   value: boolean | string | null;
+  labelClassNames?: string;
+  dropDownClassNames?: string;
 }
 
 function DropDown({
@@ -15,10 +17,12 @@ function DropDown({
   readOnly = false,
   data = [],
   value,
+  dropDownClassNames = "mb-8",
+  labelClassNames = "text-sm",
 }: DropDownProps) {
   return (
-    <div className="mb-8">
-      <Text fontSizeClass="text-sm">{label}</Text>
+    <div className={dropDownClassNames}>
+      <Text fontSizeClass={labelClassNames}>{label}</Text>
 
       <div className="w-full flex">
         <select
@@ -30,7 +34,7 @@ function DropDown({
           disabled={readOnly}
         >
           <>
-            <option value="">{`Select ${label}`}</option>
+            <option value="">{`${label}`}</option>
             {data?.map((option: any, i: number) => {
               return (
                 <option
