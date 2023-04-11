@@ -11,6 +11,8 @@ interface TextBoxProps {
   register: object;
   required?: boolean;
   readOnly?: boolean;
+  labelClassNames?: string;
+  textBoxClassNames?: string;
 }
 
 function TextBox({
@@ -22,10 +24,12 @@ function TextBox({
   register,
   required = false,
   readOnly = false,
+  labelClassNames = "text-sm",
+  textBoxClassNames = "mb-8",
 }: TextBoxProps) {
   return (
-    <div className="mb-8">
-      <Text fontSizeClass="text-sm">{label}</Text>
+    <div className={textBoxClassNames}>
+      <Text fontSizeClass={labelClassNames}>{label}</Text>
       <div className="w-full flex">
         <input
           type={type}
