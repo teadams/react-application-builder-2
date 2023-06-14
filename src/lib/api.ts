@@ -3,6 +3,7 @@ import "react-app-polyfill/stable";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { getServerDomain } from "../../../lib/acsHooks";
+import { hostname } from "os";
 
 type APIMethod = "GET" | "POST" | "PUT" | "DELETE";
 type ACSApiParam = "acsCount" | "acsMax" | unknown;
@@ -32,6 +33,14 @@ export const getDomain = () => {
     : getServerDomainFromHostname();
 };
 
+export const getHostname = () => {
+  return process.env.NEXT_PUBLIC_DOMAIN
+    ? process.env.NEXT_PUBLIC_DOMAIN
+    : typeof window !== "undefined"
+    ? window.location.hostname
+    : "localhost";
+};
+
 export const getServerDomainFromHostname = () => {
   console.log("get server domain from hosting");
   const serverDomain = getServerDomain();
@@ -40,10 +49,8 @@ export const getServerDomainFromHostname = () => {
     "PRoess env next_public Domain " + process.env.NEXT_PUBLIC_DOMAIN
   );
   // console.log("window location " + window.location.hostname);
-  const hostname = process.env.NEXT_PUBLIC_DOMAIN
-    ? process.env.NEXT_PUBLIC_DOMAIN
-    :  typeof window !== "undefined" ? window.location.hostname : "localhost";
 
+  const hostname = getHostname();
   if (hostname === "localhost") {
     return "http://localhost:2000";
   }
@@ -139,7 +146,7 @@ export async function callAPI({
       // The login is incorrect
       // Log the user out and retry without login
       if (apiResult.data.authorization_errors) {
-        if(typeof window !== "undefined"){
+        if (typeof window !== "undefined") {
           window.localStorage.removeItem("user");
         }
         //** Authorization failed. Call the same API with no username */
