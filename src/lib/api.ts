@@ -2,7 +2,7 @@ import "react-app-polyfill/ie9";
 import "react-app-polyfill/stable";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { getServerDomain } from "../../../lib/acsHooks";
+import { acsHooks } from "../../../lib/acsHooks";
 import { hostname } from "os";
 type APIMethod = "GET" | "POST" | "PUT" | "DELETE";
 type ACSApiParam = "acsCount" | "acsMax" | unknown;
@@ -38,7 +38,12 @@ export const getHostname = () => {
 };
 export const getServerDomainFromHostname = () => {
   console.log("get server domain from hosting");
-  const serverDomain = getServerDomain();
+  const serverDomain = acsHooks.getServerDomain
+    ? acsHooks.getServerDomain()
+    : "";
+  const domainFragmentToRemove = acsHooks.getDomainFragmentToRemove
+    ? acsHooks.getDomainFragmentToRemove()
+    : "";
   // console.log("SEVER DOMAIN IS " + serverDomain);
   console.log(
     "PRoess env next_public Domain " + process.env.NEXT_PUBLIC_DOMAIN
@@ -49,6 +54,12 @@ export const getServerDomainFromHostname = () => {
     return "http://localhost:2000";
   }
   const hostnameSplit = hostname.split(".");
+  if (domainFragmentToRemove) {
+    const index = hostnameSplit.indexOf(domainFragmentToRemove);
+    if (index > -1) {
+      hostnameSplit.splice(index, 1);
+    }
+  }
   const serverDomainLength = serverDomain?.split(".").length ?? 0;
   const splicedHostname = hostnameSplit.slice(
     0,
