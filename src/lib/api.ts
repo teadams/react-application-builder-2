@@ -13,15 +13,16 @@ interface API {
   data?: { [index: string]: unknown };
   method?: APIMethod;
 }
-const getHeaders = () => {
-  const user = localStorage.getItem("user");
-  let authHeader = {};
-  if (user !== "undefined") {
-    const jwtToken = JSON.parse(user as string);
-    authHeader = { "x-access-token": jwtToken };
-  }
-  return authHeader;
-};
+// const getHeaders = () => {
+//   const user = localStorage.getItem("user");
+//   let authHeader = {};
+//   if (user !== "undefined") {
+//     const jwtToken = JSON.parse(user as string);
+//     authHeader = { "x-access-token": jwtToken };
+//   }
+//   return authHeader;
+// };
+
 export const getDomain = () => {
   console.log("get domain");
   console.log("env is " + process.env.NEXT_PUBLIC_API_LOCATION);
@@ -121,7 +122,6 @@ export async function callAPI({
     url: `${domain}/${path}`,
     data: data,
     params: params,
-    headers: getHeaders(),
   }).catch((error) => {
     const paramStr = JSON.stringify(params);
     const dataStr = JSON.stringify(data);
