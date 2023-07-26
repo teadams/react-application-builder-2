@@ -24,8 +24,6 @@ interface API {
 // };
 
 export const getDomain = () => {
-  console.log("get domain");
-  console.log("env is " + process.env.NEXT_PUBLIC_API_LOCATION);
   return process.env.NEXT_PUBLIC_API_LOCATION
     ? process.env.NEXT_PUBLIC_API_LOCATION
     : getServerDomainFromHostname();
@@ -78,7 +76,6 @@ export async function callAPI({
   data = {},
   method = "GET",
 }: API): Promise<unknown> {
-  console.log("calling api " + path);
   // if (data_object) {
   //   Generically handles file uploads,which requires special handling */
   //   let multi_object = new FormData();
@@ -110,13 +107,9 @@ export async function callAPI({
   //   auth_header = { "x-access-token": jwt_token };
   // }
   // const domain = getDomain();
-  console.log("DOMAIn IS " + domain);
-  console.log("PATH IS " + path);
   // Temp until dev environments are hooked together
   if (!domain) domain = getDomain();
   // TODO: params
-  console.log("getting from ");
-  console.log(`${domain}/${path}`);
   const apiResult = await axios({
     method: method,
     url: `${domain}/${path}`,
