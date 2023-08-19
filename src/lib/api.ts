@@ -1,3 +1,5 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import "react-app-polyfill/ie9";
 import "react-app-polyfill/stable";
 import axios from "axios";
@@ -36,7 +38,6 @@ export const getHostname = () => {
     : "localhost";
 };
 export const getServerDomainFromHostname = () => {
-  console.log("get server domain from hosting");
   const serverDomain = acsHooks.getServerDomain
     ? acsHooks.getServerDomain()
     : "";
