@@ -119,6 +119,10 @@ export async function callAPI({
     url: `${domain}/${path}`,
     data: data,
     params: params,
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      "Access-Control-Allow-Origin": "*",
+    },
   }).catch((error) => {
     console.log("ERROR in calling api");
     const paramStr = JSON.stringify(params);
