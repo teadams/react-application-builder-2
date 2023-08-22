@@ -119,6 +119,7 @@ export async function callAPI({
     data: data,
     params: params,
   }).catch((error) => {
+    console.log("ERROR in calling api");
     const paramStr = JSON.stringify(params);
     const dataStr = JSON.stringify(data);
     const error_prompt = `error connecting to server with url: ${domain}/${path} method: ${method}
@@ -130,8 +131,9 @@ export async function callAPI({
       className: "text-sm",
     });
   });
-  console.log("api result in call api");
+  console.log("api result in call api for path " + path);
   console.log(apiResult);
+  console.log("status is " apiResult.data.status )
   // TODO user friendly correct error handling
   if (apiResult) {
     if (apiResult.data.status === "validationError") {
