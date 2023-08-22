@@ -110,6 +110,8 @@ export async function callAPI({
   // const domain = getDomain();
   // Temp until dev environments are hooked together
   if (!domain) domain = getDomain();
+  console.log("domain is " + domain);
+  console.log("path is " + path);
   // TODO: params
   const apiResult = await axios({
     method: method,
@@ -128,6 +130,8 @@ export async function callAPI({
       className: "text-sm",
     });
   });
+  console.log("api result in call api");
+  console.log(apiResult);
   // TODO user friendly correct error handling
   if (apiResult) {
     if (apiResult.data.status === "validationError") {
