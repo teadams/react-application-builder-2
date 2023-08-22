@@ -112,6 +112,7 @@ export async function callAPI({
   if (!domain) domain = getDomain();
   console.log("domain is " + domain);
   console.log("path is " + path);
+  console.log("method is " + method);
   // TODO: params
   const apiResult = await axios({
     method: method,
@@ -133,7 +134,7 @@ export async function callAPI({
   });
   console.log("api result in call api for path " + path);
   console.log(apiResult);
-  console.log("status is " apiResult.data.status )
+  console.log("status is " + apiResult.data.status);
   // TODO user friendly correct error handling
   if (apiResult) {
     if (apiResult.data.status === "validationError") {
