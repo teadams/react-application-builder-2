@@ -116,40 +116,27 @@ export async function callAPI({
   console.log("method is " + method);
   console.log("library is " + library);
   // TODO: params
-  const options = {
-    xsrfCookieName: "XSRF-TOKEN",
-    xsrfHeaderName: "X-XSRF-TOKEN",
-  };
-  let apiResult;
-  if (library === "axios") {
-    console.log("using axios");
-    apiResult = await axios({
-      method: method,
-      url: `${domain}/${path}`,
-      data: data,
-      params: params,
-      options,
-    }).catch((error) => {
-      console.log("ERROR in calling api");
-      const paramStr = JSON.stringify(params);
-      const dataStr = JSON.stringify(data);
-      const error_prompt = `error connecting to server with url: ${domain}/${path} method: ${method}
+
+  const apiResult = await axios({
+    method: method,
+    url: `${domain}/${path}`,
+    data: data,
+    params: params,
+    options,
+  }).catch((error) => {
+    console.log("ERROR in calling api");
+    const paramStr = JSON.stringify(params);
+    const dataStr = JSON.stringify(data);
+    const error_prompt = `error connecting to server with url: ${domain}/${path} method: ${method}
      params: ${paramStr}
      data: ${dataStr}`;
-      // alert(error_prompt + error.message + " " + error.stack);
-      console.log("error", error);
-      toast.error(error.message?.toString(), {
-        className: "text-sm",
-      });
+    // alert(error_prompt + error.message + " " + error.stack);
+    console.log("error", error);
+    toast.error(error.message?.toString(), {
+      className: "text-sm",
     });
-  } else {
-    console.log("uising the fetch library");
-    apiResult = await fetch(`${domain}/${path}`, {
-      method,
-      body: data,
-      mode: "cors",
-    });
-  }
+  });
+
   console.log("api result in call api for path " + path);
   console.log(apiResult);
   console.log("status is " + apiResult.data.status);
