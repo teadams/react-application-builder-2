@@ -114,11 +114,17 @@ export async function callAPI({
   console.log("path is " + path);
   console.log("method is " + method);
   // TODO: params
+  const headers: {
+    "Access-Control-Allow-Headers": "*";
+    "Access-Control-Allow-Methods:": "GET, POST, PATCH, PUT, DELETE, OPTIONS";
+    "Access-Control-Allow-Origin:": "*";
+  };
   const apiResult = await axios({
     method: method,
     url: `${domain}/${path}`,
     data: data,
     params: params,
+    headers,
   }).catch((error) => {
     console.log("ERROR in calling api");
     const paramStr = JSON.stringify(params);
