@@ -76,6 +76,7 @@ export async function callAPI({
   params = {},
   data = {},
   method = "GET",
+  library = "axios",
 }: API): Promise<unknown> {
   // if (data_object) {
   //   Generically handles file uploads,which requires special handling */
@@ -118,25 +119,34 @@ export async function callAPI({
     xsrfCookieName: "XSRF-TOKEN",
     xsrfHeaderName: "X-XSRF-TOKEN",
   };
-  const apiResult = await axios({
-    method: method,
-    url: `${domain}/${path}`,
-    data: data,
-    params: params,
-    options,
-  }).catch((error) => {
-    console.log("ERROR in calling api");
-    const paramStr = JSON.stringify(params);
-    const dataStr = JSON.stringify(data);
-    const error_prompt = `error connecting to server with url: ${domain}/${path} method: ${method}
+  let apiResult;
+  if (library === "axios") {
+    apiResult = await axios({
+      method: method,
+      url: `${domain}/${path}`,
+      data: data,
+      params: params,
+      options,
+    }).catch((error) => {
+      console.log("ERROR in calling api");
+      const paramStr = JSON.stringify(params);
+      const dataStr = JSON.stringify(data);
+      const error_prompt = `error connecting to server with url: ${domain}/${path} method: ${method}
      params: ${paramStr}
      data: ${dataStr}`;
-    // alert(error_prompt + error.message + " " + error.stack);
-    console.log("error", error);
-    toast.error(error.message?.toString(), {
-      className: "text-sm",
+      // alert(error_prompt + error.message + " " + error.stack);
+      console.log("error", error);
+      toast.error(error.message?.toString(), {
+        className: "text-sm",
+      });
     });
-  });
+  } else {
+    console.log("uising the fetch library");
+    apiResult = await fetch("https://example.com/posts", {
+      method,
+      body: data,
+    });
+  }
   console.log("api result in call api for path " + path);
   console.log(apiResult);
   console.log("status is " + apiResult.data.status);
