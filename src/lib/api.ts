@@ -122,7 +122,6 @@ export async function callAPI({
     url: `${domain}/${path}`,
     data: data,
     params: params,
-    options,
   }).catch((error) => {
     console.log("ERROR in calling api");
     const paramStr = JSON.stringify(params);
