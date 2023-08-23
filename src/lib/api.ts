@@ -114,11 +114,16 @@ export async function callAPI({
   console.log("path is " + path);
   console.log("method is " + method);
   // TODO: params
+  const options = {
+    xsrfCookieName: "XSRF-TOKEN",
+    xsrfHeaderName: "X-XSRF-TOKEN",
+  };
   const apiResult = await axios({
     method: method,
     url: `${domain}/${path}`,
     data: data,
     params: params,
+    options,
   }).catch((error) => {
     console.log("ERROR in calling api");
     const paramStr = JSON.stringify(params);
