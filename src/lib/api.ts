@@ -76,7 +76,6 @@ export async function callAPI({
   params = {},
   data = {},
   method = "GET",
-  library = "axios",
 }: API): Promise<unknown> {
   // if (data_object) {
   //   Generically handles file uploads,which requires special handling */
@@ -114,9 +113,7 @@ export async function callAPI({
   console.log("domain is " + domain);
   console.log("path is " + path);
   console.log("method is " + method);
-  console.log("library is " + library);
   // TODO: params
-
   const apiResult = await axios({
     method: method,
     url: `${domain}/${path}`,
@@ -135,7 +132,6 @@ export async function callAPI({
       className: "text-sm",
     });
   });
-
   console.log("api result in call api for path " + path);
   console.log(apiResult);
   console.log("status is " + apiResult.data.status);
