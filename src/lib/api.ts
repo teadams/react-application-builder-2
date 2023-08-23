@@ -144,7 +144,7 @@ export async function callAPI({
     });
   } else {
     console.log("uising the fetch library");
-    apiResult = await fetch("https://example.com/posts", {
+    apiResult = await fetch(`${domain}/${path}`, {
       method,
       body: data,
     });
