@@ -147,6 +147,7 @@ export async function callAPI({
     apiResult = await fetch(`${domain}/${path}`, {
       method,
       body: data,
+      mode: "cors",
     });
   }
   console.log("api result in call api for path " + path);
