@@ -114,6 +114,7 @@ export async function callAPI({
   console.log("domain is " + domain);
   console.log("path is " + path);
   console.log("method is " + method);
+  console.log("library is " + library);
   // TODO: params
   const options = {
     xsrfCookieName: "XSRF-TOKEN",
@@ -121,6 +122,7 @@ export async function callAPI({
   };
   let apiResult;
   if (library === "axios") {
+    console.log("using axios");
     apiResult = await axios({
       method: method,
       url: `${domain}/${path}`,
