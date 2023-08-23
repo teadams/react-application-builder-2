@@ -116,8 +116,8 @@ export async function callAPI({
   // TODO: params
   const headers = {
     "Access-Control-Allow-Headers": "*",
-    "Access-Control-Allow-Methods:": "GET, POST, PATCH, PUT, DELETE, OPTIONS",
-    "Access-Control-Allow-Origin:": "*",
+    "Access-Control-Allow-Methods": "GET, POST, PATCH, PUT, DELETE, OPTIONS",
+    "Access-Control-Allow-Origin": "*",
   };
   const apiResult = await axios({
     method: method,
