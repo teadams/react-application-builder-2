@@ -38,7 +38,6 @@ export const formField = (
     case "integer":
       return <TextBox type="number" {...standardProps} />;
     default:
-      console.log("new data typee found");
       return "new data typee found";
   }
 };

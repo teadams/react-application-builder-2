@@ -44,11 +44,6 @@ export const getServerDomainFromHostname = () => {
   const domainFragmentToRemove = acsHooks.getDomainFragmentToRemove
     ? acsHooks.getDomainFragmentToRemove()
     : "";
-  // console.log("SEVER DOMAIN IS " + serverDomain);
-  console.log(
-    "PRoess env next_public Domain " + process.env.NEXT_PUBLIC_DOMAIN
-  );
-  // console.log("window location " + window.location.hostname);
   const hostname = getHostname();
   if (hostname === "localhost") {
     return "http://localhost:2000";
@@ -110,9 +105,7 @@ export async function callAPI({
   // const domain = getDomain();
   // Temp until dev environments are hooked together
   if (!domain) domain = getDomain();
-  console.log("domain is " + domain);
-  console.log("path is " + path);
-  console.log("method is " + method);
+
   // TODO: params
   const headers = {
     "Access-Control-Allow-Headers": "*",
@@ -138,9 +131,6 @@ export async function callAPI({
       className: "text-sm",
     });
   });
-  console.log("api result in call api for path " + path);
-  console.log(apiResult);
-  console.log("status is " + apiResult.data.status);
   // TODO user friendly correct error handling
   if (apiResult) {
     if (apiResult.data.status === "validationError") {
