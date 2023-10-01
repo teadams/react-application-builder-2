@@ -130,6 +130,7 @@ export async function callAPI({
     toast.error(error.message?.toString(), {
       className: "text-sm",
     });
+    return { status: error };
   });
   // TODO user friendly correct error handling
   if (apiResult) {
