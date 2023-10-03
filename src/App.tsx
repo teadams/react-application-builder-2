@@ -16,10 +16,10 @@ function AcsApp(props: any) {
 		<QueryClientProvider client={queryClient}>
 			<AcsMetaContextProvider>
 				<AcsAuthContextProvider>{props.children}</AcsAuthContextProvider>
-				<ReactQueryDevtools initialIsOpen={false} />
 			</AcsMetaContextProvider>
 		</QueryClientProvider>
 	);
 }
 
 export default AcsApp;
+//<ReactQueryDevtools initialIsOpen={false} />
