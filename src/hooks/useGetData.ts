@@ -7,7 +7,7 @@ import { ACSMetaModel } from "../types";
 export const useGetData = (
   objectType: string,
   useQueryConfig?: any,
-  enabled = true
+  enabled = true,
 ) => {
   const acsMeta = useGetAcsMeta();
   return useQuery<Record<string, unknown>[], Error>(

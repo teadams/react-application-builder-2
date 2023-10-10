@@ -8,6 +8,7 @@ import { acsHooks } from "../../../lib/acsHooks";
 import { hostname } from "os";
 type APIMethod = "GET" | "POST" | "PUT" | "DELETE";
 type ACSApiParam = "acsCount" | "acsMax" | unknown;
+
 interface API {
   domain?: string;
   path?: string;
@@ -15,15 +16,20 @@ interface API {
   data?: { [index: string]: unknown };
   method?: APIMethod;
 }
-// const getHeaders = () => {
-//   const user = localStorage.getItem("user");
-//   let authHeader = {};
-//   if (user !== "undefined") {
-//     const jwtToken = JSON.parse(user as string);
-//     authHeader = { "x-access-token": jwtToken };
-//   }
-//   return authHeader;
-// };
+const getHeaders = () => {
+  const headers = {
+    "Access-Control-Allow-Headers": "*",
+    "Access-Control-Allow-Methods": "GET, POST, PATCH, PUT, DELETE, OPTIONS",
+    "Access-Control-Allow-Origin": "*",
+  };
+  const user = localStorage.getItem("user");
+  if (user !== "undefined") {
+    const jwtToken = JSON.parse(user as string);
+    headers.authHeader = { "x-access-token": jwtToken };
+  }
+  
+  return headers;
+};
 
 export const getDomain = () => {
   return process.env.NEXT_PUBLIC_API_LOCATION
@@ -41,18 +47,20 @@ export const getServerDomainFromHostname = () => {
   const serverDomain = acsHooks.getServerDomain
     ? acsHooks.getServerDomain()
     : "";
-  const domainFragmentToRemove = acsHooks.getDomainFragmentToRemove
-    ? acsHooks.getDomainFragmentToRemove()
+  const domainFragmentsToRemove = acsHooks.getDomainFragmentsToRemove
+    ? acsHooks.getDomainFragmentsToRemove()
     : "";
   const hostname = getHostname();
   if (hostname === "localhost") {
     return "http://localhost:2000";
   }
   const hostnameSplit = hostname.split(".");
-  if (domainFragmentToRemove) {
-    const index = hostnameSplit.indexOf(domainFragmentToRemove);
-    if (index > -1) {
-      hostnameSplit.splice(index, 1);
+  if (domainFragmentsToRemove) {
+    for (const fragment of domainFragmentsToRemove) {
+      const index = hostnameSplit.indexOf(fragement);
+      if (index > -1) {
+        hostnameSplit.splice(index, 1);
+      }
     }
   }
   const serverDomainLength = serverDomain?.split(".").length ?? 0;
@@ -105,13 +113,9 @@ export async function callAPI({
   // const domain = getDomain();
   // Temp until dev environments are hooked together
   if (!domain) domain = getDomain();
-
-  // TODO: params
-  const headers = {
-    "Access-Control-Allow-Headers": "*",
-    "Access-Control-Allow-Methods": "GET, POST, PATCH, PUT, DELETE, OPTIONS",
-    "Access-Control-Allow-Origin": "*",
-  };
+  
+  console.log("Domain is " + domain)
+  const headers = getHeaders()
   const apiResult = await axios({
     method: method,
     url: `${domain}/${path}`,
@@ -152,6 +156,8 @@ export async function callAPI({
       }
       data = {};
     } else {
+      console.log(apiResult.data)
+
       data = apiResult.data;
     }
   }
