@@ -47,10 +47,12 @@ export const getServerDomainFromHostname = () => {
   const serverDomain = acsHooks.getServerDomain
     ? acsHooks.getServerDomain()
     : "";
+
   const domainFragmentsToRemove = acsHooks.getDomainFragmentsToRemove
     ? acsHooks.getDomainFragmentsToRemove()
     : "";
   const hostname = getHostname();
+  console.log("hostname is " + hostname)
   if (hostname === "localhost") {
     return "http://localhost:2000";
   }
