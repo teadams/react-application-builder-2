@@ -71,15 +71,14 @@ export const getServerDomainFromHostname = () => {
       }
     }
     const serverDomainLength = serverDomain?.split(".").length ?? 0;
-      splicedHostname = hostnameSplit.slice(
+    
+    splicedHostname = hostnameSplit.slice(
       0,
       hostnameSplit.length - serverDomainLength
     );
   }
 
-    const finalHostname = `https://${splicedHostname}
-      .concat(serverDomain)
-      .join(".")}`;
+    const finalHostname = `https://${splicedHostname}.concat(serverDomain).join(".")}`;
     return finalHostname;
 };
 export async function callAPI({
