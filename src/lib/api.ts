@@ -57,7 +57,7 @@ export const getServerDomainFromHostname = () => {
   const hostnameSplit = hostname.split(".");
   if (domainFragmentsToRemove) {
     for (const fragment of domainFragmentsToRemove) {
-      const index = hostnameSplit.indexOf(fragement);
+      const index = hostnameSplit.indexOf(fragment);
       if (index > -1) {
         hostnameSplit.splice(index, 1);
       }
