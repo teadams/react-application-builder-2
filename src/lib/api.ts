@@ -57,23 +57,30 @@ export const getServerDomainFromHostname = () => {
     return "http://localhost:2000";
   }
   const hostnameSplit = hostname.split(".");
-  if (domainFragmentsToRemove) {
-    for (const fragment of domainFragmentsToRemove) {
-      const index = hostnameSplit.indexOf(fragment);
-      if (index > -1) {
-        hostnameSplit.splice(index, 1);
+  let splicedHostname
+  if (hostnameSplit.includes("vercel")) {
+    splicedHostname = "vercel"
+  } else {
+  
+    if (domainFragmentsToRemove) {
+      for (const fragment of domainFragmentsToRemove) {
+        const index = hostnameSplit.indexOf(fragment);
+        if (index > -1) {
+          hostnameSplit.splice(index, 1);
+        }
       }
     }
-  }
-  const serverDomainLength = serverDomain?.split(".").length ?? 0;
-  const splicedHostname = hostnameSplit.slice(
-    0,
-    hostnameSplit.length - serverDomainLength
-  );
-  const finalHostname = `https://${splicedHostname
-    .concat(serverDomain)
-    .join(".")}`;
-  return finalHostname;
+    const serverDomainLength = serverDomain?.split(".").length ?? 0;
+      splicedHostname = hostnameSplit.slice(
+      0,
+      hostnameSplit.length - serverDomainLength
+    );
+    }
+
+    const finalHostname = `https://${splicedHostname
+      .concat(serverDomain)
+      .join(".")}`;
+    return finalHostname;
 };
 export async function callAPI({
   domain = "",
