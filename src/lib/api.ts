@@ -60,7 +60,7 @@ export const getServerDomainFromHostname = () => {
   let splicedHostname
   if (hostnameSplit.includes("vercel")) {
     console.log("vercel")
-    splicedHostname = "vercel.stage"
+    splicedHostname = ["vercel","stage"]
   } else {
   
     if (domainFragmentsToRemove) {
@@ -78,8 +78,9 @@ export const getServerDomainFromHostname = () => {
       hostnameSplit.length - serverDomainLength
     );
   }
-
+    console.log(splicedHostname)
     const finalHostname = `https://${splicedHostname.concat(serverDomain).join(".")}`;
+    console.log(finalHostname)
     return finalHostname;
 };
 export async function callAPI({
