@@ -59,7 +59,7 @@ export const getServerDomainFromHostname = () => {
   const hostnameSplit = hostname.split(".");
   let splicedHostname
   if (hostnameSplit.includes("vercel")) {
-    splicedHostname = "vercel"
+    splicedHostname = "vercel.stage"
   } else {
   
     if (domainFragmentsToRemove) {
