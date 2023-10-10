@@ -78,7 +78,7 @@ export const getServerDomainFromHostname = () => {
     );
   }
 
-    const finalHostname = `https://${splicedHostname}.concat(serverDomain).join(".")}`;
+    const finalHostname = `https://${splicedHostname.concat(serverDomain).join(".")}`;
     return finalHostname;
 };
 export async function callAPI({
