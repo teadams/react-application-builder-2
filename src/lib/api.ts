@@ -69,7 +69,7 @@ export const getServerDomainFromHostname = () => {
   const localTenant = getTenant()
   console.log("hostname is " + hostname)
   console.log("local tenant is " + localTenant)
-  if ((!localTenant || localTenant.includes("localhost")) && (hostname === "localhost" || hostname.includes("localhost"))) {
+  if (localTenant.includes("localhost") || (!localTenant  && (hostname === "localhost" || hostname.includes("localhost")))) {
     console.log("localhost")
     return "http://localhost:2000";
   }
