@@ -32,6 +32,8 @@ const getHeaders = () => {
 };
 
 export const getDomain = () => {
+  console.log("in get domain")
+  console.log("process " + process.env.NEXT_PUBLIC_API_LOCATION )
   return process.env.NEXT_PUBLIC_API_LOCATION
     ? process.env.NEXT_PUBLIC_API_LOCATION
     : getServerDomainFromHostname();
@@ -43,7 +45,19 @@ export const getHostname = () => {
     ? window.location.hostname
     : "localhost";
 };
+
+export const getTenant = () => {
+  const localTenant = localStorage?.getItem("tenant")
+  console.log("window defined")
+  console.log(typeof window !== "undefined")
+  if (typeof window !== "undefined" && localTenant) {
+    console.log("In api local tenant is " + localTenant)
+    return localTenant
+  } 
+};
+
 export const getServerDomainFromHostname = () => {
+  console.log("getting server domain from hostname")
   const serverDomain = acsHooks.getServerDomain
     ? acsHooks.getServerDomain()
     : "";
@@ -52,8 +66,11 @@ export const getServerDomainFromHostname = () => {
     ? acsHooks.getDomainFragmentsToRemove()
     : "";
   const hostname = getHostname();
+  const localTenant = getTenant()
   console.log("hostname is " + hostname)
-  if (hostname === "localhost") {
+  console.log("local tenant is " + localTenant)
+  if (!localTenant && (hostname === "localhost" || hostname.includes(localhost))) {
+    console.log("localhost")
     return "http://localhost:2000";
   }
   const hostnameSplit = hostname.split(".");
@@ -77,6 +94,10 @@ export const getServerDomainFromHostname = () => {
       0,
       hostnameSplit.length - serverDomainLength
     );
+    if (localTenant) {
+      console.log("replacing tenant")
+      splicedHostname[0] = localTenant
+    }
   }
     console.log(splicedHostname)
     const finalHostname = `https://${splicedHostname.concat(serverDomain).join(".")}`;
