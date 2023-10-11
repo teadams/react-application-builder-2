@@ -69,7 +69,7 @@ export const getServerDomainFromHostname = () => {
   const localTenant = getTenant()
   console.log("hostname is " + hostname)
   console.log("local tenant is " + localTenant)
-  if (!localTenant && (hostname === "localhost" || hostname.includes(localhost))) {
+  if ((!localTenant || localTenant.includes("localhost")) && (hostname === "localhost" || hostname.includes(localhost))) {
     console.log("localhost")
     return "http://localhost:2000";
   }
@@ -99,7 +99,7 @@ export const getServerDomainFromHostname = () => {
       splicedHostname[0] = localTenant
     }
   }
-    console.log(splicedHostname)
+    console.log("final hostname is " + splicedHostname)
     const finalHostname = `https://${splicedHostname.concat(serverDomain).join(".")}`;
     console.log(finalHostname)
     return finalHostname;
@@ -146,6 +146,9 @@ export async function callAPI({
   if (!domain) domain = getDomain();
   
   console.log("Domain is " + domain)
+  console.log(`url is ${domain}/${path}`)
+  console.log(data)
+  console.log(params)
   const headers = getHeaders()
   const apiResult = await axios({
     method: method,
