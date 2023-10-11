@@ -110,8 +110,8 @@ export const getServerDomainFromHostname = () => {
       console.log("replacing tenant")
       splicedHostname[0] = localTenant
     }
-
-    if (getStage()) {
+    const stage = getStage()
+    if (stage && !splicedHostname.includes("stage"))  {
       console.log("adding stage")
       splicedHostname.push("stage")
     }
