@@ -56,6 +56,18 @@ export const getTenant = () => {
   } 
 };
 
+
+export const getStage = () => {
+  const localStage = localStorage?.getItem("stage")
+  console.log("window defined")
+  console.log(typeof window !== "undefined")
+  if (typeof window !== "undefined" && localStage) {
+    console.log("In api local stage is " +localStage)
+    return localStage
+  } 
+};
+
+
 export const getServerDomainFromHostname = () => {
   console.log("getting server domain from hostname")
   const serverDomain = acsHooks.getServerDomain
@@ -98,7 +110,13 @@ export const getServerDomainFromHostname = () => {
       console.log("replacing tenant")
       splicedHostname[0] = localTenant
     }
+
+    if (getStage()) {
+      console.log("adding stage")
+      splicedHostname.push("stage")
+    }
   }
+  
     console.log("final hostname is " + splicedHostname)
     const finalHostname = `https://${splicedHostname.concat(serverDomain).join(".")}`;
     console.log(finalHostname)
