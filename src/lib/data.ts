@@ -19,7 +19,6 @@ export const getObjectData = async (
   } else {
     console.log("get ojbe ctdata")
     const path = "acs/" + objectType;
-    console.log("path is " + path)
     apiResult = await api.callAPI({ path, params });
   }
 
