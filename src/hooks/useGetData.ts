@@ -10,7 +10,7 @@ export const useGetData = (
   enabled = true,
 ) => {
   const acsMeta = useGetAcsMeta();
-  console.log("in use get dta")
+  console.log("in use get data")
   console.log(objectType)
   console.log(useQueryConfig)
   console.log("enables is " + enabled)
