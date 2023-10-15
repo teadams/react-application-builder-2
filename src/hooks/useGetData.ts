@@ -10,6 +10,8 @@ export const useGetData = (
   enabled = true,
 ) => {
   const acsMeta = useGetAcsMeta();
+  console.log("in use get dta")
+  console.log(objectType)
   return useQuery<Record<string, unknown>[], Error>(
     [objectType],
     () => {

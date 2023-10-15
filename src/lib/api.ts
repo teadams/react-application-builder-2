@@ -129,6 +129,7 @@ export async function callAPI({
   data = {},
   method = "GET",
 }: API): Promise<unknown> {
+  console.log("call api")
   // if (data_object) {
   //   Generically handles file uploads,which requires special handling */
   //   let multi_object = new FormData();

@@ -15,7 +15,9 @@ export const getObjectData = async (
     apiResult = require(`../../../sample_data/sampleData.json`);
     apiResult = apiResult[objectType];
   } else {
+    console.log("get ojbe ctdata")
     const path = "acs/" + objectType;
+    console.log("path is " + path)
     apiResult = await api.callAPI({ path, params });
   }
 
