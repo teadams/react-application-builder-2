@@ -12,9 +12,12 @@ export const useGetData = (
   const acsMeta = useGetAcsMeta();
   console.log("in use get dta")
   console.log(objectType)
+  console.log(useQueryConfig)
+  console.log("enables is " + enabled)
   return useQuery<Record<string, unknown>[], Error>(
     [objectType],
     () => {
+      console.log("in the base of use query")
       return getObjectData(acsMeta as ACSMetaModel, objectType as string);
     },
     { enabled: objectType && enabled ? true : false, ...useQueryConfig }
