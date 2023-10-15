@@ -10,6 +10,8 @@ export const getObjectData = async (
   params: { [index: string]: unknown } = {},
   filters: { [index: string]: unknown } = {}
 ): Promise<Record<string, unknown>[]> => {
+  console.log("get object data")
+  console.log(process.env.NEXT_PUBLIC_LOCAL_DATA)
   let apiResult: any;
   if (process.env.NEXT_PUBLIC_LOCAL_DATA) {
     apiResult = require(`../../../sample_data/sampleData.json`);
