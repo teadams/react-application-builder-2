@@ -26,21 +26,17 @@ export const AcsAuthContextProvider = (props: any) => {
 	useEffect(() => {
 		const userFromLocalstorage = localStorage.getItem("user");
 		const userInfoFromLocalstorage = localStorage.getItem("userInfo");
-		console.log("user From Local Storage");
-		console.log(userFromLocalstorage);
-		console.log(userInfoFromLocalstorage);
+
 		if (userFromLocalstorage !== "undefined") {
-			console.log("looking at user");
 			const user = JSON.parse(userFromLocalstorage as string);
 			setUser(user);
 		}
 		if (userInfoFromLocalstorage !== "undefined") {
-			console.log("looking at user info");
 			const userInfo = JSON.parse(userInfoFromLocalstorage as string);
 			setUserId(userInfo?.id);
 			setUserInfo(userInfo);
 		}
-		console.log("done initializing");
+
 		setInitialLoad(false);
 	}, []);
 

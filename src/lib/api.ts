@@ -24,8 +24,9 @@ const getHeaders = () => {
   };
   const user = localStorage.getItem("user");
   if (user !== "undefined") {
-    const jwtToken = JSON.parse(user as string);
-    headers.authHeader = { "x-access-token": jwtToken };
+
+    const jwtToken = JSON.parse(user as string);  
+    headers["x-access-token"] = jwtToken;
   }
   
   return headers;
@@ -79,10 +80,7 @@ export const getServerDomainFromHostname = () => {
     : "";
   const hostname = getHostname();
   const localTenant = getTenant()
-  console.log("hostname is " + hostname)
-  console.log("local tenant is " + localTenant)
   if (localTenant?.includes("localhost") || (!localTenant  && (hostname === "localhost" || hostname.includes("localhost")))) {
-    console.log("localhost")
     return "http://localhost:2000";
   }
   const hostnameSplit = hostname.split(".");
@@ -107,21 +105,19 @@ export const getServerDomainFromHostname = () => {
       hostnameSplit.length - serverDomainLength
     );
     if (localTenant) {
-      console.log("replacing tenant")
       splicedHostname[0] = localTenant
     }
     const stage = getStage()
     if (stage && !splicedHostname.includes("stage"))  {
-      console.log("adding stage")
       splicedHostname.push("stage")
     }
   }
   
     console.log("final hostname is " + splicedHostname)
     const finalHostname = `https://${splicedHostname.concat(serverDomain).join(".")}`;
-    console.log(finalHostname)
     return finalHostname;
 };
+
 export async function callAPI({
   domain = "",
   path = "",
@@ -155,20 +151,11 @@ export async function callAPI({
   //   }
   //   data_object = multi_object;
   // }
-  // const jwt_token = JSON.parse(localStorage.getItem("user"));
-  // let auth_header;
-  // if (jwt_token) {
-  //   auth_header = { "x-access-token": jwt_token };
-  // }
-  // const domain = getDomain();
-  // Temp until dev environments are hooked together
+
   if (!domain) domain = getDomain();
-  
-  console.log("Domain is " + domain)
-  console.log(`url is ${domain}/${path}`)
-  console.log(data)
-  console.log(params)
+
   const headers = getHeaders()
+
   const apiResult = await axios({
     method: method,
     url: `${domain}/${path}`,
@@ -191,9 +178,6 @@ export async function callAPI({
   });
   // TODO user friendly correct error handling
   if (apiResult) {
-    if (apiResult.data.status === "validationError") {
-      //u.a("Validation Error", apiResult.data.validation_errors);
-    }
     if (apiResult.data.status === "error") {
       if (apiResult.data.validation_errors) {
         //u.a("Validation Error", apiResult.data.validation_errors);
@@ -202,10 +186,11 @@ export async function callAPI({
       // Log the user out and retry without login
       if (apiResult.data.authorization_errors) {
         if (typeof window !== "undefined") {
-          window.localStorage.removeItem("user");
+          localStorage.removeItem("user");
+					localStorage.removeItem("userInfo");
+          //** Authorization failed. Call the same API with no username */
+          return callAPI({ path, params, data, method });
         }
-        //** Authorization failed. Call the same API with no username */
-        return callAPI({ path, params, data, method });
       }
       data = {};
     } else {
