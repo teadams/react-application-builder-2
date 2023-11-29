@@ -47,9 +47,13 @@ export const getHostname = () => {
 };
 
 export const getTenant = () => {
-  if (typeof window !== "undefined" && localTenant) {
+  const localTenant = localStorage?.getItem("tenant");
+
+  if (typeof window !== "undefined") {
     const localTenant = localStorage?.getItem("tenant");
-    return localTenant;
+    if (localTenant) {
+      return localTenant;
+    }
   }
 };
 
