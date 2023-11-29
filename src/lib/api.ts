@@ -24,17 +24,16 @@ const getHeaders = () => {
   };
   const user = localStorage.getItem("user");
   if (user !== "undefined") {
-
-    const jwtToken = JSON.parse(user as string);  
+    const jwtToken = JSON.parse(user as string);
     headers["x-access-token"] = jwtToken;
   }
-  
+
   return headers;
 };
 
 export const getDomain = () => {
-  console.log("in get domain")
-  console.log("process " + process.env.NEXT_PUBLIC_API_LOCATION )
+  console.log("in get domain");
+  console.log("process " + process.env.NEXT_PUBLIC_API_LOCATION);
   return process.env.NEXT_PUBLIC_API_LOCATION
     ? process.env.NEXT_PUBLIC_API_LOCATION
     : getServerDomainFromHostname();
@@ -48,29 +47,24 @@ export const getHostname = () => {
 };
 
 export const getTenant = () => {
-  const localTenant = localStorage?.getItem("tenant")
-  console.log("window defined")
-  console.log(typeof window !== "undefined")
   if (typeof window !== "undefined" && localTenant) {
-    console.log("In api local tenant is " + localTenant)
-    return localTenant
-  } 
+    const localTenant = localStorage?.getItem("tenant");
+    return localTenant;
+  }
 };
-
 
 export const getStage = () => {
-  const localStage = localStorage?.getItem("stage")
-  console.log("window defined")
-  console.log(typeof window !== "undefined")
+  const localStage = localStorage?.getItem("stage");
+  console.log("window defined");
+  console.log(typeof window !== "undefined");
   if (typeof window !== "undefined" && localStage) {
-    console.log("In api local stage is " +localStage)
-    return localStage
-  } 
+    console.log("In api local stage is " + localStage);
+    return localStage;
+  }
 };
 
-
 export const getServerDomainFromHostname = () => {
-  console.log("getting server domain from hostname")
+  console.log("getting server domain from hostname");
   const serverDomain = acsHooks.getServerDomain
     ? acsHooks.getServerDomain()
     : "";
@@ -79,17 +73,20 @@ export const getServerDomainFromHostname = () => {
     ? acsHooks.getDomainFragmentsToRemove()
     : "";
   const hostname = getHostname();
-  const localTenant = getTenant()
-  if (localTenant?.includes("localhost") || (!localTenant  && (hostname === "localhost" || hostname.includes("localhost")))) {
+  const localTenant = getTenant();
+  if (
+    localTenant?.includes("localhost") ||
+    (!localTenant &&
+      (hostname === "localhost" || hostname.includes("localhost")))
+  ) {
     return "http://localhost:2000";
   }
   const hostnameSplit = hostname.split(".");
-  let splicedHostname
+  let splicedHostname;
   if (hostnameSplit.includes("vercel")) {
-    console.log("vercel")
-    splicedHostname = ["vercel","stage"]
+    console.log("vercel");
+    splicedHostname = ["vercel", "stage"];
   } else {
-  
     if (domainFragmentsToRemove) {
       for (const fragment of domainFragmentsToRemove) {
         const index = hostnameSplit.indexOf(fragment);
@@ -99,22 +96,24 @@ export const getServerDomainFromHostname = () => {
       }
     }
     const serverDomainLength = serverDomain?.split(".").length ?? 0;
-    
+
     splicedHostname = hostnameSplit.slice(
       0,
       hostnameSplit.length - serverDomainLength
     );
     if (localTenant) {
-      splicedHostname[0] = localTenant
+      splicedHostname[0] = localTenant;
     }
-    const stage = getStage()
-    if (stage && !splicedHostname.includes("stage"))  {
-      splicedHostname.push("stage")
+    const stage = getStage();
+    if (stage && !splicedHostname.includes("stage")) {
+      splicedHostname.push("stage");
     }
   }
-  
-    const finalHostname = `https://${splicedHostname.concat(serverDomain).join(".")}`;
-    return finalHostname;
+
+  const finalHostname = `https://${splicedHostname
+    .concat(serverDomain)
+    .join(".")}`;
+  return finalHostname;
 };
 
 export async function callAPI({
@@ -124,12 +123,11 @@ export async function callAPI({
   data = {},
   method = "GET",
 }: API): Promise<unknown> {
-  console.log("call api")
- 
+  console.log("call api");
 
   if (!domain) domain = getDomain();
 
-  const headers = getHeaders()
+  const headers = getHeaders();
   try {
     const apiResult = await axios({
       method: method,
@@ -137,10 +135,10 @@ export async function callAPI({
       data: data,
       params: params,
       headers,
-    })
+    });
 
     if (apiResult) {
-      let data = apiResult.data
+      let data = apiResult.data;
       if (apiResult.data.status === "error") {
         // The login is incorrect
         // Log the user out and retry without login
@@ -152,18 +150,15 @@ export async function callAPI({
             return callAPI({ path, params, data, method });
           }
         } else if (apiResult.status !== 200) {
-   
-            toast.error(apiResult.data.message, {
-              className: "text-sm",
-            });
-    
+          toast.error(apiResult.data.message, {
+            className: "text-sm",
+          });
         }
         data = {};
-      }  
-        return data;
-    
+      }
+      return data;
     }
-  } catch (error) { 
+  } catch (error) {
     toast.error(error.message, {
       className: "text-sm",
     });
