@@ -56,11 +56,8 @@ export const getTenant = () => {
 };
 
 export const getStage = () => {
-  const localStage = localStorage?.getItem("stage");
-  console.log("window defined");
-  console.log(typeof window !== "undefined");
-  if (typeof window !== "undefined" && localStage) {
-    console.log("In api local stage is " + localStage);
+  if (typeof window !== "undefined") {
+    const localStage = localStorage?.getItem("stage");
     return localStage;
   }
 };
