@@ -151,7 +151,11 @@ export async function callAPI({
             //** Authorization failed. Call the same API with no username */
             return callAPI({ path, params, data, method });
           }
-        } else if (apiResult.status !== 200) {
+        } else if (apiResult.data.create_account_errors) {
+          toast.error("There was a problem creating your account: " + apiResult.data.message, {
+            className: "text-sm",
+          });
+        } else {
           toast.error(apiResult.data.message, {
             className: "text-sm",
           });
