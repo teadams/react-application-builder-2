@@ -25,10 +25,9 @@ export const getById = async ({
   id,
   filters = {},
 }: {
-  acsMeta: ACSMetaModel;
   objectType: string;
   id: string;
-  filters: { [index: string]: unknown };
+  filters?: { [index: string]: unknown };
 }): Promise<Record<string, unknown>> => {
   const apiResult = await get({ objectType, params: { id }, filters });
   return apiResult[0];
@@ -57,7 +56,7 @@ export const updateById = async ({
   id,
   fields,
 }: {
-  queryClient: QueryClient | undefined;
+  queryClient?: QueryClient | undefined;
   objectType: string;
   id: unknown;
   fields: object;
