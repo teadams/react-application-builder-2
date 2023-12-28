@@ -72,7 +72,10 @@ export const getServerDomainFromHostname = () => {
     ? acsHooks.getDomainFragmentsToRemove()
     : "";
   const hostname = getHostname();
+  console.log("hostname", hostname)
+
   const localTenant = getTenant();
+  console.log("local tenant", localTenant)
   if (
     localTenant?.includes("localhost") ||
     (!localTenant &&
@@ -81,11 +84,13 @@ export const getServerDomainFromHostname = () => {
     return "http://localhost:2000";
   }
   const hostnameSplit = hostname.split(".");
+  console.log("hostname split", hostnameSplit)
   let splicedHostname;
   if (hostnameSplit.includes("vercel")) {
     console.log("vercel");
     splicedHostname = ["vercel", "stage"];
   } else {
+    console.log("domain frag to remove", domainFragmentsToRemove)
     if (domainFragmentsToRemove) {
       for (const fragment of domainFragmentsToRemove) {
         const index = hostnameSplit.indexOf(fragment);
@@ -101,12 +106,15 @@ export const getServerDomainFromHostname = () => {
       hostnameSplit.length - serverDomainLength
     );
     if (localTenant) {
+      // using local storage not hostname
       splicedHostname[0] = localTenant;
+      const stage = getStage();
+      console.log("stage ", stage)
+      if (stage && !splicedHostname.includes("stage")) {
+        splicedHostname.push("stage");
+      }
     }
-    const stage = getStage();
-    if (stage && !splicedHostname.includes("stage")) {
-      splicedHostname.push("stage");
-    }
+ 
   }
 
   const finalHostname = `https://${splicedHostname
