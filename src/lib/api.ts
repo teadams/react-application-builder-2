@@ -114,13 +114,13 @@ export const getServerDomainFromHostname = () => {
         splicedHostname.push("stage");
       } else {
         console.log('removing stage')
-        const index = hostnameSplit.indexOf("stage");
+        const index = splicedHostname.indexOf("stage");
         if (index > -1) {
-          hostnameSplit.splice(index, 1);
+          splicedHostname.splice(index, 1);
         }
       }
     }
-    console.log("aplices", splicedHostname)
+    console.log("final splice", splicedHostname)
  
   }
 
