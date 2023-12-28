@@ -112,8 +112,15 @@ export const getServerDomainFromHostname = () => {
       console.log("stage ", stage)
       if (stage && !splicedHostname.includes("stage")) {
         splicedHostname.push("stage");
+      } else {
+        console.log('removing stage')
+        const index = hostnameSplit.indexOf("stage");
+        if (index > -1) {
+          hostnameSplit.splice(index, 1);
+        }
       }
     }
+    console.log("aplices", splicedHostname)
  
   }
 
