@@ -1,15 +1,19 @@
 import { useQuery } from "react-query";
+import { get } from "../lib/data";
 
-import { useGetAcsMeta } from ".";
-import { getObjectData } from "../lib/data";
-import { ACSMetaModel } from "../types";
-
-export const useGetData = (
-  objectType: string,
-  useQueryConfig?: any,
+export const useGetData = ({
+  objectType,
+  params = {},
+  filters = {},
+  useQueryConfig={},
   enabled = true,
-) => {
-  const acsMeta = useGetAcsMeta();
+}: {
+  objectType: string,
+  params?: { [index: string]: unknown },
+  filters?: { [index: string]: unknown };
+  useQueryConfig?: any,
+  enabled?: boolean,
+}) => {
   console.log("in use get data")
   console.log(objectType)
   console.log(useQueryConfig)
@@ -18,7 +22,7 @@ export const useGetData = (
     [objectType],
     () => {
       console.log("in the base of use query")
-      return getObjectData(acsMeta as ACSMetaModel, objectType as string);
+      return get({objectType, params, filters});
     },
     { enabled: objectType && enabled ? true : false, ...useQueryConfig }
   );

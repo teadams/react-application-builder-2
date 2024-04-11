@@ -10,8 +10,8 @@ export const get = async ({
   filters = {},
 }: {
   objectType: string;
-  params: { [index: string]: unknown };
-  filters: { [index: string]: unknown };
+  params?: { [index: string]: unknown };
+  filters?: { [index: string]: unknown };
 }): Promise<Record<string, unknown>[]> => {
   const path = "acs/" + objectType;
   const apiResult = (await api.callAPI({ path, params })) as Promise<
@@ -93,7 +93,7 @@ export const getObjectData = async (
   params: { [index: string]: unknown } = {},
   filters: { [index: string]: unknown } = {}
 ): Promise<Record<string, unknown>[]> => {
-  console.log("DEPRECATED!!!!");
+  console.log("DEPRECATED!!!!" + objectType);
   console.log("get object data");
   console.log(process.env.NEXT_PUBLIC_LOCAL_DATA);
   let apiResult: any;
@@ -101,9 +101,10 @@ export const getObjectData = async (
     apiResult = require(`../../../sample_data/sampleData.json`);
     apiResult = apiResult[objectType];
   } else {
-    console.log("get ojbe ctdata");
     const path = "acs/" + objectType;
     apiResult = await api.callAPI({ path, params });
+    console.log("GOT DATA FOR OBJECT TYPE: " + objectType);
+
   }
 
   return apiResult;

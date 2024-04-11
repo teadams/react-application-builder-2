@@ -12,7 +12,8 @@ export const AcsAuthContextProvider = (props: any) => {
 	);
 
 	// Loding in tenant parameters
-	const { data = [] } = useGetData("acsTenantSetup", {}, initialLoad);
+	const { data = [], ...rest } = useGetData({ objectType: "acsTenantSetup" });
+	console.log("tenantSetup", data, rest);
 	if (data && data.length > 0 && Object.keys(tenantSetup).length === 0) {
 		const info: { [index: string]: unknown } = {};
 		for (const row of data ?? []) {

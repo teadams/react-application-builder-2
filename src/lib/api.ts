@@ -32,8 +32,6 @@ const getHeaders = () => {
 };
 
 export const getDomain = () => {
-  console.log("in get domain");
-  console.log("process " + process.env.NEXT_PUBLIC_API_LOCATION);
   return process.env.NEXT_PUBLIC_API_LOCATION
     ? process.env.NEXT_PUBLIC_API_LOCATION
     : getServerDomainFromHostname();
@@ -63,7 +61,6 @@ export const getStage = () => {
 };
 
 export const getServerDomainFromHostname = () => {
-  console.log("getting server domain from hostname");
   const serverDomain = acsHooks.getServerDomain
     ? acsHooks.getServerDomain()
     : "";
@@ -72,10 +69,8 @@ export const getServerDomainFromHostname = () => {
     ? acsHooks.getDomainFragmentsToRemove()
     : "";
   const hostname = getHostname();
-  console.log("hostname", hostname)
 
   const localTenant = getTenant();
-  console.log("local tenant", localTenant)
   if (
     localTenant?.includes("localhost") ||
     (!localTenant &&
@@ -84,13 +79,10 @@ export const getServerDomainFromHostname = () => {
     return "http://localhost:2000";
   }
   const hostnameSplit = hostname.split(".");
-  console.log("hostname split", hostnameSplit)
   let splicedHostname;
   if (hostnameSplit.includes("vercel")) {
-    console.log("vercel");
     splicedHostname = ["vercel", "stage"];
   } else {
-    console.log("domain frag to remove", domainFragmentsToRemove)
     if (domainFragmentsToRemove) {
       for (const fragment of domainFragmentsToRemove) {
         const index = hostnameSplit.indexOf(fragment);
@@ -109,18 +101,15 @@ export const getServerDomainFromHostname = () => {
       // using local storage not hostname
       splicedHostname[0] = localTenant;
       const stage = getStage();
-      console.log("stage ", stage)
       if (stage && !splicedHostname.includes("stage")) {
         splicedHostname.push("stage");
       } else {
-        console.log('removing stage')
         const index = splicedHostname.indexOf("stage");
         if (index > -1) {
           splicedHostname.splice(index, 1);
         }
       }
     }
-    console.log("final splice", splicedHostname)
  
   }
 
@@ -137,7 +126,6 @@ export async function callAPI({
   data = {},
   method = "GET",
 }: API): Promise<unknown> {
-  console.log("call api");
 
   if (!domain) domain = getDomain();
 
