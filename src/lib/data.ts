@@ -33,6 +33,21 @@ export const getById = async ({
   return apiResult[0];
 };
 
+export const getByField = async ({
+  objectType,
+  lookupField,
+  lookupValue,
+  filters = {},
+}: {
+  objectType: string;
+  lookupField: string;
+  lookupValue: unknown
+  filters?: { [index: string]: unknown };
+}): Promise<Record<string, unknown>> => {
+  const apiResult = await get({ objectType, params: { [lookupField]: lookupValue }, filters });
+  return apiResult[0];
+};
+
 export const create = async ({
   queryClient = undefined,
   objectType,
@@ -64,7 +79,6 @@ export const updateById = async ({
   const path = "acs/" + objectType + "/" + id;
   const params = { ...fields };
   const method = "PUT";
-  console.log(path, params);
   const apiResult = await api.callAPI({ path, params, method });
   if (queryClient) queryClient.invalidateQueries([objectType]);
   return apiResult;
@@ -93,9 +107,6 @@ export const getObjectData = async (
   params: { [index: string]: unknown } = {},
   filters: { [index: string]: unknown } = {}
 ): Promise<Record<string, unknown>[]> => {
-  console.log("DEPRECATED!!!!" + objectType);
-  console.log("get object data");
-  console.log(process.env.NEXT_PUBLIC_LOCAL_DATA);
   let apiResult: any;
   if (process.env.NEXT_PUBLIC_LOCAL_DATA) {
     apiResult = require(`../../../sample_data/sampleData.json`);
@@ -103,7 +114,6 @@ export const getObjectData = async (
   } else {
     const path = "acs/" + objectType;
     apiResult = await api.callAPI({ path, params });
-    console.log("GOT DATA FOR OBJECT TYPE: " + objectType);
 
   }
 
@@ -116,7 +126,6 @@ export const getObjectDataById = async (
   id: unknown,
   filters: { [index: string]: unknown } = {}
 ): Promise<Record<string, unknown>> => {
-  console.log("DEPRECATED!!!!");
 
   const apiResult = await getObjectData(acsMeta, objectType, { id }, filters);
   if (process.env.NEXT_PUBLIC_LOCAL_DATA) {
@@ -132,7 +141,6 @@ export const deleteObjectDataById = async (
   objectType: string,
   id: unknown
 ): Promise<unknown> => {
-  console.log("DEPRECATED!!!!");
 
   const path = "acs/" + objectType + "/" + id;
   const method = "DELETE";
@@ -148,7 +156,6 @@ export const updateObjectDataById = async (
   id: unknown,
   objectTypeFields: object
 ): Promise<unknown> => {
-  console.log("DEPRECATED!!!!");
 
   const path = "acs/" + objectType + "/" + id;
   const params = { ...objectTypeFields };
@@ -166,7 +173,6 @@ export const createNewObjectDataRow = async (
   objectType: string,
   objectTypeFields: object
 ): Promise<unknown> => {
-  console.log("DEPRECATED!!!!");
 
   const path = "acs/" + objectType;
   const params = { ...objectTypeFields };
@@ -180,7 +186,6 @@ export const createAccount = async (
   acsMeta: ACSMetaModel,
   objectTypeFields: object
 ): Promise<unknown> => {
-  console.log("DEPRECATED!!!!");
 
   const path = "acs/auth/createUserByEmailAndPassword";
   const params = { ...objectTypeFields };
@@ -193,7 +198,6 @@ export const SignIn = async (
   acsMeta: ACSMetaModel,
   objectTypeFields: object
 ): Promise<unknown> => {
-  console.log("DEPRECATED!!!!");
 
   const path = "acs/auth/loginByEmailAndPassword";
   const params = { ...objectTypeFields };
@@ -205,6 +209,7 @@ export const SignIn = async (
 export default {
   get,
   getById,
+  getByField,
   create,
   updateById,
   deleteById,
