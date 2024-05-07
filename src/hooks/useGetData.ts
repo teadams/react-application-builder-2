@@ -19,7 +19,7 @@ export const useGetData = ({
   console.log(useQueryConfig)
   console.log("enables is " + enabled)
   return useQuery<Record<string, unknown>[], Error>(
-    [objectType],
+    [{objectType}],
     () => {
       console.log("in the base of use query")
       return get({objectType, params, filters});
