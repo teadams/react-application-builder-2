@@ -10,7 +10,7 @@ export const useUpdateData = () => {
     onSuccess: (data, variables) => {
       const { id, fields, objectType } = variables;
       queryClient.invalidateQueries({ queryKey: [objectType, "list"] });
-      queryClient.invalidateQueries({ queryKey: [objectType, "one", id] });
+      queryClient.invalidateQueries({ queryKey: [objectType, "one", "id", id] });
       const fieldQueries = queryClient.getQueriesData([objectType, "one", "field"]);
       for (const query of fieldQueries) {
         const [queryKey, queryData] = query;

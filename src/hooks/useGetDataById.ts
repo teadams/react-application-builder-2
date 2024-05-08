@@ -4,15 +4,21 @@ import { useGetAcsMeta } from ".";
 import { getObjectDataById } from "../lib/data";
 import { ACSMetaModel } from "../types";
 
-export const useGetDataById = (
+export const useGetDataById = ({
+  objectType,
+  id,
+  useQueryConfig,
+  enabled=true
+}: {  
   objectType: string,
   id: unknown,
   useQueryConfig?: any,
-  enabled = true
-) => {
+  enabled:boolean
+}) => {
+
   const acsMeta = useGetAcsMeta();
   return useQuery<Record<string, unknown>, Error>(
-    [objectType],
+    [objectType,"one", "id", id],
     () => {
       return getObjectDataById(
         acsMeta as ACSMetaModel,

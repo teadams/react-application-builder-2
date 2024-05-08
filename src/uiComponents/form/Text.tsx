@@ -6,7 +6,7 @@ interface TextProps {
 	data?: Record<string, unknown>;
 	initialValue?: unknown;
 	onBlur?: (e: React.FocusEvent<HTMLInputElement>, mutatedValue: unknown) => void;
-	classNames?: string
+	className?: string
 	fontWeightClass?: string;
 	textColorClass?: string;
 	fontSizeClass?: string;
@@ -16,7 +16,7 @@ const Text = ({
 	data = {},
 	onBlur,
 	initialValue,
-	classNames = "bg-white border border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  ",
+	className = "bg-white border border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  ",
 	fontSizeClass = "text-base",
 	textColorClass = "text-dark",
 	fontWeightClass = "font-normal",
@@ -41,7 +41,7 @@ const Text = ({
 		<div>
 			<input type="text" value={value} onChange={(e) => setValue(e.target.value as string)}
 				onBlur={handleOnBlur}
-				className={`${classNames} ${fontSizeClass} ${textColorClass} ${fontWeightClass}`} />
+				className={`${className} ${fontSizeClass} ${textColorClass} ${fontWeightClass}`} />
 		</div>
 	);
 }
