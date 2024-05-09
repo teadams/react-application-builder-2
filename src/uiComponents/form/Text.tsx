@@ -1,6 +1,4 @@
 import React from "react";
-import { useGetDataByField } from "../../hooks/useGetDataByField";
-import { on } from "events";
 
 interface TextProps {
 	data?: Record<string, unknown>;
