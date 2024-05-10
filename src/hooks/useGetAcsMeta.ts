@@ -9,47 +9,47 @@ import {
   ACSField,
 } from "../types";
 
-export const useGetAcsMeta = (): ACSMetaModel | Record<string, never> => {
+export const useGetAcsMeta = (): ACSMetaModel | undefined => {
   const acsMetaContext = useContext(AcsMetaContext);
-  return acsMetaContext ? acsMetaContext : {};
+  return acsMetaContext ? acsMetaContext : undefined;
 };
 
 export const useGetAcsMetaAppParams = ():
   | ACSAppParams
-  | Record<string, never> => {
+  | undefined => {
   const acsMetaContext = useContext(AcsMetaContext);
-  return acsMetaContext ? acsMetaContext.appParams : {};
+  return acsMetaContext ? acsMetaContext.appParams : undefined;
 };
 
 export const useGetAcsMetaObjectTypes = ():
   | ACSObjectTypes
-  | Record<string, never> => {
+  | undefined => {
   const acsMetaContext = useContext(AcsMetaContext);
-  return acsMetaContext ? acsMetaContext.objectTypes : {};
+  return acsMetaContext ? acsMetaContext.objectTypes :undefined;
 };
 
 export const useGetAcsMetaObjectType = (
   objectType: string
-): ACSObjectType | Record<string, never> => {
+): ACSObjectType | undefined => {
   const acsMetaContext = useContext(AcsMetaContext);
-  return acsMetaContext ? acsMetaContext.objectTypes[objectType] : {};
+  return acsMetaContext ? acsMetaContext.objectTypes[objectType] : undefined;
 };
 
 export const useGetAcsMetaFields = (
   objectType: string
-): ACSObjectFields | Record<string, never> => {
+): ACSObjectFields | undefined => {
   const acsMetaContext = useContext(AcsMetaContext);
-  return acsMetaContext ? acsMetaContext.objectTypes[objectType].fields : {};
+  return acsMetaContext ? acsMetaContext.objectTypes[objectType].fields : undefined;
 };
 
 export const useGetAcsMetaField = (
   objectType: string,
   field: string
-): ACSField | Record<string, never> => {
+): ACSField | undefined => {
   const acsMetaContext = useContext(AcsMetaContext);
   return acsMetaContext
     ? acsMetaContext.objectTypes[objectType].fields[field]
-    : {};
+    : undefined;
 };
 
 export default useGetAcsMeta;
