@@ -9,6 +9,8 @@ const ACSField = ({
 	objectType,
 	id: propId,
 	data: propData,
+	mode: propMode = "view",
+	isEditable = true,
 	fieldName,
 	label,
 	defaultValue,
@@ -23,6 +25,8 @@ const ACSField = ({
 	objectType: string;
 	id?: string | number;
 	data?: Record<string, unknown>;
+	mode?: "view" | "edit" | "create";
+	isEditable?: boolean;
 	fieldName: string;
 	label: string;
 	defaultValue?: unknown;
@@ -36,8 +40,9 @@ const ACSField = ({
 }
 ) => {
 
-	// Props:
+	const [mode, setMode] = React.useState(propMode);
 
+	// Props:
 	// For edit mode:
 	// data - Row data - If this is provided, no call to server necessary
 	// id - server lookup by id for the row data
@@ -46,7 +51,7 @@ const ACSField = ({
 	// For create mode:
 	// defaultValue (optional)
 	// none of id, lookupField, lookupValue, data 
-	const mode = propId || lookupValue || propData ? "edit" : "create";
+	//const mode = propId || lookupValue || propData ? "edit" : "create";
 
 	const { data: idData } = useGetDataById({
 		objectType,
@@ -71,6 +76,9 @@ const ACSField = ({
 		if (!isMutating && mode === "edit") {
 			mutate({ objectType, id, fields: { [fieldName]: mutatedValue } });
 		}
+		if (propMode === "view") {
+			setMode("view")
+		}
 		if (mode === "create") {
 			// Tell parent what the value is. Parent will collect values and then submit
 			// either that or figure out a way to use useForm
@@ -82,11 +90,17 @@ const ACSField = ({
 		return null;
 	}
 
+	const handleClick = () => {
+		if (isEditable && mode == "view") {
+			setMode("edit");
+		}
+	}
 
 	return (
-		<div>
+		<div onClick={handleClick}>
 			{label && <label className={labelClassName}>{label}</label>}
-			<Text data={data} onBlur={handleMutate} initialValue={initialValue} className={fieldClassName} fontSizeClass={fontSizeClass} textColorClass={textColorClass} fontWeightClass={fontWeightClass} />
+			<Text mode={mode} data={data} onBlur={handleMutate} initialValue={initialValue}
+				className={fieldClassName} fontSizeClass={fontSizeClass} textColorClass={textColorClass} fontWeightClass={fontWeightClass} />
 		</div>
 	);
 }

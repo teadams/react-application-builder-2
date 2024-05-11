@@ -2,6 +2,7 @@ import React from "react";
 
 interface TextProps {
 	data?: Record<string, unknown>;
+	mode: string;
 	initialValue?: unknown;
 	onBlur?: (e: React.FocusEvent<HTMLInputElement>, mutatedValue: unknown) => void;
 	className?: string
@@ -12,6 +13,7 @@ interface TextProps {
 
 const Text = ({
 	data = {},
+	mode = "view",
 	onBlur,
 	initialValue,
 	className = "bg-white border border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  ",
@@ -30,18 +32,24 @@ const Text = ({
 	}
 
 	const handleOnBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-		if (value !== initialValue) {
-			onBlur && onBlur(e, value);
-		}
+		onBlur && onBlur(e, value);
+
 	}
 
-	return (
-		<div>
-			<input type="text" value={value} onChange={(e) => setValue(e.target.value as string)}
-				onBlur={handleOnBlur}
-				className={`${className} ${fontSizeClass} ${textColorClass} ${fontWeightClass}`} />
-		</div>
-	);
-}
+	switch (mode) {
+		case "view":
+			return <>{initialValue}</>
 
+		case "edit":
+			return (
+				<input type="text" autoFocus={true} value={value} onChange={(e) => setValue(e.target.value as string)}
+					onBlur={handleOnBlur}
+					className={`${className} ${fontSizeClass} ${textColorClass} ${fontWeightClass}`} />
+			);
+
+		case "create":
+			return <>{initialValue}</>
+
+	}
+}
 export { Text };

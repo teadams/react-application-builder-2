@@ -11,6 +11,8 @@ const getTenantSetupRecord = (tenantSetup: any, key: string) => {
 const ACSTenantField = ({
 	fieldKey,
 	label,
+	mode = "view",
+	isEditable = true,
 	labelClassName = "block mb-2 text-sm font-medium text-black-500 ",
 	fieldClassName = "bg-white border border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  ",
 	fontSizeClass = "text-base",
@@ -20,6 +22,8 @@ const ACSTenantField = ({
 
 	fieldKey: string;
 	label?: string;
+	mode?: "view" | "edit" | "create";
+	isEditable?: boolean;
 	labelClassName?: string
 	fieldClassName?: string
 	fontWeightClass?: string;
@@ -35,7 +39,7 @@ const ACSTenantField = ({
 	label = label ?? data.parameter.name
 
 	return (
-		<ACSField label={label as string} objectType="acsTenantSetup" fieldName="value" data={data}
+		<ACSField mode={mode} isEditable={isEditable} label={label as string} objectType="acsTenantSetup" fieldName="value" data={data}
 			labelClassName={labelClassName} fieldClassName={fieldClassName} fontSizeClass={fontSizeClass} textColorClass={textColorClass} fontWeightClass={fontWeightClass}
 		/>
 	);
