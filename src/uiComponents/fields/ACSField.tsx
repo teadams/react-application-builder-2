@@ -1,7 +1,7 @@
 import React from "react";
 import { Text } from ".";
 
-import { useGetDataByField, useUpdateData, useGetDataById } from "../../hooks";
+import { useGetAcsMetaField, useGetDataByField, useUpdateData, useGetDataById } from "../../hooks";
 
 
 const ACSField = ({
@@ -9,6 +9,7 @@ const ACSField = ({
 	id: propId,
 	data: propData,
 	mode: propMode = "view",
+	handleCreateChange,
 	isEditable = true,
 	fieldName,
 	label,
@@ -25,9 +26,10 @@ const ACSField = ({
 	id?: string | number;
 	data?: Record<string, unknown>;
 	mode?: "view" | "edit" | "create";
+	handleCreateChange?: (fieldName: string, value: unknown) => void;
 	isEditable?: boolean;
 	fieldName: string;
-	label: string;
+	label?: string;
 	defaultValue?: unknown;
 	lookupValue?: any;
 	lookupField?: string;
@@ -40,6 +42,7 @@ const ACSField = ({
 ) => {
 
 	const [mode, setMode] = React.useState(propMode);
+
 
 	// Props:
 	// For edit mode:
@@ -66,7 +69,9 @@ const ACSField = ({
 	});
 
 	const data = propData ?? fieldData ?? idData ?? {}
-
+	const acsMeta = useGetAcsMetaField(objectType, fieldName)
+	defaultValue = defaultValue ?? acsMeta?.defaultValue ?? "";
+	label = label ?? acsMeta?.prettyName;
 
 	const initialValue = defaultValue ?? data?.[fieldName];
 	const id = propId ?? data?.id as string | number;
@@ -76,11 +81,10 @@ const ACSField = ({
 			mutate({ objectType, id, fields: { [fieldName]: mutatedValue } });
 		}
 		if (propMode === "view") {
-			setMode("view")
+			setMode("view");
 		}
-		if (mode === "create") {
-			// Tell parent what the value is. Parent will collect values and then submit
-			// either that or figure out a way to use useForm
+		if (mode === "create" && handleCreateChange) {
+			handleCreateChange(fieldName, mutatedValue);
 		}
 	};
 

@@ -22,7 +22,7 @@ const Text = ({
 	fontWeightClass = "font-normal",
 }: TextProps) => {
 
-	const [value, setValue] = React.useState<string>(initialValue as string);
+	const [value, setValue] = React.useState<string>(initialValue as string ?? "");
 	const [prevInitialvalue, setPrevInitialValue] = React.useState<string>(initialValue as string);
 	if (prevInitialvalue !== initialValue) {
 		setPrevInitialValue(initialValue as string);
@@ -51,7 +51,9 @@ const Text = ({
 			);
 
 		case "create":
-			return <>{initialValue}</>
+			return (<input type="text" value={value} onChange={(e) => setValue(e.target.value as string)}
+				onBlur={handleOnBlur}
+				className={`${className} ${fontSizeClass} ${textColorClass} ${fontWeightClass}`} />)
 
 	}
 }
