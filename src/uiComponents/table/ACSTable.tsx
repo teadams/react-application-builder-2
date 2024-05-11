@@ -18,6 +18,7 @@ const ACSTable = ({
 	bodyClassName?: string
 }) => {
 	const { data } = useGetData({ objectType: objectType, enabled: propsData === undefined })
+	console.log(data)
 	const acsMeta = useGetAcsMetaFields(objectType)
 
 	if (!data || !acsMeta) return null
