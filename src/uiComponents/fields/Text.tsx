@@ -31,7 +31,7 @@ const Text = ({
 		}
 	}
 
-	const handleOnBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+	const handleOnBlur = (e: unknown) => {
 		onBlur && onBlur(e, value);
 
 	}
@@ -42,9 +42,12 @@ const Text = ({
 
 		case "edit":
 			return (
-				<input type="text" autoFocus={true} value={value} onChange={(e) => setValue(e.target.value as string)}
-					onBlur={handleOnBlur}
-					className={`${className} ${fontSizeClass} ${textColorClass} ${fontWeightClass}`} />
+				<form onSubmit={handleOnBlur}>
+					<input type="text" autoFocus={true} value={value} onChange={(e) => setValue(e.target.value as string)}
+						onBlur={handleOnBlur}
+
+						className={`${className} ${fontSizeClass} ${textColorClass} ${fontWeightClass}`} />
+				</form>
 			);
 
 		case "create":

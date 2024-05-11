@@ -71,7 +71,7 @@ const ACSField = ({
 	const initialValue = defaultValue ?? data?.[fieldName];
 	const id = propId ?? data?.id as string | number;
 	const { mutate, isLoading: isMutating } = useUpdateData();
-	const handleMutate = (e: React.FocusEvent<HTMLInputElement>, mutatedValue: unknown) => {
+	const handleMutate = (e: unknown, mutatedValue: unknown) => {
 		if (!isMutating && mode === "edit") {
 			mutate({ objectType, id, fields: { [fieldName]: mutatedValue } });
 		}
