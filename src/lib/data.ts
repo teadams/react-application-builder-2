@@ -49,11 +49,9 @@ export const getByField = async ({
 };
 
 export const create = async ({
-  queryClient = undefined,
   objectType,
   fields,
 }: {
-  queryClient: QueryClient | undefined;
   objectType: string;
   fields: object;
 }): Promise<unknown> => {
@@ -61,17 +59,14 @@ export const create = async ({
   const params = { ...fields };
   const method = "POST";
   const apiResult = await api.callAPI({ path, params, method });
-  if (queryClient) queryClient.invalidateQueries([objectType]);
   return apiResult;
 };
 
 export const updateById = async ({
-  queryClient = undefined,
   objectType,
   id,
   fields,
 }: {
-  queryClient?: QueryClient | undefined;
   objectType: string;
   id: unknown;
   fields: object;
@@ -80,7 +75,6 @@ export const updateById = async ({
   const params = { ...fields };
   const method = "PUT";
   const apiResult = await api.callAPI({ path, params, method });
-  if (queryClient) queryClient.invalidateQueries([objectType]);
   return apiResult;
 };
 

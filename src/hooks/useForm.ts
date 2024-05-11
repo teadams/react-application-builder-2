@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {useGetAcsMetaFields} from "./"
+import {useGetAcsMetaFields, useCreateData} from "./"
 
 export const useForm = ({
   objectType,
@@ -15,6 +15,8 @@ export const useForm = ({
   const [touched, setTouched] = useState(false)
   const [values, setValues] = useState<{ [key: string]: any }>({}) // Add type annotation for values object
   const [defaultsLoaded, setDefaultsLoaded] = useState(false)
+  const { mutate, isLoading: isMutating } = useCreateData();
+
  
   if (mode === "create" && acsMeta && !defaultsLoaded) {
     const defaultValues: { [key: string]: any } = {} // Add type annotation for defaultValues object
@@ -26,8 +28,10 @@ export const useForm = ({
       setDefaultsLoaded(true)
   }
 
-  console.log(values)
-  const handleSubmit = () => {  
+  const handleSubmit = () => { 
+    if (!isMutating) {
+			mutate({ objectType, fields:values });
+		} 
     alert (JSON.stringify(values))
   }
 
