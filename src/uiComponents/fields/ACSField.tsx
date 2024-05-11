@@ -1,7 +1,6 @@
 import React from "react";
-import { Text } from "./";
-import { useQueryClient, useMutation } from "react-query";
-import { updateById } from "../../lib/data";
+import { Text } from ".";
+
 import { useGetDataByField, useUpdateData, useGetDataById } from "../../hooks";
 
 
