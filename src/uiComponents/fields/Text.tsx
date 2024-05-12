@@ -4,7 +4,7 @@ interface TextProps {
 	data?: Record<string, unknown>;
 	mode: string;
 	initialValue?: unknown;
-	onBlur?: (e: React.FocusEvent<HTMLInputElement>, mutatedValue: unknown) => void;
+	onBlur?: (e: unknown, mutatedValue: unknown) => void;
 	className?: string
 	fontWeightClass?: string;
 	textColorClass?: string;
