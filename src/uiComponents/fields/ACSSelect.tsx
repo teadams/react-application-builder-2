@@ -35,7 +35,6 @@ const ACSSelect = ({
 		}
 	}
 	if (!data) return null
-	console.log("DDDDD", objectType, data, displayFields, params)
 	return (
 		<Select
 			options={data as any[]}

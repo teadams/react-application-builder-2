@@ -1,10 +1,13 @@
 import React  from "react";
 import { useQuery } from "react-query";
+import utils from "../lib/utils"
 import { get } from "../lib/data";
 
 export const useGetData = ({
   objectType,
   params = {},
+  path,
+  basePath,
   filters = {},
   useQueryConfig={},
   enabled = true,
@@ -13,6 +16,8 @@ export const useGetData = ({
 }: {
   objectType: string,
   params?: { [index: string]: unknown },
+  path?:string,
+  basePath?:string,
   filters?: { [index: string]: unknown };
   useQueryConfig?: any,
   enabled?: boolean,
@@ -23,16 +28,12 @@ export const useGetData = ({
     [objectType, "list", {params, filters}],
     () => {
 
-      return get({objectType, params, filters});
+      return get({objectType, params, filters, basePath, path});
     },
     { enabled: objectType && enabled ? true : false, 
       select: React.useCallback((data: any[]) => {
-        return sortBy? 
-          data.sort((a: any, b: any) => (
-          sortOrder === "asc" ? 
-            a[sortBy] > b[sortBy] ? 1 : -1 :  
-            a[sortBy] < b[sortBy] ? 1 : -1)) 
-          : data},[sortBy, sortOrder]),
+          return utils.sort(data, sortBy, sortOrder)
+        },[sortBy, sortOrder]),
         ...useQueryConfig }
   );
 

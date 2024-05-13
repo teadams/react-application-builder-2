@@ -8,13 +8,16 @@ export const get = async ({
   objectType,
   params = {},
   filters = {},
+  path,
+  basePath = "acs"
 }: {
   objectType: string;
   params?: { [index: string]: unknown };
   filters?: { [index: string]: unknown };
+  path?:string,
+  basePath?:string
 }): Promise<Record<string, unknown>[]> => {
-  const path = "acs/" + objectType;
-  console.log("path", path, "params", params, "filters", filters)
+  path = path ?? basePath +"/" +  objectType;
   const apiResult = (await api.callAPI({ path, params })) as Promise<
     Record<string, unknown>[]
   >;
@@ -25,12 +28,16 @@ export const getById = async ({
   objectType,
   id,
   filters = {},
+  path,
+  basePath = "acs"
 }: {
   objectType: string;
   id: string;
   filters?: { [index: string]: unknown };
+  path?:string,
+  basePath?:string
 }): Promise<Record<string, unknown>> => {
-  const apiResult = await get({ objectType, params: { id }, filters });
+  const apiResult = await get({ objectType, path, basePath, params: { id }, filters });
   return apiResult[0];
 };
 
@@ -38,15 +45,23 @@ export const getByField = async ({
   objectType,
   lookupField,
   lookupValue,
+  params={},
   filters = {},
+  path,
+  basePath = "acs",
 }: {
   objectType: string;
   lookupField: string;
   lookupValue: unknown
+  params?: { [index: string]: unknown };
   filters?: { [index: string]: unknown };
-}): Promise<Record<string, unknown>> => {
-  const apiResult = await get({ objectType, params: { [lookupField]: lookupValue }, filters });
-  return apiResult[0];
+  path?:string,
+  basePath?:string,
+
+}): Promise<Record<string, unknown>[]>=> {
+
+  const apiResult = await get({ objectType, path, basePath, params: {...params, [lookupField]: lookupValue }, filters });
+  return apiResult;
 };
 
 export const create = async ({
