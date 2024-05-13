@@ -130,9 +130,7 @@ export async function callAPI({
   if (!domain) domain = getDomain();
 
   const headers = getHeaders();
-  console.log("domain", domain);
-  console.log("path", path);
-  console.log("params", params);
+
   try {
     const apiResult = await axios({
       method: method,

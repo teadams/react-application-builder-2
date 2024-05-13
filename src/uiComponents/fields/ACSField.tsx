@@ -70,7 +70,7 @@ const ACSField = ({
 		enabled: defaultValue === undefined && lookupValue && propId === undefined && mode === "edit" && !propData
 	});
 
-	const data = propData ?? fieldData ?? idData ?? {}
+	const data = propData ?? fieldData?.[0] ?? idData ?? {}
 	const acsMeta = useGetAcsMetaField(objectType, fieldName)
 	defaultValue = defaultValue ?? acsMeta?.defaultValue ?? "";
 	label = label ?? acsMeta?.prettyName;
