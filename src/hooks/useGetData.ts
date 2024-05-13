@@ -23,7 +23,6 @@ export const useGetData = ({
     [objectType, "list", {params, filters}],
     () => {
 
- 
       return get({objectType, params, filters});
     },
     { enabled: objectType && enabled ? true : false, 

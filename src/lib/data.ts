@@ -14,6 +14,7 @@ export const get = async ({
   filters?: { [index: string]: unknown };
 }): Promise<Record<string, unknown>[]> => {
   const path = "acs/" + objectType;
+  console.log("path", path, "params", params, "filters", filters)
   const apiResult = (await api.callAPI({ path, params })) as Promise<
     Record<string, unknown>[]
   >;

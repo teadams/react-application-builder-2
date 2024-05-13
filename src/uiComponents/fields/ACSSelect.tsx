@@ -1,10 +1,13 @@
 import React from "react";
 import { useGetData } from "../../hooks";
+import { Select } from "./"
 
 const ACSSelect = ({
 	objectType,
 	value,
+	displayFields = ["name"],
 	params,
+	filters,
 	onChange,
 	sortBy,
 	sortOrder,
@@ -13,36 +16,34 @@ const ACSSelect = ({
 }: {
 	objectType: string,
 	value?: string | number | readonly string[] | undefined,
-	params?: Record<string, any>
-	onChange?: (newValue: string) => void;
+	displayFields?: string[],
+	params?: Record<string, any>;
+	filters?: Record<string, any>
+	onChange?: (newValue: string, newRow: Record<string, unknown> | undefined) => void;
 	sortBy?: string;
 	sortOrder?: "asc" | "desc";
 	className?: string
 }) => {
-	const { data } = useGetData({ objectType, params, sortBy, sortOrder });
+	const { data } = useGetData({ objectType, params, filters, sortBy, sortOrder });
 
 
 	const handleChange = (e: any) => {
+		const selectedValue = e.target.value;
 		if (onChange) {
-			onChange(e.target.value);
+			const selectedRow = data?.find((row: any) => row.id === selectedValue);
+			onChange(selectedValue, selectedRow);
 		}
 	}
 	if (!data) return null
-
+	console.log("DDDDD", objectType, data, displayFields, params)
 	return (
-		<>
-			<select
-				value={value}
-				className={`${className}`}
-				onChange={handleChange}
-			>
-				{data.map((option: any) => (
-					<option key={option.id} value={option.id} className="font-family-red">
-						{option.name}
-					</option>
-				))}
-			</select >
-		</>
+		<Select
+			options={data as any[]}
+			displayFields={displayFields}
+			value={value}
+			className={`${className}`}
+			onChange={handleChange}
+		/>
 	);
 
 }

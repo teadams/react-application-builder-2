@@ -1,5 +1,23 @@
 import { indexOf, uniq } from "lodash";
 
+/**
+ * 
+ * @param obj 
+ * @param path
+ * 
+ * Given a path string, return the value of the object at that path.  
+ */
+const getDeepValueFromString = (obj: Record<string, unknown>, path: string) => {
+  const pathArray = path.split(".")
+  for (let i = 0; i < pathArray.length; i++) {
+    if (i < pathArray.length - 1) {
+      obj = obj[pathArray[i]] as Record<string, unknown>
+    }    
+  }
+  return obj[pathArray[pathArray.length - 1]]
+
+}
+
 /*** converts an array to a
  * JSON object keyed by keyAttribute
  */
@@ -85,6 +103,7 @@ export const reverse = (arrays: unknown[]): unknown[] => {
 };
 
 export default {
+  getDeepValueFromString,
   arrayOfJsonToObject,
   getElementByAttribute,
   getElementsByAttribute,
