@@ -20,13 +20,11 @@ const getDeepValueFromString = (obj: Record<string, unknown>, path: string) => {
 
 const sort = (array: Record<string, unknown>[], sortBy: string | undefined, sortOrder: string = "asc") => {
   if (!sortBy) return array
-  console.log("sort", sortBy, sortOrder, array  )
   const result =  array.sort((a: Record<string, unknown>, b: Record<string, unknown>) => {
       return sortOrder === "asc" ? 
         (a[sortBy] as string) > (b[sortBy] as string) ? 1 : -1 :  
         (a[sortBy] as string) < (b[sortBy] as string) ? 1 : -1
   });
-  console.log("result", result)
   return result
 }
 

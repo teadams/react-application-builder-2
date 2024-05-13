@@ -18,6 +18,7 @@ export const get = async ({
   basePath?:string
 }): Promise<Record<string, unknown>[]> => {
   path = path ?? basePath +"/" +  objectType;
+
   const apiResult = (await api.callAPI({ path, params })) as Promise<
     Record<string, unknown>[]
   >;

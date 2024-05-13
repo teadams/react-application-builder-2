@@ -19,7 +19,6 @@ const Select = ({
 	const [value, setValue] = usePropState(propValue as any);
 
 	if (!options) return null;
-	console.log("options", options)
 	const handleChange = (e: any) => {
 		setValue(e.target.value);
 		if (onChange) {
