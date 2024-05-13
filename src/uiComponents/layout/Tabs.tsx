@@ -38,7 +38,7 @@ const Tabs = ({
 				<ul key="tabs" className="text-sm font-medium text-center text-gray-500 rounded-lg shadow sm:flex dark:divide-gray-700 dark:text-gray-40" id="default-tab" data-tabs-toggle="#default-tab-content" role="tablist">
 					{names.map((name, index) => {
 						return (
-							<li className="w-full cursor-pointer" onClick={() => setActiveTab(index)}>
+							<li key={index} className="w-full cursor-pointer" onClick={() => setActiveTab(index)}>
 								<a className={`inline-block w-full p-4  border-r border-gray-400 dark:border-gray-700 hover:text-gray-700 hover:bg-gray-50 focus:ring-4 focus:ring-blue-300 ${index === activeTab ? 'bg-gray-100' : ''} focus:outline-none dark:hover:text-white dark:bg-gray-800 dark:hover:bg-gray-700`}>{name}</a>
 							</li>
 						)

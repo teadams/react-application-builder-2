@@ -6,4 +6,5 @@ export * from "./useIsVisible";
 export * from "./useUpdateData";
 export * from "./useCreateData";
 export * from "./useForm"
+export * from "./usePropState"
 

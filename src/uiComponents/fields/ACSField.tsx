@@ -13,6 +13,7 @@ const ACSField = ({
 	isEditable = true,
 	fieldName,
 	label,
+	value,
 	defaultValue,
 	lookupValue,
 	lookupField = "id",
@@ -30,6 +31,7 @@ const ACSField = ({
 	isEditable?: boolean;
 	fieldName: string;
 	label?: string;
+	value?: unknown;
 	defaultValue?: unknown;
 	lookupValue?: any;
 	lookupField?: string;
@@ -73,7 +75,7 @@ const ACSField = ({
 	defaultValue = defaultValue ?? acsMeta?.defaultValue ?? "";
 	label = label ?? acsMeta?.prettyName;
 
-	const initialValue = defaultValue ?? data?.[fieldName];
+	value = mode === "create" ? defaultValue ?? "" : value ?? data?.[fieldName]
 	const id = propId ?? data?.id as string | number;
 	const { mutate, isLoading: isMutating } = useUpdateData();
 	const handleMutate = (e: unknown, mutatedValue: unknown) => {
@@ -88,8 +90,8 @@ const ACSField = ({
 		}
 	};
 
-
-	if (mode === "edit" && initialValue === undefined) {
+	// This ensures the data is loaded before rendering
+	if (mode === "edit" && value === undefined) {
 		return null;
 	}
 
@@ -102,7 +104,7 @@ const ACSField = ({
 	return (
 		<div onClick={handleClick}>
 			{label && <label className={labelClassName}>{label}</label>}
-			<Text mode={mode} data={data} onBlur={handleMutate} initialValue={initialValue}
+			<Text mode={mode} data={data} onBlur={handleMutate} value={value}
 				className={fieldClassName} fontSizeClass={fontSizeClass} textColorClass={textColorClass} fontWeightClass={fontWeightClass} />
 		</div>
 	);

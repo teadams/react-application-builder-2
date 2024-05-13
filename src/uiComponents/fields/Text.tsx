@@ -1,9 +1,10 @@
 import React from "react";
+import { usePropState } from "../../hooks";
 
 interface TextProps {
 	data?: Record<string, unknown>;
 	mode: string;
-	initialValue?: unknown;
+	value?: unknown;
 	onBlur?: (e: unknown, mutatedValue: unknown) => void;
 	className?: string
 	fontWeightClass?: string;
@@ -15,21 +16,14 @@ const Text = ({
 	data = {},
 	mode = "view",
 	onBlur,
-	initialValue,
+	value: propValue = "", // need to default to "" or react will complain about controlled/uncontrolled input
 	className = "bg-white border border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  ",
 	fontSizeClass = "text-base",
 	textColorClass = "text-dark",
 	fontWeightClass = "font-normal",
 }: TextProps) => {
 
-	const [value, setValue] = React.useState<string>(initialValue as string ?? "");
-	const [prevInitialvalue, setPrevInitialValue] = React.useState<string>(initialValue as string);
-	if (prevInitialvalue !== initialValue) {
-		setPrevInitialValue(initialValue as string);
-		if (initialValue !== value) {
-			setValue(initialValue as string);
-		}
-	}
+	const [value, setValue] = usePropState(propValue);
 
 	const handleOnBlur = (e: unknown) => {
 		onBlur && onBlur(e, value);
@@ -38,7 +32,7 @@ const Text = ({
 
 	switch (mode) {
 		case "view":
-			return <>{initialValue}</>
+			return <>{value}</>
 
 		case "edit":
 			return (
