@@ -132,6 +132,7 @@ export async function callAPI({
   const headers = getHeaders();
 
   try {
+    console.log("domain", domain, "path", path, "params", params, "data", data, "method", method, "headers", headers)
     const apiResult = await axios({
       method: method,
       url: `${domain}/${path}`,

@@ -28,11 +28,11 @@ export const useForm = ({
       setDefaultsLoaded(true)
   }
 
-  const handleSubmit = () => { 
+  const handleSubmit = (e) => { 
+    e.preventDefault()
     if (!isMutating) {
 			mutate({ objectType, fields:values });
 		} 
-    alert (JSON.stringify(values))
   }
 
   const handleChange = ( field:unknown, value:unknown) => {
