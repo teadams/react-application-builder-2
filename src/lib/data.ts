@@ -73,9 +73,9 @@ export const create = async ({
   fields: object;
 }): Promise<unknown> => {
   const path = "acs/" + objectType;
-  const params = { ...fields };
+  const data = { ...fields };
   const method = "POST";
-  const apiResult = await api.callAPI({ path, params, method });
+  const apiResult = await api.callAPI({ path, data, method });
   return apiResult;
 };
 
@@ -89,9 +89,9 @@ export const updateById = async ({
   fields: object;
 }): Promise<unknown> => {
   const path = "acs/" + objectType + "/" + id;
-  const params = { ...fields };
+  const data = { ...fields };
   const method = "PUT";
-  const apiResult = await api.callAPI({ path, params, method });
+  const apiResult = await api.callAPI({ path, data, method });
   return apiResult;
 };
 

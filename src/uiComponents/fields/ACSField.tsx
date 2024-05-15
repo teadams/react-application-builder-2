@@ -11,6 +11,7 @@ const ACSField = ({
 	mode: propMode = "view",
 	handleCreateChange,
 	isEditable = true,
+	isForm = false,
 	fieldName,
 	label,
 	value,
@@ -29,6 +30,7 @@ const ACSField = ({
 	mode?: "view" | "edit" | "create";
 	handleCreateChange?: (fieldName: string, value: unknown) => void;
 	isEditable?: boolean;
+	isForm: boolean;
 	fieldName: string;
 	label?: string;
 	value?: unknown;
@@ -90,6 +92,7 @@ const ACSField = ({
 		}
 	};
 
+
 	// This ensures the data is loaded before rendering
 	if (mode === "edit" && value === undefined) {
 		return null;
@@ -104,7 +107,7 @@ const ACSField = ({
 	return (
 		<div onClick={handleClick}>
 			{label && <label className={labelClassName}>{label}</label>}
-			<Text mode={mode} data={data} onBlur={handleMutate} value={value}
+			<Text mode={mode} data={data} onBlur={handleMutate} value={value} isForm={isForm}
 				className={fieldClassName} fontSizeClass={fontSizeClass} textColorClass={textColorClass} fontWeightClass={fontWeightClass} />
 		</div>
 	);

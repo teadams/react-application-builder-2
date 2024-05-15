@@ -5,6 +5,7 @@ interface TextProps {
 	data?: Record<string, unknown>;
 	mode: string;
 	value?: unknown;
+	isForm?: boolean;
 	onBlur?: (e: unknown, mutatedValue: unknown) => void;
 	className?: string
 	fontWeightClass?: string;
@@ -17,6 +18,7 @@ const Text = ({
 	mode = "view",
 	onBlur,
 	value: propValue = "", // need to default to "" or react will complain about controlled/uncontrolled input
+	isForm = false,
 	className = "bg-white border border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  ",
 	fontSizeClass = "text-base",
 	textColorClass = "text-dark",
@@ -35,19 +37,27 @@ const Text = ({
 			return <>{value}</>
 
 		case "edit":
-			return (
-				<form onSubmit={handleOnBlur}>
-					<input type="text" autoFocus={true} value={value} onChange={(e) => setValue(e.target.value as string)}
-						onBlur={handleOnBlur}
+			if (!isForm) {
+				return (<input type="text" autoFocus={true} value={value}
+					onChange={(e) => setValue(e.target.value as string)}
+					onBlur={handleOnBlur}
+					className={`${className} ${fontSizeClass} ${textColorClass} ${fontWeightClass}`} />
+				)
+			} else {
+				return (
+					<form onSubmit={handleOnBlur}>
+						<input type="text" autoFocus={true} value={value} onChange={(e) => setValue(e.target.value as string)}
+							onBlur={handleOnBlur}
 
-						className={`${className} ${fontSizeClass} ${textColorClass} ${fontWeightClass}`} />
-				</form>
-			);
+							className={`${className} ${fontSizeClass} ${textColorClass} ${fontWeightClass}`} />
+					</form>
+				);
+			}
 
 		case "create":
-			return (<input type="text" value={value} onChange={(e) => setValue(e.target.value as string)}
+			return (<><input type="text" value={value} onChange={(e) => setValue(e.target.value as string)}
 				onBlur={handleOnBlur}
-				className={`${className} ${fontSizeClass} ${textColorClass} ${fontWeightClass}`} />)
+				className={`${className} ${fontSizeClass} ${textColorClass} ${fontWeightClass}`} /></>)
 
 	}
 }

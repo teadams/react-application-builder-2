@@ -132,6 +132,20 @@ export async function callAPI({
   const headers = getHeaders();
 
   try {
+    data = Object.entries(data)
+      .filter(([key, value]) => value !== undefined)
+      .reduce((obj, [key, value]) => {
+        obj[key] = value;
+        return obj;
+    }, {});
+
+    params = Object.entries(params)
+      .filter(([key, value]) => value !== undefined)
+      .reduce((obj, [key, value]) => {
+        obj[key] = value;
+        return obj;
+    }, {});
+
     console.log("domain", domain, "path", path, "params", params, "data", data, "method", method, "headers", headers)
     const apiResult = await axios({
       method: method,
