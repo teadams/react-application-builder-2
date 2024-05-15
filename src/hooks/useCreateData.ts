@@ -8,8 +8,9 @@ export const useCreateData = () => {
   const mutation = useMutation({
     mutationFn: create,
     onSuccess: (data, variables) => {
-      const {  fields, objectType } = variables;
+      const {  fields, objectType} = variables;
       queryClient.invalidateQueries({ queryKey: [objectType, "list"] });
+
       // optimistially update
     },
   });

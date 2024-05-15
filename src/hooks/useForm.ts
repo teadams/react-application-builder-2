@@ -4,11 +4,14 @@ import {useGetAcsMetaFields, useCreateData} from "./"
 export const useForm = ({
   objectType,
   fields,
-  mode = "create"
+  mode = "create",
+  onSubmit,
+  closeModal
 }: {
   objectType: string,
   fields: string[],
-  mode?:  "edit" | "create";
+  mode?:  "edit" | "create",
+  onSubmit: () => void
 }) => {
   //only create supported right now
   const acsMeta = useGetAcsMetaFields(objectType)
@@ -28,11 +31,17 @@ export const useForm = ({
       setDefaultsLoaded(true)
   }
 
-  const handleSubmit = (e) => { 
+  const  handleSubmit = (e: { preventDefault: () => void; }) => { 
     e.preventDefault()
     if (!isMutating) {
 			mutate({ objectType, fields:values });
 		} 
+    if  (onSubmit) {
+      onSubmit()
+    } 
+    if (closeModal) {
+      closeModal()
+    }
   }
 
   const handleChange = ( field:unknown, value:unknown) => {

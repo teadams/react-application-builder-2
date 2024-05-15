@@ -3,16 +3,18 @@ import { ACSField } from "../fields";
 import { useForm, useUpdateData } from "../../hooks";
 
 const ACSForm = ({ objectType, fields, labelClassName,
-	fieldClassName, fontSizeClass, textColorClass, fontWeightClass }:
+	fieldClassName, fontSizeClass, textColorClass, fontWeightClass, onSubmit, closeModal }:
 	{
 		objectType: string, fields: string[],
 		labelClassName?: string, fieldClassName?: string, fontSizeClass?: string,
-		textColorClass?: string, fontWeightClass?: string
+		textColorClass?: string, fontWeightClass?: string, onSubmit: () => void,
+		closeModal: () => void
 	}) => {
 
 	const mode = "create"
 
-	const { handleSubmit, handleChange } = useForm({ objectType, fields, mode })
+
+	const { handleSubmit, handleChange } = useForm({ objectType, fields, mode, onSubmit, closeModal })
 
 	return (
 		<div>
