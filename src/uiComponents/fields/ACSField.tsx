@@ -89,7 +89,7 @@ const ACSField = ({
 	value = mode === "create" ? defaultValue ?? "" : value ?? data?.[fieldName]
 	const id = propId ?? data?.id as string | number;
 	const { mutate, isLoading: isMutating } = useUpdateData();
-	const handleMutate = (e: unknown, mutatedValue: unknown) => {
+	const handleBlur = (e: unknown, mutatedValue: unknown) => {
 		if (!isMutating && mode === "edit") {
 			mutate({ objectType, id, fields: { [fieldName]: mutatedValue } });
 		}
@@ -114,14 +114,14 @@ const ACSField = ({
 	}
 
 	if (mode === "view") {
-		return (<FieldComponent index={index} componentType={componentType} fieldMeta={fieldMeta} mode={mode} data={data} onBlur={handleMutate} value={value} isForm={isForm}
+		return (<FieldComponent index={index} componentType={componentType} fieldMeta={fieldMeta} mode={mode} data={data} value={value} isForm={isForm}
 			className={fieldClassName} fontSizeClass={fontSizeClass} textColorClass={textColorClass} fontWeightClass={fontWeightClass} />
 		)
 	} else {
 		return (
 			<div key={index} className={layoutClassName} onClick={handleClick}>
 				{label && <label className={labelClassName}>{label}</label>}
-				<FieldComponent index={index} componentType={componentType} fieldMeta={fieldMeta} mode={mode} data={data} onBlur={handleMutate} value={value} isForm={isForm}
+				<FieldComponent index={index} componentType={componentType} fieldMeta={fieldMeta} mode={mode} data={data} onBlur={handleBlur} value={value} isForm={isForm}
 					className={fieldClassName} fontSizeClass={fontSizeClass} textColorClass={textColorClass} fontWeightClass={fontWeightClass} />
 			</div>
 		);

@@ -15,8 +15,8 @@ export const useForm = ({
   hiddenFields?: Record<string, unknown>,
   defaultValues?: Record<string, unknown>,
   mode?:  "edit" | "create",
-  onSubmit: () => void,
-  closeModal: () => void
+  onSubmit?: () => void,
+  closeModal?: () => void
 }) => {
   //only create supported right now
   const acsMeta = useGetAcsMetaFields(objectType)
@@ -24,7 +24,6 @@ export const useForm = ({
   const [values, setValues] = useState<{ [key: string]: any }>({}) // Add type annotation for values object
   const [defaultsLoaded, setDefaultsLoaded] = useState(false)
   const { mutate, isLoading: isMutating } = useCreateData();
-  console.log("values", values)
   
   if (mode === "create" && acsMeta && !defaultsLoaded) {
     const defaultValues: { [key: string]: any } = {} // Add type annotation for defaultValues object
@@ -33,16 +32,15 @@ export const useForm = ({
         defaultValues[field] = propDefaultValues?.[field]??acsMeta[field]?.defaultValue
       } 
     }
-    console.log("hiddenFields",hiddenFields)
     
     setValues({...hiddenFields, ...defaultValues})
-    console.log("defaultValues", defaultValues)
     setDefaultsLoaded(true)
   }
 
   const  handleSubmit = (e: { preventDefault: () => void; }) => { 
     e.preventDefault()
     if (!isMutating) {
+      console.log("SUBMITTING THE MUTATION", values)
 			mutate({ objectType, fields:values });
 		} 
     if  (onSubmit) {
@@ -53,8 +51,10 @@ export const useForm = ({
     }
   }
 
+  console.log("VVVALLUES", values)
   const handleChange = ( field:unknown, value:unknown) => {
     setValues({...values, [field as string]: value})
+
     if (!touched) setTouched(true)
   }
   return {touched, handleSubmit, handleChange}
