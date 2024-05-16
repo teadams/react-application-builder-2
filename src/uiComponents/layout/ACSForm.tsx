@@ -16,23 +16,30 @@ const ACSForm = ({ objectType, fields, hiddenFields, labelClassName,
 
 
 	const { handleSubmit, handleChange } = useForm({ objectType, fields, mode, onSubmit, closeModal, hiddenFields })
-
+	const validated = true;
 	return (
-		<div>
-			<form>
-				{fields.map((field, index) => {
-					return (
-						<ACSField key={index} mode={mode} objectType={objectType} fieldName={field}
-							handleCreateChange={handleChange} isForm={true}
-							labelClassName={labelClassName} fieldClassName={fieldClassName}
-							fontSizeClass={fontSizeClass} textColorClass={textColorClass}
-							fontWeightClass={fontWeightClass}
-						/>
-					)
-				})}
-			</form>
-			<button className="" onClick={handleSubmit}>Submit</button>
-		</div >
+		<>
+			<form className="flex flex-col gap-y-4 mt-8">
+				{
+					fields.map((field, index) => {
+						return (
+							<ACSField key={index} mode={mode} objectType={objectType} fieldName={field}
+								handleCreateChange={handleChange} isForm={true}
+								labelClassName={labelClassName} fieldClassName={fieldClassName}
+								fontSizeClass={fontSizeClass} textColorClass={textColorClass}
+								fontWeightClass={fontWeightClass}
+							/>
+						)
+					})
+				}
+			</form >
+			<div className="flex justify-center w-full">
+				<button onClick={handleSubmit} disabled={!validated}
+					className={` mt-7  shrink ${validated ? "bg-[#18264C] text-white" : "bg-[#F3F3F3] text-[#808080]"}  py-3 px-10 rounded-md `}>
+					Submit
+				</button >
+			</div>
+		</>
 	)
 }
 

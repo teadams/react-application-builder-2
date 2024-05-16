@@ -19,10 +19,10 @@ const Text = ({
 	onBlur,
 	value: propValue = "", // need to default to "" or react will complain about controlled/uncontrolled input
 	isForm = false,
-	className = "bg-white border border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  ",
-	fontSizeClass = "text-base",
-	textColorClass = "text-dark",
-	fontWeightClass = "font-normal",
+	className,
+	fontSizeClass,
+	textColorClass,
+	fontWeightClass,
 }: TextProps) => {
 
 	const [value, setValue] = usePropState(propValue);
@@ -49,7 +49,7 @@ const Text = ({
 						<input type="text" autoFocus={true} value={value} onChange={(e) => setValue(e.target.value as string)}
 							onBlur={handleOnBlur}
 
-							className={`${className} ${fontSizeClass} ${textColorClass} ${fontWeightClass}`} />
+							className={`${className} `} />
 					</form>
 				);
 			}

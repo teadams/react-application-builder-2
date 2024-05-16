@@ -48,14 +48,14 @@ const Modal = ({ children,
 					inset-0 z-[10000] outline-none focus:outline-none">
 				{/*size of Modal lg:max-w-[52rem] is key attribute/*/}
 				<div className=" relative lg:w-3/4 md:w-11/12 sm:w-11/12 w-11/12 mx-auto my-auto 
-					lg:max-w-[52rem]  h-[90vh]">
+					lg:max-w-[52rem]  min-h-[90vh]">
 					{/*content*/}
 					<div className="p-7 h-full w-full border-0 rounded-lg shadow-lg 
 						relative flex flex-col  bg-white outline-none focus:outline-none">
 						<Header title={title} closeModal={closeModal} />
-						<div className="flex flex-col gap-y-4 mt-8 pl-2">
-							{children}
-						</div>
+
+						{children}
+
 					</div>
 				</div>
 			</div>
@@ -70,18 +70,18 @@ export { Modal };
 
 {/* <div
 	className="text-black fixed inset-0 z-[200] overflow-y-auto"
-	style={{
-		backgroundImage: 'url("../../../images/login-background-new.png")',
-		backgroundSize: "cover",
-	}}
+						style={{
+							backgroundImage: 'url("../../../images/login-background-new.png")',
+							backgroundSize: "cover",
+						}}
 >
-	<Authenticate
-		closeModal={() => setShowLoginModal(false)}
-		loginCallback={handleLogin}
-		setDataRefresh={setDataRefresh}
-		dataRefresh={dataRefresh}
-	/>
-</div> */}
+						<Authenticate
+							closeModal={() => setShowLoginModal(false)}
+							loginCallback={handleLogin}
+							setDataRefresh={setDataRefresh}
+							dataRefresh={dataRefresh}
+						/>
+					</div> */}
 
 
 

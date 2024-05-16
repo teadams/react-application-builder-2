@@ -18,11 +18,14 @@ const ACSField = ({
 	defaultValue,
 	lookupValue,
 	lookupField = "id",
-	labelClassName = "block mb-2 text-sm font-medium text-black-500 ",
-	fieldClassName = "bg-white border border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  ",
-	fontSizeClass = "text-base",
-	textColorClass = "text-dark",
-	fontWeightClass = "font-normal",
+	labelClassName = "font-family-red-hat text-xs pl-1 text-[#18264C]",
+	layoutClassName = "flex gap-y-2 flex-col",
+	//	 focus:outline-none focus:ring-0  
+	//	 
+	fieldClassName = "focus:text-black bg-slate-50 focus:bg-blue-50 focus:outline-2  focus:outline-blue-500 border-[#E1E1E1]  text-[#18264C] text-sm rounded-lg       border rounded-lg w-[100%]  py-4 pl-3 pr-10  flex justify-center items-center gap-x-2",
+	fontSizeClass,
+	textColorClass,
+	fontWeightClass,
 }: {
 	objectType: string;
 	id?: string | number;
@@ -37,8 +40,9 @@ const ACSField = ({
 	defaultValue?: unknown;
 	lookupValue?: any;
 	lookupField?: string;
-	labelClassName?: string
-	fieldClassName?: string
+	labelClassName?: string;
+	layoutClassName?: string;
+	fieldClassName?: string;
 	fontWeightClass?: string;
 	textColorClass?: string;
 	fontSizeClass?: string;
@@ -105,7 +109,7 @@ const ACSField = ({
 	}
 
 	return (
-		<div onClick={handleClick}>
+		<div className={layoutClassName} onClick={handleClick}>
 			{label && <label className={labelClassName}>{label}</label>}
 			<Text mode={mode} data={data} onBlur={handleMutate} value={value} isForm={isForm}
 				className={fieldClassName} fontSizeClass={fontSizeClass} textColorClass={textColorClass} fontWeightClass={fontWeightClass} />
