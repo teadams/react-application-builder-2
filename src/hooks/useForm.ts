@@ -8,7 +8,8 @@ export const useForm = ({
   hiddenFields,
   defaultValues:propDefaultValues,
   onSubmit,
-  closeModal
+  closeModal,
+  data
 }: {
   objectType: string,
   fields: string[],
@@ -16,7 +17,8 @@ export const useForm = ({
   defaultValues?: Record<string, unknown>,
   mode?:  "edit" | "create",
   onSubmit?: () => void,
-  closeModal?: () => void
+  closeModal?: () => void,
+  data?: Record<string, unknown>
 }) => {
   //only create supported right now
   const acsMeta = useGetAcsMetaFields(objectType)
@@ -37,6 +39,17 @@ export const useForm = ({
     setDefaultsLoaded(true)
   }
 
+  if (mode === "edit" && !defaultsLoaded) {
+    const defaultValues: { [key: string]: any } = {} // Add type annotation for defaultValues object
+    for (const field of fields) {
+      if (data?.[field] !== undefined) {
+       defaultValues[field] = data?.[field]
+      }
+    }
+    setValues({...hiddenFields, ...defaultValues})
+    setDefaultsLoaded(true)
+  }
+ console.log("Default Values", values)
   const  handleSubmit = (e: { preventDefault: () => void; }) => { 
     e.preventDefault()
     if (!isMutating) {
@@ -57,7 +70,7 @@ export const useForm = ({
 
     if (!touched) setTouched(true)
   }
-  return {touched, handleSubmit, handleChange}
+  return {touched, handleSubmit, handleChange, defaultsLoaded}
 };
 
 export default useForm

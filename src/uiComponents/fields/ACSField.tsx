@@ -85,41 +85,36 @@ const ACSField = ({
 	label = mode !== "view" ? label ?? fieldMeta?.prettyName : undefined
 	const componentType = fieldMeta?.component ?? "Text";
 
-
-	value = mode === "create" ? defaultValue ?? "" : value ?? data?.[fieldName]
+	console.log("DEFAULT VALUE IN FIELD", defaultValue)
+	value = ["edit", "create"].includes(mode) ? defaultValue ?? "" : value ?? data?.[fieldName]
 	const id = propId ?? data?.id as string | number;
 	const { mutate, isLoading: isMutating } = useUpdateData();
 	const handleBlur = (e: unknown, mutatedValue: unknown) => {
-		if (!isMutating && mode === "edit") {
+		if (!isMutating && mode === "edit" && !isForm) {
 			mutate({ objectType, id, fields: { [fieldName]: mutatedValue } });
 		}
 		if (propMode === "view") {
 			setMode("view");
 		}
-		if (mode === "create" && handleCreateChange) {
+		if (isForm && handleCreateChange) {
 			handleCreateChange(fieldName, mutatedValue);
 		}
 	};
 
-
-	// This ensures the data is loaded before rendering
-	if (mode === "edit" && value === undefined) {
-		return null;
-	}
 
 	const handleClick = () => {
 		if (isEditable && mode == "view") {
 			setMode("edit");
 		}
 	}
-
+	//onClick={handleClick} - TODO add a click wrapper
 	if (mode === "view") {
 		return (<FieldComponent index={index} componentType={componentType} fieldMeta={fieldMeta} mode={mode} data={data} value={value} isForm={isForm}
 			className={fieldClassName} fontSizeClass={fontSizeClass} textColorClass={textColorClass} fontWeightClass={fontWeightClass} />
 		)
 	} else {
 		return (
-			<div key={index} className={layoutClassName} onClick={handleClick}>
+			<div key={index} className={layoutClassName} >
 				{label && <label className={labelClassName}>{label}</label>}
 				<FieldComponent index={index} componentType={componentType} fieldMeta={fieldMeta} mode={mode} data={data} onBlur={handleBlur} value={value} isForm={isForm}
 					className={fieldClassName} fontSizeClass={fontSizeClass} textColorClass={textColorClass} fontWeightClass={fontWeightClass} />
