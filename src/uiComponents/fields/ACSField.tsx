@@ -35,9 +35,9 @@ const ACSField = ({
 	index?: number;
 	handleCreateChange?: (fieldName: string, value: unknown) => void;
 	isEditable?: boolean;
-	isForm: boolean;
+	isForm?: boolean;
 	fieldName: string;
-	label?: string;
+	label?: string | undefined;
 	value?: unknown;
 	defaultValue?: unknown;
 	lookupValue?: any;
@@ -82,7 +82,7 @@ const ACSField = ({
 	// WE get acsMeta here was we might get overrides from props later
 	const fieldMeta = useGetAcsMetaField(objectType, fieldName)
 	defaultValue = defaultValue ?? fieldMeta?.defaultValue ?? "";
-	label = label ?? fieldMeta?.prettyName;
+	label = mode !== "view" ? label ?? fieldMeta?.prettyName : undefined
 	const componentType = fieldMeta?.component ?? "Text";
 
 
@@ -113,13 +113,19 @@ const ACSField = ({
 		}
 	}
 
-	return (
-		<div key={index} className={layoutClassName} onClick={handleClick}>
-			{label && <label className={labelClassName}>{label}</label>}
-			<FieldComponent index={index} componentType={componentType} fieldMeta={fieldMeta} mode={mode} data={data} onBlur={handleMutate} value={value} isForm={isForm}
-				className={fieldClassName} fontSizeClass={fontSizeClass} textColorClass={textColorClass} fontWeightClass={fontWeightClass} />
-		</div>
-	);
+	if (mode === "view") {
+		return (<FieldComponent index={index} componentType={componentType} fieldMeta={fieldMeta} mode={mode} data={data} onBlur={handleMutate} value={value} isForm={isForm}
+			className={fieldClassName} fontSizeClass={fontSizeClass} textColorClass={textColorClass} fontWeightClass={fontWeightClass} />
+		)
+	} else {
+		return (
+			<div key={index} className={layoutClassName} onClick={handleClick}>
+				{label && <label className={labelClassName}>{label}</label>}
+				<FieldComponent index={index} componentType={componentType} fieldMeta={fieldMeta} mode={mode} data={data} onBlur={handleMutate} value={value} isForm={isForm}
+					className={fieldClassName} fontSizeClass={fontSizeClass} textColorClass={textColorClass} fontWeightClass={fontWeightClass} />
+			</div>
+		);
+	}
 }
 
 const FieldComponent = (props: any) => {

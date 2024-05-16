@@ -1,4 +1,5 @@
 import React from "react";
+import moment from "moment";
 import { FormWrapper } from ".";
 import { usePropState } from "../../hooks";
 
@@ -35,12 +36,16 @@ const DateTime = ({
 
 	}
 
+	console.log(" date value is ", value)
+
 	if (mode === "view") {
-		return <>{value}</>
+		return <>{moment(value).format("M-DD")}  at {moment(value).format("h:mm a")
+		}</>
 	} else {
 		return (
 			<FormWrapper mode={mode} isForm={isForm} onSubmit={handleOnBlur}>
-				<input type="text" autoFocus={autoFocus} value={value}
+
+				<input type="datetime-local" autoFocus={autoFocus} value={value}
 					onChange={(e) => setValue(e.target.value as string)}
 					onBlur={handleOnBlur}
 					className={`${className} ${fontSizeClass} ${textColorClass} ${fontWeightClass}`} />
