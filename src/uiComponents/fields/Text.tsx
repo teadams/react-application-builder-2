@@ -1,5 +1,5 @@
 import React from "react";
-import { Form } from "./";
+import { FormWrapper } from "./";
 import { usePropState } from "../../hooks";
 
 interface TextProps {
@@ -40,13 +40,13 @@ const Text = ({
 		return <>{value}</>
 	} else {
 		return (
-			<Form mode={mode} isForm={isForm} onSubmit={handleOnBlur}>
+			<FormWrapper mode={mode} isForm={isForm} onSubmit={handleOnBlur}>
 				<input type="text" autoFocus={autoFocus} value={value}
 					onChange={(e) => setValue(e.target.value as string)}
 					onBlur={handleOnBlur}
 					className={`${className} ${fontSizeClass} ${textColorClass} ${fontWeightClass}`} />
 
-			</Form>
+			</FormWrapper>
 		)
 	}
 }

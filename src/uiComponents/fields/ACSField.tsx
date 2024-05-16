@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, TextArea } from ".";
+import { Text, TextArea, Avatar, DateTime } from ".";
 
 import { useGetAcsMetaField, useGetDataByField, useUpdateData, useGetDataById } from "../../hooks";
 
@@ -131,6 +131,10 @@ const FieldComponent = (props: any) => {
 			return <Text {...rest} />;
 		case "TextArea":
 			return <TextArea {...rest} />;
+		case "Avatar":
+			return <Avatar {...rest} />;
+		case "DateTime":
+			return <DateTime {...rest} />;
 		default:
 			return <Text {...rest} />;
 	}

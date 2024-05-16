@@ -1,13 +1,14 @@
 import React from "react";
-import { FormWrapper } from "./";
+import { FormWrapper } from ".";
 import { usePropState } from "../../hooks";
 
-const TextArea = ({
+
+const DateTime = ({
 	data = {},
 	mode = "view",
+	index = 0,
 	onBlur,
 	value: propValue = "", // need to default to "" or react will complain about controlled/uncontrolled input
-	fieldMeta,
 	isForm = false,
 	className,
 	fontSizeClass,
@@ -16,39 +17,37 @@ const TextArea = ({
 }: {
 	data?: Record<string, unknown>;
 	mode: string;
+	index?: number;
 	value?: unknown;
-	fieldMeta?: any;
 	isForm?: boolean;
 	onBlur?: (e: unknown, mutatedValue: unknown) => void;
 	className?: string
 	fontWeightClass?: string;
 	textColorClass?: string;
 	fontSizeClass?: string;
-}
-) => {
+}) => {
 
 	const [value, setValue] = usePropState(propValue);
-	isForm = (mode === "create" || mode === "edit" && isForm) ? true : isForm;
+	const autoFocus = index === 0;
 
 	const handleOnBlur = (e: unknown) => {
 		onBlur && onBlur(e, value);
 
 	}
 
-
 	if (mode === "view") {
 		return <>{value}</>
 	} else {
 		return (
-			<FormWrapper isForm={isForm} onSubmit={handleOnBlur}>
-				<textarea value={value} onChange={(e) => setValue(e.target.value as string)}
+			<FormWrapper mode={mode} isForm={isForm} onSubmit={handleOnBlur}>
+				<input type="text" autoFocus={autoFocus} value={value}
+					onChange={(e) => setValue(e.target.value as string)}
 					onBlur={handleOnBlur}
-					rows={fieldMeta?.rows}
-					cols={fieldMeta?.cols}
 					className={`${className} ${fontSizeClass} ${textColorClass} ${fontWeightClass}`} />
+
 			</FormWrapper>
 		)
 	}
-
 }
-export { TextArea };
+
+export { DateTime };
