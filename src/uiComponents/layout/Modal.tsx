@@ -8,7 +8,7 @@ const Background = ({ className = "opacity-25 fixed inset-0 z-40 bg-[#18264C] bg
 }
 
 const Header = ({ title,
-	className = "flex items-center justify-between p-5 rounded-t md:text-base sm:text-base text-base lg:text-lg font-family-besley text-[#18264C] font-semibold",
+	className = "flex items-center justify-between  rounded-t md:text-base sm:text-base text-base lg:text-lg font-family-besley text-[#18264C] font-semibold",
 	closeModal }:
 	{
 		title?: string, className?: string,
@@ -37,14 +37,23 @@ const Modal = ({ children,
 	closeModal?: () => void
 }) => {
 
-	return (
-		<>
-			<div key={key} className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-[10000] outline-none focus:outline-none">
-				<div className=" relative lg:w-3/4 md:w-11/12 sm:w-11/12 w-11/12 mx-auto my-auto lg:max-w-[52rem]">
 
-					<div className="min-h-[90vh] max-h-[90vh] h-[90vh] border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+	// <div className="p-7 border-0 rounded-md shadow-lg relative flex flex-col w-full 
+	// bg-white outline-none focus:outline-none">
+
+
+	return (
+		<>	{/*Background cover*/}
+			<div key={key} className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed 
+					inset-0 z-[10000] outline-none focus:outline-none">
+				{/*size of Modal lg:max-w-[52rem] is key attribute/*/}
+				<div className=" relative lg:w-3/4 md:w-11/12 sm:w-11/12 w-11/12 mx-auto my-auto 
+					lg:max-w-[52rem]  h-[90vh]">
+					{/*content*/}
+					<div className="p-7 h-full w-full border-0 rounded-lg shadow-lg 
+						relative flex flex-col  bg-white outline-none focus:outline-none">
 						<Header title={title} closeModal={closeModal} />
-						<div className="mx-10">
+						<div className="flex flex-col gap-y-4 mt-8 pl-2">
 							{children}
 						</div>
 					</div>
