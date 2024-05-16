@@ -1,5 +1,5 @@
 import React from "react";
-import { Text } from ".";
+import { Text, TextArea } from ".";
 
 import { useGetAcsMetaField, useGetDataByField, useUpdateData, useGetDataById } from "../../hooks";
 
@@ -9,6 +9,7 @@ const ACSField = ({
 	id: propId,
 	data: propData,
 	mode: propMode = "view",
+	index,
 	handleCreateChange,
 	isEditable = true,
 	isForm = false,
@@ -31,6 +32,7 @@ const ACSField = ({
 	id?: string | number;
 	data?: Record<string, unknown>;
 	mode?: "view" | "edit" | "create";
+	index?: number;
 	handleCreateChange?: (fieldName: string, value: unknown) => void;
 	isEditable?: boolean;
 	isForm: boolean;
@@ -77,9 +79,12 @@ const ACSField = ({
 	});
 
 	const data = propData ?? fieldData?.[0] ?? idData ?? {}
-	const acsMeta = useGetAcsMetaField(objectType, fieldName)
-	defaultValue = defaultValue ?? acsMeta?.defaultValue ?? "";
-	label = label ?? acsMeta?.prettyName;
+	// WE get acsMeta here was we might get overrides from props later
+	const fieldMeta = useGetAcsMetaField(objectType, fieldName)
+	defaultValue = defaultValue ?? fieldMeta?.defaultValue ?? "";
+	label = label ?? fieldMeta?.prettyName;
+	const componentType = fieldMeta?.component ?? "Text";
+
 
 	value = mode === "create" ? defaultValue ?? "" : value ?? data?.[fieldName]
 	const id = propId ?? data?.id as string | number;
@@ -109,12 +114,26 @@ const ACSField = ({
 	}
 
 	return (
-		<div className={layoutClassName} onClick={handleClick}>
+		<div key={index} className={layoutClassName} onClick={handleClick}>
 			{label && <label className={labelClassName}>{label}</label>}
-			<Text mode={mode} data={data} onBlur={handleMutate} value={value} isForm={isForm}
+			<FieldComponent index={index} componentType={componentType} fieldMeta={fieldMeta} mode={mode} data={data} onBlur={handleMutate} value={value} isForm={isForm}
 				className={fieldClassName} fontSizeClass={fontSizeClass} textColorClass={textColorClass} fontWeightClass={fontWeightClass} />
 		</div>
 	);
+}
+
+const FieldComponent = (props: any) => {
+	const { componentType, ...rest } = props;
+
+
+	switch (componentType) {
+		case "Text":
+			return <Text {...rest} />;
+		case "TextArea":
+			return <TextArea {...rest} />;
+		default:
+			return <Text {...rest} />;
+	}
 }
 
 export { ACSField };

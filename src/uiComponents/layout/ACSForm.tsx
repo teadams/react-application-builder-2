@@ -23,7 +23,7 @@ const ACSForm = ({ objectType, fields, hiddenFields, labelClassName,
 				{
 					fields.map((field, index) => {
 						return (
-							<ACSField key={index} mode={mode} objectType={objectType} fieldName={field}
+							<ACSField key={index} mode={mode} index={index} objectType={objectType} fieldName={field}
 								handleCreateChange={handleChange} isForm={true}
 								labelClassName={labelClassName} fieldClassName={fieldClassName}
 								fontSizeClass={fontSizeClass} textColorClass={textColorClass}
