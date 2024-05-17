@@ -68,32 +68,100 @@ export const getByField = async ({
 export const create = async ({
   objectType,
   fields,
+  path,
+  preSubmit,
+  overrideSubmit,
+  postSubmit
 }: {
   objectType: string;
-  fields: object;
+  fields: Record<string, unknown>;
+  path?:string,
+  preSubmit?: ({objectType, data}: 
+    {objectType:string, data:Record<string,unknown>}) => any, // 
+  overrideSubmit?: ({objectType, data, preSubmitResult}: 
+    {objectType:string, data:Record<string,unknown>, 
+      preSubmitResult:Record<string,unknown>}) => any, // 
+  postSubmit?: ({objectType, data, preSubmitResult, submitResult}: 
+     {objectType:string, data:Record<string,unknown>, 
+      preSubmitResult:Record<string,unknown>,
+      submitResult:Record<string,unknown>}) => any, // 
 }): Promise<unknown> => {
-  const path = "acs/" + objectType;
-  const data = { ...fields };
-  const method = "POST";
-  const apiResult = await api.callAPI({ path, data, method });
-  return apiResult;
+  return await persist({ objectType, data: fields, method: "POST", path, preSubmit,overrideSubmit,postSubmit})  ;
 };
 
 export const updateById = async ({
   objectType,
   id,
   fields,
+  path,
+  preSubmit,
+  overrideSubmit,
+  postSubmit
 }: {
   objectType: string;
-  id: unknown;
-  fields: object;
+  id:any;
+  fields: Record<string, unknown>;
+  path: string,
+  preSubmit?: ({objectType, data}: 
+    {objectType:string, data:Record<string,unknown>}) => any, // 
+  overrideSubmit?: ({objectType, data, preSubmitResult}: 
+    {objectType:string, data:Record<string,unknown>, 
+      preSubmitResult:Record<string,unknown>}) => any, // 
+  postSubmit?: ({objectType, data, preSubmitResult, submitResult}: 
+     {objectType:string, data:Record<string,unknown>, 
+      preSubmitResult:Record<string,unknown>,
+      submitResult:Record<string,unknown>}) => any, // 
 }): Promise<unknown> => {
-  const path = "acs/" + objectType + "/" + id;
-  const data = { ...fields };
-  const method = "PUT";
-  const apiResult = await api.callAPI({ path, data, method });
-  return apiResult;
+  path = path ?? "acs/" + objectType + "/" + id;
+   
+  return await persist({ objectType, data: fields, method: "PUT", path,  preSubmit,
+  overrideSubmit,
+  postSubmit})  ;
 };
+
+export const persist = async ({
+  objectType,
+  data,
+  method = "POST",
+  path, 
+  preSubmit,
+  overrideSubmit,
+  postSubmit
+}: {
+  objectType: string;
+  data: Record<string, unknown>;
+  path?:string,
+  method?: "POST" | "PUT" 
+  preSubmit?: ({objectType, data}: 
+              {objectType:string, data:Record<string,unknown>}) => any, // 
+  overrideSubmit?: ({objectType, data, preSubmitResult}: 
+              {objectType:string, data:Record<string,unknown>, 
+                preSubmitResult:Record<string,unknown>}) => any, // 
+  postSubmit?: ({objectType, data, preSubmitResult, submitResult}: 
+               {objectType:string, data:Record<string,unknown>, 
+                preSubmitResult:Record<string,unknown>,
+                submitResult:Record<string,unknown>}) => any, // 
+
+}): Promise<unknown> => {
+  let preSubmitResult, submitResult, postSubmitResult
+ 
+   path = path ?? "acs/" + objectType;
+   
+  if (preSubmit) {
+    preSubmitResult = await preSubmit({objectType, data});
+  }
+  if (overrideSubmit) {
+    submitResult = await overrideSubmit({objectType, data, preSubmitResult});
+  } else {
+    submitResult = await api.callAPI({ path, data, method });
+  }
+  if (postSubmit) {
+    postSubmitResult = await postSubmit({objectType, data, preSubmitResult,submitResult} );
+  }
+  return postSubmitResult ?? submitResult;
+};
+
+
 
 export const deleteById = async ({
   queryClient,
@@ -222,6 +290,7 @@ export default {
   getById,
   getByField,
   create,
+  persist,
   updateById,
   deleteById,
 };

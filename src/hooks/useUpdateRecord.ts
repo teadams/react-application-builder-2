@@ -1,9 +1,10 @@
 import {  useQueryClient, useMutation } from "react-query";
-import {updateById } from "../lib/data";
+import { updateById } from "../lib/data";
 
 
 
-export const useUpdateData = () => {
+export const useUpdateRecord = (props:{invalidateQueryKeys?:string[]}) => {
+  const {invalidateQueryKeys} = props ?? {};
   const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: updateById,
@@ -17,6 +18,9 @@ export const useUpdateData = () => {
         if ((queryData as { id: string })?.id === id) {
           queryClient.invalidateQueries({queryKey});
         }
+        for (const queryKey of invalidateQueryKeys ?? []) {
+          queryClient.invalidateQueries({ queryKey });
+        }
       }
 
     },
@@ -25,4 +29,4 @@ export const useUpdateData = () => {
   return mutation;
 };
 
-export default useUpdateData;
+export default useUpdateRecord;

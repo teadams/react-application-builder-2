@@ -1,7 +1,7 @@
 import React from "react";
 import { Text, TextArea, Avatar, DateTime } from ".";
 
-import { useGetAcsMetaField, useGetDataByField, useUpdateData, useGetDataById } from "../../hooks";
+import { useGetAcsMetaField, useGetDataByField, useUpdateRecord, useGetDataById } from "../../hooks";
 
 
 const ACSField = ({
@@ -88,7 +88,7 @@ const ACSField = ({
 	console.log("DEFAULT VALUE IN FIELD", defaultValue)
 	value = ["edit", "create"].includes(mode) ? defaultValue ?? "" : value ?? data?.[fieldName]
 	const id = propId ?? data?.id as string | number;
-	const { mutate, isLoading: isMutating } = useUpdateData();
+	const { mutate, isLoading: isMutating } = useUpdateRecord();
 	const handleBlur = (e: unknown, mutatedValue: unknown) => {
 		if (!isMutating && mode === "edit" && !isForm) {
 			mutate({ objectType, id, fields: { [fieldName]: mutatedValue } });

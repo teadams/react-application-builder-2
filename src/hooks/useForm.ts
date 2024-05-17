@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 import { useQueryClient } from "react-query";
-import {useGetAcsMetaFields, useCreateData} from "./"
+import {useGetAcsMetaFields, useCreateRecord, useUpdateRecord} from "./"
+import { cp } from "fs";
 
 export const useForm = ({
   objectType,
@@ -8,12 +9,14 @@ export const useForm = ({
   mode = "create",
   hiddenFields,
   defaultValues:propDefaultValues,
-  onSubmit:onSuccess,
+  path,
+  onSuccuss:onSuccess,
   preSubmit,
   postSubmit,
   overrideSubmit,
   closeModal,
   data,
+  invalidateQueryKeys
 
 }: {
   objectType: string,
@@ -21,12 +24,19 @@ export const useForm = ({
   hiddenFields?: Record<string, unknown>,
   defaultValues?: Record<string, unknown>,
   mode?:  "edit" | "create",
-  onSubmit?: () => void, /// Should be onSuccess.. called after mutation
-  preSubmit?: (objectType:string, fields:Record<string,unknown>) => void, // 
-  postSubmit?: (data:Record<string,unknown>, objectType:string, fields:Record<string,unknown>) => void, // run in "useCreateData", which should be usePerist Data
+  onSuccess?: () => void, /// Should be onSuccess.. called after mutation
+  preSubmit?: ({objectType, data}: 
+    {objectType:string, data:Record<string,unknown>}) => any, // 
+  overrideSubmit?: ({objectType, data, preSubmitResult}: 
+    {objectType:string, data:Record<string,unknown>, 
+      preSubmitResult:Record<string,unknown>}) => any, // 
+  postSubmit?: ({objectType, data, preSubmitResult, submitResult}: 
+     {objectType:string, data:Record<string,unknown>, 
+      preSubmitResult:Record<string,unknown>,
+      submitResult:Record<string,unknown>}) => any, // 
   closeModal?: () => void,
-  overrideSubmit?: (objectType:string, fields:Record<string,unknown>) => void,
   data?: Record<string, unknown>
+  invalidateQueryKeys?: string[]
 }) => {
   //only create supported right now
   const acsMeta = useGetAcsMetaFields(objectType)
@@ -34,8 +44,13 @@ export const useForm = ({
   const [values, setValues] = useState<{ [key: string]: any }>({}) // Add type annotation for values object
   const [defaultsLoaded, setDefaultsLoaded] = useState(false)
   const queryClient = useQueryClient();
-  const { mutate, isLoading: isMutating } = useCreateData(postSubmit);
-  
+ 
+  console.log("before create mutate")
+  const { mutate: createMutate, isLoading: isCreateLoading } = useCreateRecord({invalidateQueryKeys})
+console.log("after create mutate")
+  const { mutate: updateMutate, isLoading: isUpdateLoading } = useUpdateRecord({invalidateQueryKeys})
+console.log("after update mutate")
+  const isMutating =  isCreateLoading || isUpdateLoading
   if (mode === "create" && acsMeta && !defaultsLoaded) {
     const defaultValues: { [key: string]: any } = {} // Add type annotation for defaultValues object
      for (const field of fields) {
@@ -60,32 +75,23 @@ export const useForm = ({
   }
  console.log("Default Values", values)
   const  handleSubmit = async (e: { preventDefault: () => void; }) => { 
-    e.preventDefault()
-    if (!isMutating) {
-      if (preSubmit) {
-         await preSubmit(objectType, values)
-       }
-       if (overrideSubmit) {
-         await overrideSubmit(objectType, values)
-         // These usualy run in the mutate function
-         // Doing a broad stroke and invalidating everything
-         // for that object type to keep it simple
-         queryClient.invalidateQueries({ queryKey: [objectType] });
-    
-       } else {
-         mutate({ objectType, fields:values });
-      }
-
-		} 
-    //THIS SHOULD BE ON SUCCESS
-    if  (onSuccess) {
-      onSuccess()
-    } 
-    if (closeModal) {
-      closeModal()
-    }
+      console.log("handleSubmit")
+        e.preventDefault()
+        if (!isMutating) {
+          if (mode === "create") {
+             createMutate({ objectType, fields:values, path, preSubmit, overrideSubmit, postSubmit});
+          } else {
+             updateMutate({ objectType, id:values?.id, fields:values, path, preSubmit, overrideSubmit, postSubmit});
+          }
+    		} 
+        //THIS SHOULD BE ON SUCCESS
+        if  (onSuccess) {
+          onSuccess()
+        } 
+        if (closeModal) {
+          closeModal()
+        }
   }
-
   console.log("VVVALLUES", values)
   const handleChange = ( field:unknown, value:unknown) => {
     setValues({...values, [field as string]: value})
