@@ -10,7 +10,7 @@ export const useForm = ({
   hiddenFields,
   defaultValues:propDefaultValues,
   path,
-  onSuccuss:onSuccess,
+  onSuccess,
   preSubmit,
   postSubmit,
   overrideSubmit,
@@ -24,6 +24,7 @@ export const useForm = ({
   hiddenFields?: Record<string, unknown>,
   defaultValues?: Record<string, unknown>,
   mode?:  "edit" | "create",
+  path?:string,
   onSuccess?: () => void, /// Should be onSuccess.. called after mutation
   preSubmit?: ({objectType, data}: 
     {objectType:string, data:Record<string,unknown>}) => any, // 
@@ -45,11 +46,9 @@ export const useForm = ({
   const [defaultsLoaded, setDefaultsLoaded] = useState(false)
   const queryClient = useQueryClient();
  
-  console.log("before create mutate")
   const { mutate: createMutate, isLoading: isCreateLoading } = useCreateRecord({invalidateQueryKeys})
-console.log("after create mutate")
   const { mutate: updateMutate, isLoading: isUpdateLoading } = useUpdateRecord({invalidateQueryKeys})
-console.log("after update mutate")
+
   const isMutating =  isCreateLoading || isUpdateLoading
   if (mode === "create" && acsMeta && !defaultsLoaded) {
     const defaultValues: { [key: string]: any } = {} // Add type annotation for defaultValues object

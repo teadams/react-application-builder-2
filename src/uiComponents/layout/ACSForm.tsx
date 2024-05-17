@@ -1,29 +1,45 @@
 import React from "react";
 import { ACSField } from "../fields";
-import { useForm, useUpdateData } from "../../hooks";
-import { Form } from "react-hook-form";
+import { useForm } from "../../hooks";
 
-const ACSForm = ({ mode = "create", objectType, fields, data, hiddenFields, labelClassName,
+
+const ACSForm = ({
+	mode = "create", objectType, fields, path, data, hiddenFields, labelClassName,
 	fieldClassName, fontSizeClass, textColorClass, fontWeightClass,
-	onSubmit, preSubmit, postSubmit, overrideSubmit, formComponent, closeModal }:
-	{
-		mode?: "edit" | "create",
-		objectType: string, fields: string[],
-		data?: Record<string, unknown>,
-		hiddenFields?: Record<string, unknown>,
-		labelClassName?: string, fieldClassName?: string, fontSizeClass?: string,
-		textColorClass?: string, fontWeightClass?: string, onSubmit?: () => void,
-		formComponent?: string,
-		closeModal: () => void,
-		preSubmit?: (objectType: string, fields: Record<string, unknown>) => void,
-		overrideSubmit?: (objectType: string, fields: Record<string, unknown>) => void,
-		postSubmit?: (data: Record<string, unknown>, objectType: string, fields: Record<string, unknown>) => void
-	}) => {
+	onSuccess, preSubmit, postSubmit, overrideSubmit, formComponent, closeModal,
+	invalidateQueryKeys
+}: {
+
+	mode?: "edit" | "create",
+	objectType: string, fields: string[],
+	path: string,
+	data?: Record<string, unknown>,
+	hiddenFields?: Record<string, unknown>,
+	labelClassName?: string, fieldClassName?: string, fontSizeClass?: string,
+	textColorClass?: string, fontWeightClass?: string, onSubmit?: () => void,
+	formComponent?: string,
+	onSuccess?: () => void,  // used to close caller modals
+	preSubmit?: ({ objectType, data }:
+		{ objectType: string, data: Record<string, unknown> }) => any, // 
+	overrideSubmit?: ({ objectType, data, preSubmitResult }:
+		{
+			objectType: string, data: Record<string, unknown>,
+			preSubmitResult: Record<string, unknown>
+		}) => any, // 
+	postSubmit?: ({ objectType, data, preSubmitResult, submitResult }:
+		{
+			objectType: string, data: Record<string, unknown>,
+			preSubmitResult: Record<string, unknown>,
+			submitResult: Record<string, unknown>
+		}) => any, // 
+	closeModal?: () => void,
+	invalidateQueryKeys?: string[]
+}) => {
 
 
 	const FormComponent = formComponent as React.ElementType
 
-	const { handleSubmit, handleChange } = useForm({ objectType, fields, mode, onSubmit, closeModal, hiddenFields, data, preSubmit, postSubmit, overrideSubmit })
+	const { handleSubmit, handleChange } = useForm({ objectType, fields, mode, path, onSuccess, closeModal, hiddenFields, data, preSubmit, postSubmit, overrideSubmit, invalidateQueryKeys })
 	const validated = true;
 	return (
 		<>
@@ -31,7 +47,7 @@ const ACSForm = ({ mode = "create", objectType, fields, data, hiddenFields, labe
 				{formComponent ? <FormComponent
 					testProp="testProp"
 					handleCreateChange={handleChange}
-					objectType="NONON"
+					objectType={objectType}
 					mode={mode}
 					hiddenFields={hiddenFields}
 					fields={fields}
@@ -43,7 +59,7 @@ const ACSForm = ({ mode = "create", objectType, fields, data, hiddenFields, labe
 				/>
 					: <>
 						{fields.map((field, index) => {
-							const defaultValue = mode === "edit" ? data[field] : undefined
+							const defaultValue = mode === "edit" ? data?.[field] : undefined
 							return (
 								<ACSField key={index} mode={mode} index={index} objectType={objectType} fieldName={field}
 									handleCreateChange={handleChange} isForm={true} defaultValue={defaultValue}
