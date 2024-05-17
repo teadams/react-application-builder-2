@@ -50,14 +50,20 @@ export const useForm = ({
   const { mutate: updateMutate, isLoading: isUpdateLoading } = useUpdateRecord({invalidateQueryKeys})
 
   const isMutating =  isCreateLoading || isUpdateLoading
-  if (mode === "create" && acsMeta && !defaultsLoaded) {
+  console.log("mode is " +mode)
+  console.log("before setting defautlus", mode, acsMeta, defaultsLoaded)
+  if (mode === "create" && !defaultsLoaded) {
+    console.log("SSSSSSSSSSSSSSSSSSSSSSSSSSSS")
+    console.log("setting defatls")
     const defaultValues: { [key: string]: any } = {} // Add type annotation for defaultValues object
-     for (const field of fields) {
-      if(acsMeta[field]?.defaultValue !== undefined) {
-        defaultValues[field] = propDefaultValues?.[field]??acsMeta[field]?.defaultValue
-      } 
+    if (acsMeta) { 
+      for (const field of fields) {
+        if(acsMeta[field]?.defaultValue !== undefined) {
+          defaultValues[field] = propDefaultValues?.[field]??acsMeta[field]?.defaultValue
+        } 
+      }
     }
-    
+    console.log("hidden Fields FFFFFF", hiddenFields)
     setValues({...hiddenFields, ...defaultValues})
     setDefaultsLoaded(true)
   }
@@ -72,9 +78,10 @@ export const useForm = ({
     setValues({...hiddenFields, ...defaultValues})
     setDefaultsLoaded(true)
   }
- console.log("Default Values", values)
+ console.log("Values are", values)
   const  handleSubmit = async (e: { preventDefault: () => void; }) => { 
-      console.log("handleSubmit")
+      console.log("HHHHHHHHHHHHHHHHHHHHHHH handleSubmit")
+      console.log(mode)
         e.preventDefault()
         if (!isMutating) {
           if (mode === "create") {

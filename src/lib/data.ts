@@ -86,6 +86,7 @@ export const create = async ({
       preSubmitResult:Record<string,unknown>,
       submitResult:Record<string,unknown>}) => any, // 
 }): Promise<unknown> => {
+  console.log("CREATE", fields, path)
   return await persist({ objectType, data: fields, method: "POST", path, preSubmit,overrideSubmit,postSubmit})  ;
 };
 
@@ -101,7 +102,7 @@ export const updateById = async ({
   objectType: string;
   id:any;
   fields: Record<string, unknown>;
-  path: string,
+  path?: string,
   preSubmit?: ({objectType, data}: 
     {objectType:string, data:Record<string,unknown>}) => any, // 
   overrideSubmit?: ({objectType, data, preSubmitResult}: 
