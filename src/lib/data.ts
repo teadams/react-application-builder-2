@@ -67,14 +67,14 @@ export const getByField = async ({
 
 export const create = async ({
   objectType,
-  fields,
+  data,
   path,
   preSubmit,
   overrideSubmit,
   postSubmit
 }: {
   objectType: string;
-  fields: Record<string, unknown>;
+  data: Record<string, unknown>;
   path?:string,
   preSubmit?: ({objectType, data}: 
     {objectType:string, data:Record<string,unknown>}) => any, // 
@@ -86,14 +86,14 @@ export const create = async ({
       preSubmitResult:Record<string,unknown>,
       submitResult:Record<string,unknown>}) => any, // 
 }): Promise<unknown> => {
-  console.log("CREATE", fields, path)
-  return await persist({ objectType, data: fields, method: "POST", path, preSubmit,overrideSubmit,postSubmit})  ;
+  console.log("CREATE", data, path)
+  return await persist({ objectType, data, method: "POST", path, preSubmit,overrideSubmit,postSubmit})  ;
 };
 
 export const updateById = async ({
   objectType,
   id,
-  fields,
+  data,
   path,
   preSubmit,
   overrideSubmit,
@@ -101,7 +101,7 @@ export const updateById = async ({
 }: {
   objectType: string;
   id:any;
-  fields: Record<string, unknown>;
+  data: Record<string, unknown>;
   path?: string,
   preSubmit?: ({objectType, data}: 
     {objectType:string, data:Record<string,unknown>}) => any, // 
@@ -115,7 +115,7 @@ export const updateById = async ({
 }): Promise<unknown> => {
   path = path ?? "acs/" + objectType + "/" + id;
    
-  return await persist({ objectType, data: fields, method: "PUT", path,  preSubmit,
+  return await persist({ objectType, data, method: "PUT", path,  preSubmit,
   overrideSubmit,
   postSubmit})  ;
 };

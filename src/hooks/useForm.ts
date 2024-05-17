@@ -50,11 +50,7 @@ export const useForm = ({
   const { mutate: updateMutate, isLoading: isUpdateLoading } = useUpdateRecord({invalidateQueryKeys})
 
   const isMutating =  isCreateLoading || isUpdateLoading
-  console.log("mode is " +mode)
-  console.log("before setting defautlus", mode, acsMeta, defaultsLoaded)
   if (mode === "create" && !defaultsLoaded) {
-    console.log("SSSSSSSSSSSSSSSSSSSSSSSSSSSS")
-    console.log("setting defatls")
     const defaultValues: { [key: string]: any } = {} // Add type annotation for defaultValues object
     if (acsMeta) { 
       for (const field of fields) {
@@ -63,7 +59,6 @@ export const useForm = ({
         } 
       }
     }
-    console.log("hidden Fields FFFFFF", hiddenFields)
     setValues({...hiddenFields, ...defaultValues})
     setDefaultsLoaded(true)
   }
@@ -80,14 +75,12 @@ export const useForm = ({
   }
  console.log("Values are", values)
   const  handleSubmit = async (e: { preventDefault: () => void; }) => { 
-      console.log("HHHHHHHHHHHHHHHHHHHHHHH handleSubmit")
-      console.log(mode)
         e.preventDefault()
         if (!isMutating) {
           if (mode === "create") {
-             createMutate({ objectType, fields:values, path, preSubmit, overrideSubmit, postSubmit});
+             createMutate({ objectType, data:values, path, preSubmit, overrideSubmit, postSubmit});
           } else {
-             updateMutate({ objectType, id:values?.id, fields:values, path, preSubmit, overrideSubmit, postSubmit});
+             updateMutate({ objectType, id:values?.id, date:values, path, preSubmit, overrideSubmit, postSubmit});
           }
     		} 
         //THIS SHOULD BE ON SUCCESS
