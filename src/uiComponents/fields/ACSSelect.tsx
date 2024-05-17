@@ -1,6 +1,7 @@
 import React from "react";
 import { useGetData } from "../../hooks";
 import { Select } from "./"
+import { initial } from "lodash";
 
 const ACSSelect = ({
 	objectType,
@@ -12,6 +13,7 @@ const ACSSelect = ({
 	onChange,
 	sortBy,
 	sortOrder,
+	initialSelect = [{ id: "", value: "--- Select ---" }],
 	labelClassName = "font-family-red-hat text-xs pl-1 text-[#18264C]",
 	layoutClassName = "flex gap-y-2 flex-col",
 	fieldClassName = "border focus:outline-none  rounded-lg w-[100%]  p-2 text-sm disabled font-family-red"
@@ -26,10 +28,10 @@ const ACSSelect = ({
 	onChange?: (newValue: string, newRow: Record<string, unknown> | undefined) => void;
 	sortBy?: string;
 	sortOrder?: "asc" | "desc";
+	initialSelect?: Record<string, unknown>[]
 	labelClassName?: string,
 	layoutClassName?: string,
-
-	className?: string
+	fieldClassName?: string
 }) => {
 	const { data } = useGetData({ objectType, params, filters, sortBy, sortOrder });
 
@@ -38,10 +40,20 @@ const ACSSelect = ({
 		const selectedValue = e.target.value;
 		if (onChange) {
 			const selectedRow = data?.find((row: any) => row.id === selectedValue);
-			onChange(selectedValue, selectedRow);
+			if (selectedRow) { // Add this condition to check if selectedRow is defined
+				onChange(selectedValue, selectedRow);
+			}
+		}
+		if (initialSelect) {
+			const selectedRow = initialSelect?.find((row: any) => row.id === selectedValue);
+			if (selectedRow && typeof selectedRow.onChange === 'function') { // Add this condition to check if selectedRow.onChange is a function
+				selectedRow.onChange(selectedValue, selectedRow);
+			}
 		}
 	}
 	if (!data) return null
+
+
 	return (
 
 		<div key={objectType} className={layoutClassName}>
@@ -49,6 +61,7 @@ const ACSSelect = ({
 			<Select
 				options={data as any[]}
 				displayFields={displayFields}
+				initialSelect={initialSelect}
 				value={value}
 				className={`${fieldClassName}`}
 				onChange={handleChange}

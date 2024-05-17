@@ -5,22 +5,25 @@ import { Form } from "react-hook-form";
 
 const ACSForm = ({ mode = "create", objectType, fields, data, hiddenFields, labelClassName,
 	fieldClassName, fontSizeClass, textColorClass, fontWeightClass,
-	onSubmit, formComponent, closeModal }:
+	onSubmit, preSubmit, postSubmit, overrideSubmit, formComponent, closeModal }:
 	{
 		mode?: "edit" | "create",
 		objectType: string, fields: string[],
-		data: Record<string, unknown>,
+		data?: Record<string, unknown>,
 		hiddenFields?: Record<string, unknown>,
 		labelClassName?: string, fieldClassName?: string, fontSizeClass?: string,
 		textColorClass?: string, fontWeightClass?: string, onSubmit?: () => void,
 		formComponent?: string,
-		closeModal: () => void
+		closeModal: () => void,
+		preSubmit?: (objectType: string, fields: Record<string, unknown>) => void,
+		overrideSubmit?: (objectType: string, fields: Record<string, unknown>) => void,
+		postSubmit?: (data: Record<string, unknown>, objectType: string, fields: Record<string, unknown>) => void
 	}) => {
 
 
 	const FormComponent = formComponent as React.ElementType
 
-	const { handleSubmit, handleChange } = useForm({ objectType, fields, mode, onSubmit, closeModal, hiddenFields, data })
+	const { handleSubmit, handleChange } = useForm({ objectType, fields, mode, onSubmit, closeModal, hiddenFields, data, preSubmit, postSubmit, overrideSubmit })
 	const validated = true;
 	return (
 		<>

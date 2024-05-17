@@ -8,12 +8,14 @@ const Select = ({
 	options,
 	displayFields = ["name"],
 	onChange,
+	initialSelect,
 	className = "border focus:outline-none  rounded-lg w-[100%]  p-2 text-sm disabled font-family-red",
 }: {
 	value?: unknown;
 	options?: any[];
 	displayFields?: string[];
 	onChange?: (value: string) => void;
+	initialSelect?: any[];
 	className?: string;
 }) => {
 	const [value, setValue] = usePropState(propValue as any);
@@ -24,6 +26,7 @@ const Select = ({
 		if (onChange) {
 			onChange(e);
 		}
+
 	};
 
 	const width = "w-[300px]"
@@ -36,13 +39,21 @@ const Select = ({
 				className={`w-full ${className}`}
 				onChange={handleChange}
 			>
-				{options.map((option: any) => {
+				{initialSelect && initialSelect.map((option: any) => {
 					return (<option key={option.id} value={option.id}>
-						{displayFields.map((field) => {
-							return utils.getDeepValueFromString(option, field)
-						}).join(" ")}
+						{option.value}
 					</option>)
 				})}
+
+				{
+					options.map((option: any) => {
+						return (<option key={option.id} value={option.id}>
+							{displayFields.map((field) => {
+								return utils.getDeepValueFromString(option, field)
+							}).join(" ")}
+						</option>)
+					})
+				}
 			</select >
 		</div >
 	);
