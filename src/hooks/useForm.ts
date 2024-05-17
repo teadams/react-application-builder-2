@@ -63,16 +63,16 @@ export const useForm = ({
     e.preventDefault()
     if (!isMutating) {
       if (preSubmit) {
-        await preSubmit(objectType, values)
-      }
-      if (overrideSubmit) {
-        await overrideSubmit(objectType, values)
-        // These usualy run in the mutate function
-        // Doing a broad stroke and invalidating everything
-        // for that object type to keep it simple
-        queryClient.invalidateQueries({ queryKey: [objectType] });
+         await preSubmit(objectType, values)
+       }
+       if (overrideSubmit) {
+         await overrideSubmit(objectType, values)
+         // These usualy run in the mutate function
+         // Doing a broad stroke and invalidating everything
+         // for that object type to keep it simple
+         queryClient.invalidateQueries({ queryKey: [objectType] });
     
-      } else {
+       } else {
          mutate({ objectType, fields:values });
       }
 

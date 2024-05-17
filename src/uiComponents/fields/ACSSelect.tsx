@@ -34,8 +34,8 @@ const ACSSelect = ({
 	fieldClassName?: string
 }) => {
 	const { data } = useGetData({ objectType, params, filters, sortBy, sortOrder });
-
-
+	console.log("object type ins select", objectType)
+	console.log("data in select", data)
 	const handleChange = (e: any) => {
 		const selectedValue = e.target.value;
 		if (onChange) {
