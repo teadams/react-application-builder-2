@@ -38,7 +38,6 @@ const ACSForm = ({
 
 
 	const FormComponent = formComponent as React.ElementType
-	console.log("INTINTINTINT", mode, objectType, formComponent)
 
 	const { handleSubmit, handleChange } = useForm({ objectType, fields, mode, path, onSuccess, closeModal, hiddenFields, data, preSubmit, postSubmit, overrideSubmit, invalidateQueryKeys })
 	const validated = true;

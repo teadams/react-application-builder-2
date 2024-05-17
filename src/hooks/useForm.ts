@@ -73,14 +73,13 @@ export const useForm = ({
     setValues({...hiddenFields, ...defaultValues})
     setDefaultsLoaded(true)
   }
- console.log("Values are", values)
   const  handleSubmit = async (e: { preventDefault: () => void; }) => { 
         e.preventDefault()
         if (!isMutating) {
           if (mode === "create") {
              createMutate({ objectType, data:values, path, preSubmit, overrideSubmit, postSubmit});
           } else {
-             updateMutate({ objectType, id:values?.id, date:values, path, preSubmit, overrideSubmit, postSubmit});
+             updateMutate({ objectType, id:values?.id, data:values, path, preSubmit, overrideSubmit, postSubmit});
           }
     		} 
         //THIS SHOULD BE ON SUCCESS
@@ -91,7 +90,6 @@ export const useForm = ({
           closeModal()
         }
   }
-  console.log("VVVALLUES", values)
   const handleChange = ( field:unknown, value:unknown) => {
     setValues({...values, [field as string]: value})
 

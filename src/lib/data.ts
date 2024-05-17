@@ -86,7 +86,6 @@ export const create = async ({
       preSubmitResult:Record<string,unknown>,
       submitResult:Record<string,unknown>}) => any, // 
 }): Promise<unknown> => {
-  console.log("CREATE", data, path)
   return await persist({ objectType, data, method: "POST", path, preSubmit,overrideSubmit,postSubmit})  ;
 };
 
