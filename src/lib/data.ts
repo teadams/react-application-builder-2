@@ -185,7 +185,7 @@ export const persist = async ({
                                                 
 }): Promise<unknown> => {
   let preSubmitResult, apiResult, postSubmitResult
- 
+
    path = path ?? "acs/" + objectType;
    
   if (preSubmit) {
