@@ -146,7 +146,7 @@ export async function callAPI({
         return obj;
     }, {});
 
-    console.log("domain", domain, "path", path, "params", params, "data", data, "method", method, "headers", headers)
+    console.log("CALLING API", "domain", domain, "path", path, "params", params, "data", data, "method", method, "headers", headers)
     const apiResult = await axios({
       method: method,
       url: `${domain}/${path}`,

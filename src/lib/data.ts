@@ -1,6 +1,6 @@
 import "react-app-polyfill/ie9";
 import "react-app-polyfill/stable";
-import { QueryClient, QueryKey } from "react-query";
+import { any, QueryKey } from "react-query";
 import { ACSMetaModel } from "../types";
 import * as api from "./api";
 
@@ -71,7 +71,10 @@ export const create = async ({
   path,
   preSubmit,
   overrideSubmit,
-  postSubmit
+  postSubmit,
+  queryClient,
+  invalidateQueryKeys
+
 }: {
   objectType: string;
   data: Record<string, unknown>;
@@ -81,12 +84,23 @@ export const create = async ({
   overrideSubmit?: ({objectType, data, preSubmitResult}: 
     {objectType:string, data:Record<string,unknown>, 
       preSubmitResult:Record<string,unknown>}) => any, // 
-  postSubmit?: ({objectType, data, preSubmitResult, submitResult}: 
+  postSubmit?: ({objectType, data, preSubmitResult, apiResult}: 
      {objectType:string, data:Record<string,unknown>, 
       preSubmitResult:Record<string,unknown>,
-      submitResult:Record<string,unknown>}) => any, // 
+      apiResult:Record<string,unknown>}) => any, //
+  queryClient?: any, 
+  invalidateQueryKeys?: QueryKey[]  // Additional keys to invalidate beyond standard ACS
 }): Promise<unknown> => {
-  return await persist({ objectType, data, method: "POST", path, preSubmit,overrideSubmit,postSubmit})  ;
+
+  const createResult = await persist({ objectType, data, method: "POST", path, preSubmit,overrideSubmit,postSubmit,   queryClient,
+  invalidateQueryKeys});
+  if (queryClient) {
+    queryClient.invalidateQueries({ queryKey: [objectType, "list"] });
+    for (const queryKey of invalidateQueryKeys ?? []) {
+      queryClient.invalidateQueries({ queryKey });
+    }
+  }
+  return createResult
 };
 
 export const updateById = async ({
@@ -96,7 +110,9 @@ export const updateById = async ({
   path,
   preSubmit,
   overrideSubmit,
-  postSubmit
+  postSubmit,
+  queryClient,
+  invalidateQueryKeys
 }: {
   objectType: string;
   id:any;
@@ -107,43 +123,68 @@ export const updateById = async ({
   overrideSubmit?: ({objectType, data, preSubmitResult}: 
     {objectType:string, data:Record<string,unknown>, 
       preSubmitResult:Record<string,unknown>}) => any, // 
-  postSubmit?: ({objectType, data, preSubmitResult, submitResult}: 
+  postSubmit?: ({objectType, data, preSubmitResult, apiResult}: 
      {objectType:string, data:Record<string,unknown>, 
       preSubmitResult:Record<string,unknown>,
-      submitResult:Record<string,unknown>}) => any, // 
+      apiResult:Record<string,unknown>}) => any, //
+  queryClient?: any, 
+  invalidateQueryKeys?: QueryKey[]   // Additional keys to invalidate beyond standard ACS
+      
 }): Promise<unknown> => {
   path = path ?? "acs/" + objectType + "/" + id;
    
-  return await persist({ objectType, data, method: "PUT", path,  preSubmit,
-  overrideSubmit,
-  postSubmit})  ;
+  const updateByIdResult = await persist({ objectType, data, method: "PUT", path,  preSubmit,
+  overrideSubmit, postSubmit,   queryClient, invalidateQueryKeys});
+
+  if (queryClient) {
+    queryClient.invalidateQueries({ queryKey: [objectType, "list"] });
+    queryClient.invalidateQueries({ queryKey: [objectType, "one", "id", id] });
+    const fieldQueries = queryClient.getQueriesData([objectType, "one", "field"]);
+    for (const query of fieldQueries) {
+      const [queryKey, queryData] = query;
+      if ((queryData as { id: string })?.id === id) {
+        queryClient.invalidateQueries({queryKey});
+      }
+      for (const queryKey of invalidateQueryKeys ?? []) {
+        queryClient.invalidateQueries({ queryKey });
+      }
+    }
+  }
+  return updateByIdResult;
+
+
 };
 
 export const persist = async ({
-  objectType,
+  objectType="",
   data,
   method = "POST",
   path, 
   preSubmit,
   overrideSubmit,
-  postSubmit
+  postSubmit, 
+  queryClient,
+  invalidateQueryKeys
+  
 }: {
-  objectType: string;
+  objectType?: string;
   data: Record<string, unknown>;
-  path?:string,
-  method?: "POST" | "PUT" 
+  path?:string;
+  method?: "POST" | "PUT"; 
   preSubmit?: ({objectType, data}: 
               {objectType:string, data:Record<string,unknown>}) => any, // 
   overrideSubmit?: ({objectType, data, preSubmitResult}: 
               {objectType:string, data:Record<string,unknown>, 
                 preSubmitResult:Record<string,unknown>}) => any, // 
-  postSubmit?: ({objectType, data, preSubmitResult, submitResult}: 
+  postSubmit?: ({objectType, data, preSubmitResult, apiResult}: 
                {objectType:string, data:Record<string,unknown>, 
                 preSubmitResult:Record<string,unknown>,
-                submitResult:Record<string,unknown>}) => any, // 
-
+                apiResult:Record<string,unknown>}) => any, // 
+  queryClient?: any, 
+  invalidateQueryKeys?: QueryKey[] 
+                                                
 }): Promise<unknown> => {
-  let preSubmitResult, submitResult, postSubmitResult
+  let preSubmitResult, apiResult, postSubmitResult
  
    path = path ?? "acs/" + objectType;
    
@@ -151,14 +192,24 @@ export const persist = async ({
     preSubmitResult = await preSubmit({objectType, data});
   }
   if (overrideSubmit) {
-    submitResult = await overrideSubmit({objectType, data, preSubmitResult});
+    apiResult = await overrideSubmit({objectType, data, preSubmitResult});
   } else {
-    submitResult = await api.callAPI({ path, data, method });
+    apiResult = await api.callAPI({ path, data, method });
   }
   if (postSubmit) {
-    postSubmitResult = await postSubmit({objectType, data, preSubmitResult,submitResult} );
+    postSubmitResult = await postSubmit({objectType, data, preSubmitResult, apiResult} );
   }
-  return postSubmitResult ?? submitResult;
+  if (invalidateQueryKeys) {
+    if (queryClient) {
+      for (const queryKey of invalidateQueryKeys ?? [] ) {
+        queryClient.invalidateQueries({ queryKey });
+      }   
+    } else {
+      console.error("queryClient is required to invalidate queries")
+    }
+  }
+
+  return postSubmitResult ?? apiResult;
 };
 
 
@@ -168,7 +219,7 @@ export const deleteById = async ({
   objectType,
   id,
 }: {
-  queryClient: QueryClient;
+  queryClient: any;
   objectType: string;
   id: unknown;
 }): Promise<unknown> => {
@@ -216,7 +267,7 @@ export const getObjectDataById = async (
 /// THIS WILL BE DEPRECTATED
 export const deleteObjectDataById = async (
   acsMeta: ACSMetaModel,
-  queryClient: QueryClient,
+  queryClient: any,
   objectType: string,
   id: unknown
 ): Promise<unknown> => {
@@ -230,7 +281,7 @@ export const deleteObjectDataById = async (
 /// THIS WILL BE DEPRECTATED
 export const updateObjectDataById = async (
   acsMeta: ACSMetaModel,
-  queryClient: QueryClient,
+  queryClient: any,
   objectType: string,
   id: unknown,
   objectTypeFields: object
@@ -248,7 +299,7 @@ export const updateObjectDataById = async (
 /// THIS WILL BE DEPRECTATED
 export const createNewObjectDataRow = async (
   acsMeta: ACSMetaModel,
-  queryClient: QueryClient,
+  queryClient: any,
   objectType: string,
   objectTypeFields: object
 ): Promise<unknown> => {

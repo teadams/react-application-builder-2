@@ -46,8 +46,8 @@ export const useForm = ({
   const [defaultsLoaded, setDefaultsLoaded] = useState(false)
   const queryClient = useQueryClient();
  
-  const { mutate: createMutate, isLoading: isCreateLoading } = useCreateRecord({invalidateQueryKeys})
-  const { mutate: updateMutate, isLoading: isUpdateLoading } = useUpdateRecord({invalidateQueryKeys})
+  const { mutate: createMutate, isLoading: isCreateLoading } = useCreateRecord()
+  const { mutate: updateMutate, isLoading: isUpdateLoading } = useUpdateRecord()
 
   const isMutating =  isCreateLoading || isUpdateLoading
   if (mode === "create" && !defaultsLoaded) {
@@ -77,9 +77,9 @@ export const useForm = ({
         e.preventDefault()
         if (!isMutating) {
           if (mode === "create") {
-             createMutate({ objectType, data:values, path, preSubmit, overrideSubmit, postSubmit});
+             createMutate({ objectType, data:values, path, preSubmit, overrideSubmit, postSubmit, queryClient, invalidateQueryKeys});
           } else {
-             updateMutate({ objectType, id:values?.id, data:values, path, preSubmit, overrideSubmit, postSubmit});
+             updateMutate({ objectType, id:values?.id, data:values, path, preSubmit, overrideSubmit, postSubmit, queryClient, invalidateQueryKeys});
           }
     		} 
         //THIS SHOULD BE ON SUCCESS

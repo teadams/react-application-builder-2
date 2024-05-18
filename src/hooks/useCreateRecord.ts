@@ -3,20 +3,10 @@ import { create } from "../lib/data";
 
 
 
-export const useCreateRecord = (props:{invalidateQueryKeys?:string[]}) => {
-  const {invalidateQueryKeys} = props ?? {};
+export const useCreateRecord = () => {
   
-  const queryClient = useQueryClient();
   const mutation = useMutation({
-    mutationFn: create,
-    onSuccess: (data, variables) => {
-       const {  fields, objectType} = variables;
-      queryClient.invalidateQueries({ queryKey: [objectType, "list"] });
-      for (const queryKey of invalidateQueryKeys ?? []) {
-        queryClient.invalidateQueries({ queryKey });
-      }
-
-    },
+    mutationFn: create
   });
 
   return mutation;

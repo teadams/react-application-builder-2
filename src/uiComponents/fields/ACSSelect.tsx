@@ -40,9 +40,7 @@ const ACSSelect = ({
 		const selectedValue = e.target.value;
 		if (onChange) {
 			const selectedRow = data?.find((row: any) => row.id === selectedValue);
-			if (selectedRow) { // Add this condition to check if selectedRow is defined
-				onChange(selectedValue, selectedRow);
-			}
+			onChange(selectedValue, selectedRow);
 		}
 		if (initialSelect) {
 			const selectedRow = initialSelect?.find((row: any) => row.id === selectedValue);

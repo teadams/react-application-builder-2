@@ -28,6 +28,7 @@ const ACSForm = ({
 		}) => any, // 
 	postSubmit?: ({ objectType, data, preSubmitResult, submitResult }:
 		{
+			apiResult: any;
 			objectType: string, data: Record<string, unknown>,
 			preSubmitResult: Record<string, unknown>,
 			submitResult: Record<string, unknown>
@@ -38,6 +39,7 @@ const ACSForm = ({
 
 
 	const FormComponent = formComponent as React.ElementType
+	console.log("CLOSE MODEL", closeModal)
 
 	const { handleSubmit, handleChange } = useForm({ objectType, fields, mode, path, onSuccess, closeModal, hiddenFields, data, preSubmit, postSubmit, overrideSubmit, invalidateQueryKeys })
 	const validated = true;

@@ -3,29 +3,10 @@ import { updateById } from "../lib/data";
 
 
 
-export const useUpdateRecord = (props:{invalidateQueryKeys?:string[]}) => {
-  const {invalidateQueryKeys} = props ?? {};
-  const queryClient = useQueryClient();
+export const useUpdateRecord = () => {
   const mutation = useMutation({
     mutationFn: updateById,
-    onSuccess: (data, variables) => {
-      const { id, fields, objectType } = variables;
-      queryClient.invalidateQueries({ queryKey: [objectType, "list"] });
-      queryClient.invalidateQueries({ queryKey: [objectType, "one", "id", id] });
-      const fieldQueries = queryClient.getQueriesData([objectType, "one", "field"]);
-      for (const query of fieldQueries) {
-        const [queryKey, queryData] = query;
-        if ((queryData as { id: string })?.id === id) {
-          queryClient.invalidateQueries({queryKey});
-        }
-        for (const queryKey of invalidateQueryKeys ?? []) {
-          queryClient.invalidateQueries({ queryKey });
-        }
-      }
-
-    },
   });
-
   return mutation;
 };
 
