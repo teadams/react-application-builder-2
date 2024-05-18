@@ -1,18 +1,16 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-nocheck
 
-import React from "react";
-import { FC } from "react"
+import React, { FC } from "react";
+import { usePropState } from "../../hooks";
 
-// Either specify
-// 1. names, component, and props
-// 2. data and displayField
-type Props = unknown;
+
 const Tabs = ({
 	names,
 	components,
 	props,
 	data,
+	selectedId: propsSelectedId,
 	displayField = "name",
 	idField = "id",
 	style = "underline",
@@ -21,17 +19,17 @@ const Tabs = ({
 	names?: string[];
 	components?: FC<Props>[];
 	props?: Record<string, unknown>[];
+	selectedId?: string | number;
 	data?: Record<string, unknown>[];
 	displayField?: string;
 	idField?: string;
 	style?: "underline" | "tab",
 	onTabChange?: (index: number) => void
 }) => {
-
-	const [activeTab, setActiveTab] = React.useState(0);
+	const propsActiveTab = data?.findIndex((item: Record<string, unknown>) => item["id"] === propsSelectedId) ?? 0
+	const [activeTab, setActiveTab] = usePropState(propsActiveTab ?? 0);
 	const ActiveComponent = components ? components[activeTab] as FC<Props> : undefined
 	const activeProps = props ? props[activeTab] ?? {} : {}
-
 	if (!names || names.length === 0) {
 		names = data?.map((item: Record<string, unknown>) => item[displayField] as string) ?? []
 	}
@@ -42,7 +40,6 @@ const Tabs = ({
 			onTabChange(data[index][idField])
 		}
 	}
-
 	return (
 		<div key="tabs" className="mb-4 border-b border-gray-200 dark:border-gray-700">
 			{style === "underline" &&
