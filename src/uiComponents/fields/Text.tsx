@@ -29,10 +29,12 @@ const Text = ({
 }: TextProps) => {
 
 	const [value, setValue] = usePropState(propValue);
+	const [touched, setTouched] = usePropState(false);
+
 	const autoFocus = index === 0;
 
 	const handleOnBlur = (e: unknown) => {
-		onBlur && onBlur(e, value);
+		touched && onBlur && onBlur(e, value);
 
 	}
 
@@ -42,7 +44,10 @@ const Text = ({
 		return (
 			<FormWrapper mode={mode} isForm={isForm} onSubmit={handleOnBlur}>
 				<input type="text" autoFocus={autoFocus} value={value}
-					onChange={(e) => setValue(e.target.value as string)}
+					onChange={(e) => {
+						setTouched(true);
+						setValue(e.target.value as string)
+					}}
 					onBlur={handleOnBlur}
 					className={`${className} ${fontSizeClass} ${textColorClass} ${fontWeightClass}`} />
 

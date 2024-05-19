@@ -28,10 +28,12 @@ const TextArea = ({
 ) => {
 
 	const [value, setValue] = usePropState(propValue);
+	const [touched, setTouched] = usePropState(false);
+
 	isForm = (mode === "create" || mode === "edit" && isForm) ? true : isForm;
 
 	const handleOnBlur = (e: unknown) => {
-		onBlur && onBlur(e, value);
+		touched && onBlur && onBlur(e, value);
 
 	}
 
@@ -41,7 +43,10 @@ const TextArea = ({
 	} else {
 		return (
 			<FormWrapper isForm={isForm} onSubmit={handleOnBlur}>
-				<textarea value={value} onChange={(e) => setValue(e.target.value as string)}
+				<textarea value={value} onChange={(e) => {
+					setTouched(true);
+					setValue(e.target.value as string)
+				}}
 					onBlur={handleOnBlur}
 					rows={fieldMeta?.rows}
 					cols={fieldMeta?.cols}

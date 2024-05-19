@@ -85,7 +85,6 @@ const ACSField = ({
 	label = mode !== "view" ? label ?? fieldMeta?.prettyName : undefined
 	const componentType = fieldMeta?.component ?? "Text";
 
-	console.log("DEFAULT VALUE IN FIELD", defaultValue)
 	value = ["edit", "create"].includes(mode) ? defaultValue ?? "" : value ?? data?.[fieldName]
 	const id = propId ?? data?.id as string | number;
 	const { mutate, isLoading: isMutating } = useUpdateRecord();
