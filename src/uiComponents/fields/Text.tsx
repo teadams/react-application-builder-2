@@ -34,6 +34,7 @@ const Text = ({
 	const autoFocus = index === 0;
 
 	const handleOnBlur = (e: unknown) => {
+
 		touched && onBlur && onBlur(e, value);
 
 	}

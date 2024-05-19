@@ -63,7 +63,7 @@ const ACSForm = ({
 							const defaultValue = mode === "edit" ? data?.[field] : undefined
 							return (
 								<ACSField key={index} mode={mode} index={index} objectType={objectType} fieldName={field}
-									handleCreateChange={handleChange} isForm={true} defaultValue={defaultValue}
+									handleCreateChange={handleChange} isInsideForm={true} defaultValue={defaultValue}
 									labelClassName={labelClassName} fieldClassName={fieldClassName}
 									fontSizeClass={fontSizeClass} textColorClass={textColorClass}
 									fontWeightClass={fontWeightClass}

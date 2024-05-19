@@ -46,7 +46,7 @@ export const useForm = ({
   const [defaultsLoaded, setDefaultsLoaded] = useState(false)
   const queryClient = useQueryClient();
  
-  console.log("Values are ", values)
+  console.log("VVVVV Values are ", values)
   const { mutate: createMutate, isLoading: isCreateLoading } = useCreateRecord()
   const { mutate: updateMutate, isLoading: isUpdateLoading } = useUpdateRecord()
 

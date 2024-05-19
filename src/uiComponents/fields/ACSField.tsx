@@ -1,4 +1,5 @@
 import React from "react";
+import { useQueryClient } from "react-query";
 import { Text, TextArea, Avatar, DateTime } from ".";
 
 import { useGetAcsMetaField, useGetDataByField, useUpdateRecord, useGetDataById } from "../../hooks";
@@ -11,8 +12,8 @@ const ACSField = ({
 	mode: propMode = "view",
 	index,
 	handleCreateChange,
-	isEditable = true,
-	isForm = false,
+	canEdit = true,
+	isInsideForm = false,
 	fieldName,
 	label,
 	value,
@@ -34,8 +35,8 @@ const ACSField = ({
 	mode?: "view" | "edit" | "create";
 	index?: number;
 	handleCreateChange?: (fieldName: string, value: unknown) => void;
-	isEditable?: boolean;
-	isForm?: boolean;
+	canEdit?: boolean;
+	isInsideForm?: boolean;
 	fieldName: string;
 	label?: string | undefined;
 	value?: unknown;
@@ -52,7 +53,7 @@ const ACSField = ({
 ) => {
 
 	const [mode, setMode] = React.useState(propMode);
-
+	const queryClient = useQueryClient();
 
 	// Props:
 	// For edit mode:
@@ -64,7 +65,6 @@ const ACSField = ({
 	// defaultValue (optional)
 	// none of id, lookupField, lookupValue, data 
 	//const mode = propId || lookupValue || propData ? "edit" : "create";
-
 	const { data: idData } = useGetDataById({
 		objectType,
 		id: propId,
@@ -81,42 +81,52 @@ const ACSField = ({
 	const data = propData ?? fieldData?.[0] ?? idData ?? {}
 	// WE get acsMeta here was we might get overrides from props later
 	const fieldMeta = useGetAcsMetaField(objectType, fieldName)
+
 	defaultValue = defaultValue ?? fieldMeta?.defaultValue ?? "";
 	label = mode !== "view" ? label ?? fieldMeta?.prettyName : undefined
 	const componentType = fieldMeta?.component ?? "Text";
 
-	value = ["edit", "create"].includes(mode) ? defaultValue ?? "" : value ?? data?.[fieldName]
+	value = value ?? data?.[fieldName]
+	if (mode === "create" && value === undefined) {
+		value = defaultValue ?? undefined
+	}
 	const id = propId ?? data?.id as string | number;
+
 	const { mutate, isLoading: isMutating } = useUpdateRecord();
 	const handleBlur = (e: unknown, mutatedValue: unknown) => {
-		if (!isMutating && mode === "edit" && !isForm) {
-			mutate({ objectType, id, fields: { [fieldName]: mutatedValue } });
+		if (!isMutating && mode === "edit" && !isInsideForm) {
+			console.log("Mutating ", objectType, id, { [fieldName]: mutatedValue });
+			mutate({ objectType, id, data: { [fieldName]: mutatedValue }, queryClient });
 		}
 		if (propMode === "view") {
 			setMode("view");
 		}
-		if (isForm && handleCreateChange) {
+		if (isInsideForm && handleCreateChange) {
 			handleCreateChange(fieldName, mutatedValue);
 		}
 	};
 
 
 	const handleClick = () => {
-		if (isEditable && mode == "view") {
+		if (canEdit && mode == "view") {
 			setMode("edit");
 		}
 	}
+
+
+
+	const passthroughProps = { index, componentType, fieldMeta, mode, data, value, isInsideForm, className: fieldClassName, fontSizeClass, textColorClass, fontWeightClass }
 	//onClick={handleClick} - TODO add a click wrapper
 	if (mode === "view") {
-		return (<FieldComponent index={index} componentType={componentType} fieldMeta={fieldMeta} mode={mode} data={data} value={value} isForm={isForm}
-			className={fieldClassName} fontSizeClass={fontSizeClass} textColorClass={textColorClass} fontWeightClass={fontWeightClass} />
-		)
+		return (<div onClick={handleClick}>
+			<FieldComponent {...passthroughProps} />
+		</div>)
+
 	} else {
 		return (
 			<div key={index} className={layoutClassName} >
 				{label && <label className={labelClassName}>{label}</label>}
-				<FieldComponent index={index} componentType={componentType} fieldMeta={fieldMeta} mode={mode} data={data} onBlur={handleBlur} value={value} isForm={isForm}
-					className={fieldClassName} fontSizeClass={fontSizeClass} textColorClass={textColorClass} fontWeightClass={fontWeightClass} />
+				<FieldComponent onBlur={handleBlur} {...passthroughProps} />
 			</div>
 		);
 	}
