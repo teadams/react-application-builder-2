@@ -161,7 +161,7 @@ const ACSField = ({
 const FieldComponent = (props: any) => {
 	const { componentType, ...rest } = props;
 
-	if (props.mode === "edit" && props?.value === undefined || props?.value === null && props?.viewPlaceholder) {
+	if (props.mode === "view" && !props?.value && props?.viewPlaceholder) {
 		return (<div className="w-full">{props?.fieldMeta?.viewPlaceholder as string}</div>)
 	}
 
