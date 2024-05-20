@@ -1,5 +1,5 @@
 import React from "react";
-import { FormWrapper } from "./";
+
 import { usePropState } from "../../hooks";
 
 interface TextProps {
@@ -8,7 +8,8 @@ interface TextProps {
 	index?: number;
 	value?: unknown;
 	isForm?: boolean;
-	onBlur?: (e: unknown, mutatedValue: unknown) => void;
+	onBlur?: (e: unknown) => void;
+	onChange?: (e: unknown) => void;
 	className?: string
 	fontWeightClass?: string;
 	textColorClass?: string;
@@ -20,7 +21,8 @@ const Text = ({
 	mode = "view",
 	index = 0,
 	onBlur,
-	value: propValue = "", // need to default to "" or react will complain about controlled/uncontrolled input
+	onChange,
+	value,
 	isForm = false,
 	className,
 	fontSizeClass,
@@ -28,31 +30,25 @@ const Text = ({
 	fontWeightClass,
 }: TextProps) => {
 
-	const [value, setValue] = usePropState(propValue);
-	const [touched, setTouched] = usePropState(false);
 
 	const autoFocus = index === 0;
 
 	const handleOnBlur = (e: unknown) => {
-
-		touched && onBlur && onBlur(e, value);
-
+		onBlur && onBlur(e);
 	}
 
 	if (mode === "view") {
 		return <>{value}</>
 	} else {
 		return (
-			<FormWrapper mode={mode} isForm={isForm} onSubmit={handleOnBlur}>
-				<input type="text" autoFocus={autoFocus} value={value}
-					onChange={(e) => {
-						setTouched(true);
-						setValue(e.target.value as string)
-					}}
-					onBlur={handleOnBlur}
-					className={`${className} ${fontSizeClass} ${textColorClass} ${fontWeightClass}`} />
 
-			</FormWrapper>
+			<input type="text" autoFocus={autoFocus} value={value as string}
+				onChange={(e) => {
+					onChange && onChange(e)
+				}}
+				onBlur={handleOnBlur}
+				className={`${className} ${fontSizeClass} ${textColorClass} ${fontWeightClass}`} />
+
 		)
 	}
 }

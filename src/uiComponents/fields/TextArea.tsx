@@ -6,8 +6,11 @@ const TextArea = ({
 	data = {},
 	mode = "view",
 	onBlur,
+	index = 0,
 	value: propValue = "", // need to default to "" or react will complain about controlled/uncontrolled input
 	fieldMeta,
+	onChange,
+	value,
 	isForm = false,
 	className,
 	fontSizeClass,
@@ -17,9 +20,11 @@ const TextArea = ({
 	data?: Record<string, unknown>;
 	mode: string;
 	value?: unknown;
+	index?: number;
 	fieldMeta?: any;
 	isForm?: boolean;
-	onBlur?: (e: unknown, mutatedValue: unknown) => void;
+	onBlur?: (e: unknown) => void;
+	onChange?: (e: unknown) => void;
 	className?: string
 	fontWeightClass?: string;
 	textColorClass?: string;
@@ -27,33 +32,28 @@ const TextArea = ({
 }
 ) => {
 
-	const [value, setValue] = usePropState(propValue);
-	const [touched, setTouched] = usePropState(false);
-
-	isForm = (mode === "create" || mode === "edit" && isForm) ? true : isForm;
+	console.log("fieldMeta", fieldMeta);
+	const autoFocus = index === 0;
 
 	const handleOnBlur = (e: unknown) => {
-		touched && onBlur && onBlur(e, value);
-
+		onBlur && onBlur(e);
 	}
-
 
 	if (mode === "view") {
 		return <>{value}</>
 	} else {
 		return (
-			<FormWrapper isForm={isForm} onSubmit={handleOnBlur}>
-				<textarea value={value} onChange={(e) => {
-					setTouched(true);
-					setValue(e.target.value as string)
-				}}
-					onBlur={handleOnBlur}
-					rows={fieldMeta?.rows}
-					cols={fieldMeta?.cols}
-					className={`${className} ${fontSizeClass} ${textColorClass} ${fontWeightClass}`} />
-			</FormWrapper>
-		)
-	}
 
+			<textarea autoFocus={autoFocus} value={value as string}
+				onChange={(e) => {
+					onChange && onChange(e)
+				}}
+				onBlur={handleOnBlur}
+				rows={fieldMeta?.rows}
+				cols={fieldMeta?.cols}
+				className={`${className} ${fontSizeClass} ${textColorClass} ${fontWeightClass}`} />
+		)
+
+	}
 }
 export { TextArea };

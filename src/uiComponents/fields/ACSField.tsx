@@ -1,6 +1,8 @@
 import React from "react";
 import { useQueryClient } from "react-query";
+import { usePropState } from "../../hooks";
 import { Text, TextArea, Avatar, DateTime } from ".";
+import { FormWrapper } from "./";
 
 import { useGetAcsMetaField, useGetDataByField, useUpdateRecord, useGetDataById } from "../../hooks";
 
@@ -13,10 +15,11 @@ const ACSField = ({
 	index,
 	handleCreateChange,
 	canEdit = true,
+	viewPlaceholder,
 	isInsideForm = false,
 	fieldName,
 	label,
-	value,
+	value: propValue,
 	defaultValue,
 	lookupValue,
 	lookupField = "id",
@@ -36,6 +39,7 @@ const ACSField = ({
 	index?: number;
 	handleCreateChange?: (fieldName: string, value: unknown) => void;
 	canEdit?: boolean;
+	viewPlaceholder?: boolean;
 	isInsideForm?: boolean;
 	fieldName: string;
 	label?: string | undefined;
@@ -52,7 +56,14 @@ const ACSField = ({
 }
 ) => {
 
+	propValue = propValue ?? propData?.[fieldName]
+	if (propMode === "create" && propValue === undefined) {
+		propValue = defaultValue ?? undefined
+	}
 	const [mode, setMode] = React.useState(propMode);
+	const [value, setValue] = usePropState(propValue);
+	const [dataInitialized, setDataInitialized] = React.useState(mode !== "create" && (!propData || propValue) ? false : true);
+	const [touched, setTouched] = usePropState(false);
 	const queryClient = useQueryClient();
 
 	// Props:
@@ -79,33 +90,42 @@ const ACSField = ({
 	});
 
 	const data = propData ?? fieldData?.[0] ?? idData ?? {}
+	if (data && !dataInitialized) {
+		setValue(data[fieldName]);
+		setDataInitialized(true);
+	}
 	// WE get acsMeta here was we might get overrides from props later
 	const fieldMeta = useGetAcsMetaField(objectType, fieldName)
 
 	defaultValue = defaultValue ?? fieldMeta?.defaultValue ?? "";
-	label = mode !== "view" ? label ?? fieldMeta?.prettyName : undefined
-	const componentType = fieldMeta?.component ?? "Text";
 
-	value = value ?? data?.[fieldName]
-	if (mode === "create" && value === undefined) {
-		value = defaultValue ?? undefined
-	}
+
+	label = propMode !== "view" ? label ?? fieldMeta?.prettyName : undefined
+	const componentType = fieldMeta?.component ?? "Text";
+	viewPlaceholder = viewPlaceholder ?? (mode === "view" && canEdit) ? true : false;
+
+
 	const id = propId ?? data?.id as string | number;
 
 	const { mutate, isLoading: isMutating } = useUpdateRecord();
-	const handleBlur = (e: unknown, mutatedValue: unknown) => {
-		if (!isMutating && mode === "edit" && !isInsideForm) {
-			console.log("Mutating ", objectType, id, { [fieldName]: mutatedValue });
-			mutate({ objectType, id, data: { [fieldName]: mutatedValue }, queryClient });
+	const handleBlur = (e: unknown) => {
+		if (!isMutating && mode === "edit" && !isInsideForm && touched) {
+			console.log("Mutating ", objectType, id, { [fieldName]: value });
+			setTouched(false);
+			mutate({ objectType, id, data: { [fieldName]: value }, queryClient });
 		}
 		if (propMode === "view") {
 			setMode("view");
 		}
 		if (isInsideForm && handleCreateChange) {
-			handleCreateChange(fieldName, mutatedValue);
+			handleCreateChange(fieldName, value);
 		}
 	};
 
+	const handleChange = (e: any) => {
+		setTouched(true);
+		setValue(e.target.value as string)
+	}
 
 	const handleClick = () => {
 		if (canEdit && mode == "view") {
@@ -114,20 +134,26 @@ const ACSField = ({
 	}
 
 
-
-	const passthroughProps = { index, componentType, fieldMeta, mode, data, value, isInsideForm, className: fieldClassName, fontSizeClass, textColorClass, fontWeightClass }
+	const passthroughProps = {
+		index, componentType, fieldMeta, mode, data, value, isInsideForm, viewPlaceholder,
+		className: fieldClassName, fontSizeClass, textColorClass, fontWeightClass
+	}
 	//onClick={handleClick} - TODO add a click wrapper
 	if (mode === "view") {
+
 		return (<div onClick={handleClick}>
 			<FieldComponent {...passthroughProps} />
-		</div>)
+		</div>
+		)
 
 	} else {
 		return (
-			<div key={index} className={layoutClassName} >
-				{label && <label className={labelClassName}>{label}</label>}
-				<FieldComponent onBlur={handleBlur} {...passthroughProps} />
-			</div>
+			<FormWrapper mode={mode} isForm={mode === "edit" && !isInsideForm} onSubmit={handleBlur}>
+				<div key={index} className={layoutClassName} >
+					{label && <label className={labelClassName}>{label}</label>}
+					<FieldComponent onBlur={handleBlur} onChange={handleChange} {...passthroughProps} />
+				</div>
+			</FormWrapper>
 		);
 	}
 }
@@ -135,6 +161,9 @@ const ACSField = ({
 const FieldComponent = (props: any) => {
 	const { componentType, ...rest } = props;
 
+	if (props.mode === "edit" && props?.value === undefined || props?.value === null && props?.viewPlaceholder) {
+		return (<div className="w-full">{props?.fieldMeta?.viewPlaceholder as string}</div>)
+	}
 
 	switch (componentType) {
 		case "Text":

@@ -4,7 +4,7 @@ import { usePropState } from "../../hooks";
 
 const FormWrapper = ({ children, isForm, mode = "edit", onSubmit }: any) => {
 	if (isForm && mode === "edit") {
-		return <form onSubmit={onSubmit}>{children}</form>
+		return <form className="w-full" onSubmit={onSubmit}>{children}</form>
 	} else {
 		return <>{children}</>
 	}

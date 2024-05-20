@@ -63,6 +63,7 @@ export interface ACSField {
   helpText?: string;
   /** The following are attributes of input fields */
   placeholder?: string;
+  viewPlaceholder?: string;
   autocomplete?: string;
   disabled?: boolean;
 
