@@ -12,7 +12,7 @@ const ACSForm = ({
 
 	mode?: "edit" | "create",
 	objectType: string, fields: string[],
-	path: string,
+	path?: string,
 	data?: Record<string, unknown>,
 	hiddenFields?: Record<string, unknown>,
 	labelClassName?: string, fieldClassName?: string, fontSizeClass?: string,
@@ -39,7 +39,8 @@ const ACSForm = ({
 
 
 	const FormComponent = formComponent as React.ElementType
-
+	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+	//@ts-ignore
 	const { handleSubmit, handleChange } = useForm({ objectType, fields, mode, path, onSuccess, closeModal, hiddenFields, data, preSubmit, postSubmit, overrideSubmit, invalidateQueryKeys })
 	const validated = true;
 	return (

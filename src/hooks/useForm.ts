@@ -78,8 +78,12 @@ export const useForm = ({
         e.preventDefault()
         if (!isMutating) {
           if (mode === "create") {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            //@ts-ignore
              createMutate({ objectType, data:values, path, preSubmit, overrideSubmit, postSubmit, queryClient, invalidateQueryKeys});
           } else {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            //@ts-ignore
              updateMutate({ objectType, id:values?.id, data:values, path, preSubmit, overrideSubmit, postSubmit, queryClient, invalidateQueryKeys});
           }
     		} 
