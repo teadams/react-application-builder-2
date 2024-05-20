@@ -133,7 +133,7 @@ const ACSField = ({
 		}
 	}
 
-
+	console.log("FieldComponent", fieldName, fieldMeta)
 	const passthroughProps = {
 		index, componentType, fieldMeta, mode, data, value, isInsideForm, viewPlaceholder,
 		className: fieldClassName, fontSizeClass, textColorClass, fontWeightClass
@@ -164,6 +164,7 @@ const FieldComponent = (props: any) => {
 	if (props.mode === "edit" && props?.value === undefined || props?.value === null && props?.viewPlaceholder) {
 		return (<div className="w-full">{props?.fieldMeta?.viewPlaceholder as string}</div>)
 	}
+
 
 	switch (componentType) {
 		case "Text":
