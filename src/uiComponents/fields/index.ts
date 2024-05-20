@@ -7,3 +7,4 @@ export * from './Select';
 export * from "./FormWrapper"
 export * from "./Avatar"
 export * from "./DateTime"
+export * from "./BulletedList"

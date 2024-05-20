@@ -1,7 +1,7 @@
 import React from "react";
 import { useQueryClient } from "react-query";
 import { usePropState } from "../../hooks";
-import { Text, TextArea, Avatar, DateTime } from ".";
+import { Text, TextArea, Avatar, DateTime, BulletedList } from ".";
 import { FormWrapper } from "./";
 
 import { useGetAcsMetaField, useGetDataByField, useUpdateRecord, useGetDataById } from "../../hooks";
@@ -174,6 +174,8 @@ const FieldComponent = (props: any) => {
 			return <Avatar {...rest} />;
 		case "DateTime":
 			return <DateTime {...rest} />;
+		case "BulletedList":
+			return <BulletedList {...rest} />;
 		default:
 			return <Text {...rest} />;
 	}
