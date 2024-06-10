@@ -1,30 +1,33 @@
 import React from "react";
-import { usePropState } from "../../hooks";
-import utils from "../../lib/utils"
+
 
 
 const Select = ({
-	value: propValue = "",
+	value,
 	options,
-	displayFields = ["name"],
 	onChange,
-	initialSelect,
+	onBlur,
 	className = "border focus:outline-none  rounded-lg w-[100%]  p-2 text-sm disabled font-family-red",
 }: {
 	value?: unknown;
 	options?: any[];
-	displayFields?: string[];
 	onChange?: (value: string) => void;
-	initialSelect?: any[];
 	className?: string;
 }) => {
-	const [value, setValue] = usePropState(propValue as any);
 
 	if (!options) return null;
 	const handleChange = (e: any) => {
-		setValue(e.target.value);
+
 		if (onChange) {
 			onChange(e);
+		}
+
+	};
+
+	const handleBlur = (e: any) => {
+
+		if (onBlur) {
+			onBlur(e);
 		}
 
 	};
@@ -38,19 +41,14 @@ const Select = ({
 				value={value as string}
 				className={`w-full ${className}`}
 				onChange={handleChange}
+				onBlur={handleBlur}
 			>
-				{initialSelect && initialSelect.map((option: any) => {
-					return (<option key={option.id} value={option.id}>
-						{option.value}
-					</option>)
-				})}
+
 
 				{
 					options.map((option: any) => {
 						return (<option key={option.id} value={option.id}>
-							{displayFields.map((field) => {
-								return utils.getDeepValueFromString(option, field)
-							}).join(" ")}
+							{option.value}
 						</option>)
 					})
 				}

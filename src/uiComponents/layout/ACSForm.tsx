@@ -37,10 +37,9 @@ const ACSForm = ({
 	invalidateQueryKeys?: string[]
 }) => {
 
-
 	const FormComponent = formComponent as React.ElementType
 	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-	//@ts-ignore
+	//@ts-ignore 
 	const { handleSubmit, handleChange } = useForm({ objectType, fields, mode, path, onSuccess, closeModal, hiddenFields, data, preSubmit, postSubmit, overrideSubmit, invalidateQueryKeys })
 	const validated = true;
 	return (
@@ -48,7 +47,7 @@ const ACSForm = ({
 			<form className="flex flex-col gap-y-4 mt-8">
 				{formComponent ? <FormComponent
 					testProp="testProp"
-					handleCreateChange={handleChange}
+					handleFormChange={handleChange}
 					objectType={objectType}
 					mode={mode}
 					hiddenFields={hiddenFields}
@@ -64,7 +63,7 @@ const ACSForm = ({
 							const defaultValue = mode === "edit" ? data?.[field] : undefined
 							return (
 								<ACSField key={index} mode={mode} index={index} objectType={objectType} fieldName={field}
-									handleCreateChange={handleChange} isInsideForm={true} defaultValue={defaultValue}
+									handleFormChange={handleChange} isInsideForm={true} defaultValue={defaultValue}
 									labelClassName={labelClassName} fieldClassName={fieldClassName}
 									fontSizeClass={fontSizeClass} textColorClass={textColorClass}
 									fontWeightClass={fontWeightClass}

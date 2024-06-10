@@ -2,7 +2,7 @@ import React from "react";
 import { useQueryClient } from "react-query";
 import { usePropState } from "../../hooks";
 import { Text, TextArea, Avatar, DateTime, BulletedList } from ".";
-import { FormWrapper } from "./";
+import { FormWrapper, ACSSelect } from "./";
 
 import { useGetAcsMetaField, useGetDataByField, useUpdateRecord, useGetDataById } from "../../hooks";
 
@@ -13,7 +13,7 @@ const ACSField = ({
 	data: propData,
 	mode: propMode = "view",
 	index,
-	handleCreateChange,
+	handleFormChange,
 	canEdit = true,
 	viewPlaceholder,
 	isInsideForm = false,
@@ -37,7 +37,7 @@ const ACSField = ({
 	data?: Record<string, unknown>;
 	mode?: "view" | "edit" | "create";
 	index?: number;
-	handleCreateChange?: (fieldName: string, value: unknown) => void;
+	handleFormChange?: (fieldName: string, value: unknown) => void;
 	canEdit?: boolean;
 	viewPlaceholder?: boolean;
 	isInsideForm?: boolean;
@@ -101,24 +101,24 @@ const ACSField = ({
 
 
 	label = propMode !== "view" ? label ?? fieldMeta?.prettyName : undefined
-	const componentType = fieldMeta?.component ?? "Text";
+	const componentType = fieldMeta?.component ?? "Text"
+
 	viewPlaceholder = viewPlaceholder ?? (mode === "view" && canEdit) ? true : false;
 
 
 	const id = propId ?? data?.id as string | number;
 
 	const { mutate, isLoading: isMutating } = useUpdateRecord();
-	const handleBlur = (e: unknown) => {
+	const handleBlur = (e: any) => {
 		if (!isMutating && mode === "edit" && !isInsideForm && touched) {
-			console.log("Mutating ", objectType, id, { [fieldName]: value });
 			setTouched(false);
-			mutate({ objectType, id, data: { [fieldName]: value }, queryClient });
+			mutate({ objectType, id, data: { [fieldName]: e?.target?.value }, queryClient });
 		}
 		if (propMode === "view") {
 			setMode("view");
 		}
-		if (isInsideForm && handleCreateChange) {
-			handleCreateChange(fieldName, value);
+		if (isInsideForm && handleFormChange) {
+			handleFormChange(fieldName, e?.target?.value);
 		}
 	};
 
@@ -133,7 +133,6 @@ const ACSField = ({
 		}
 	}
 
-	console.log("FieldComponent", fieldName, fieldMeta)
 	const passthroughProps = {
 		index, componentType, fieldMeta, mode, data, value, isInsideForm, viewPlaceholder,
 		className: fieldClassName, fontSizeClass, textColorClass, fontWeightClass
@@ -164,11 +163,21 @@ const FieldComponent = (props: any) => {
 	if (props.mode === "view" && !props?.value && props?.viewPlaceholder) {
 		return (<div className="w-full">{props?.fieldMeta?.viewPlaceholder as string}</div>)
 	}
-
-
+	console.log("PROPS IS 	", props)
 	switch (componentType) {
 		case "Text":
 			return <Text {...rest} />;
+		case "Select": {
+			const { referencesTable: objectType, referencesDisplayFields: displayFields,
+				referencesSortBy: sortBy, referencesSortOrder: sortOrder, referencesAddNew: addAddNew,
+				referencesAddNewFields: addNewFields
+			} = props.fieldMeta;
+			return <ACSSelect {...rest} objectType={objectType} displayFields={displayFields} sortBy={sortBy} sortOrder={sortOrder}
+				addAddNew={addAddNew} addNewFields={addNewFields}
+				onChange={(e: any, selectedValue: any, selectedRow: any) => { // Explicitly type 'selectedRow' as any
+					props.onChange(e)
+				}} />;
+		}
 		case "TextArea":
 			return <TextArea {...rest} />;
 		case "Avatar":
@@ -177,8 +186,9 @@ const FieldComponent = (props: any) => {
 			return <DateTime {...rest} />;
 		case "BulletedList":
 			return <BulletedList {...rest} />;
-		default:
+		default: {
 			return <Text {...rest} />;
+		}
 	}
 }
 
