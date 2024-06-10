@@ -45,7 +45,6 @@ const ACSSelect = ({
 	layoutClassName?: string,
 	fieldClassName?: string
 }) => {
-	console.log("xxxx  ACSSelect", objectType, displayFields, propValue, params, filters, sortBy, sortOrder, displayFields, onChange)
 	const { data } = useGetData({ objectType, params, filters, sortBy, sortOrder });
 	const [addObjectTypeModal, setAddObjectTypeModal] = useState(false);
 	const [value, setValue] = usePropState(propValue as any);
@@ -109,7 +108,7 @@ const ACSSelect = ({
 				onChange={handleChange}
 			/>
 			{
-				addObjectTypeModal && <Modal title="Add New Candidate" key="addCandidate"
+				addObjectTypeModal && <Modal title={"Add New " + objectTypeMeta?.prettyName} key={"add" + objectType}
 					closeModal={() => { setAddObjectTypeModal(false) }}>
 					<ACSForm objectType={objectType}
 						closeModal={() => setAddObjectTypeModal(false)}
