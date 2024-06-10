@@ -65,9 +65,7 @@ const Avatar = ({
 	const [value, setValue] = usePropState(propValue);
 
 
-	const handleOnBlur = (e: unknown) => {
-		onBlur && onBlur(e, value);
-	}
+
 
 	const handleFileAttach = async (file: any) => {
 		const uploadFile = file;
@@ -77,7 +75,7 @@ const Avatar = ({
 			uploadFileName
 		);
 		setValue(uploadS3Filename);
-		onBlur && onBlur(undefined, uploadS3Filename);
+		onBlur && onBlur({ target: { value: uploadS3Filename } }, uploadS3Filename);
 	}
 
 
