@@ -57,9 +57,8 @@ const BulletedList = ({
 	const handleOnBlur = (e: unknown) => {
 		onBlur && onBlur(e);
 	}
-
 	if (mode === "view") {
-		return <><BulletListView list={value ? (value as string).split(";") as string[] : []} introText={fieldMeta?.instructions} /></>
+		return <><BulletListView list={value ? (value as string).split(/\r?\n/) as string[] : []} introText={fieldMeta?.instructions} /></>
 	} else {
 		return (
 
