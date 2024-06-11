@@ -32,13 +32,13 @@ const DateTime = ({
 
 	const autoFocus = index === 0;
 	console.log("DATE VALUE ", value)
-	const dateValue = value ? moment(value).format("YYYY-MM-DD") : moment().format("YYYY-MM-DD");
-	const timeValue = value ? moment(value).format("h:mm A") : "9:00 AM";
+	const dateValue = value ? moment(value).format("YYYY-MM-DD") : undefined;
+	const timeValue = value ? moment(value).format("h:mm A") : undefined;
 	console.log("time values is " + timeValue)
 
 
 
-	const options = []
+	const options = [{ value: "-- select time --", id: "" }]
 	for (let i = 0; i < 24; i++) {
 		const hour = i > 12 ? i - 12 : i;
 		const AMorPM = i < 12 ? "AM" : "PM";
@@ -50,9 +50,8 @@ const DateTime = ({
 
 	const handleDateChange = (e: any) => {
 		const newDate = e.target.value
-		console.log("new date is " + newDate)
-		console.log("time value is " + timeValue)
-		const newDateTime = new Date(newDate + " " + timeValue);
+		const newT = timeValue ?? "1:00 AM"
+		const newDateTime = new Date(newDate + " " + (timeValue ?? "9:00 AM"));
 		onChange && onChange({ target: { value: newDateTime } });
 		onBlur && onBlur({ target: { value: newDateTime } }, true);
 
@@ -68,7 +67,7 @@ const DateTime = ({
 	}
 
 	if (mode === "view") {
-		return <>{moment(value).format("M-DD")}  at {moment(value).format("h:mm a")
+		return <>{moment(value).format("dddd, MMMM Do YYYY, h:mm a")
 		}</>
 	} else {
 		return (

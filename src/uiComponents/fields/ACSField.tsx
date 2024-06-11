@@ -68,7 +68,7 @@ const ACSField = ({
 	}
 	const [mode, setMode] = React.useState(propMode);
 	const [value, setValue] = usePropState(propValue);
-	const [dataInitialized, setDataInitialized] = React.useState(mode !== "create" && (!propData || propValue) ? false : true);
+	const [dataInitialized, setDataInitialized] = React.useState(propData || propValue ? true : false);
 	const [touched, setTouched] = usePropState(false);
 	const queryClient = useQueryClient();
 
@@ -95,16 +95,16 @@ const ACSField = ({
 		enabled: defaultValue === undefined && lookupValue && propId === undefined && mode === "edit" && !propData
 	});
 
-	const data = propData ?? fieldData?.[0] ?? idData ?? {}
+	const fieldMeta = useGetAcsMetaField(objectType, fieldName)
+	const data = propData ?? fieldData?.[0] ?? idData ?? undefined
 	if (data && !dataInitialized) {
 		setValue(data[fieldName]);
 		setDataInitialized(true);
+	} else if (mode === "create" && !dataInitialized) {
+		defaultValue = defaultValue ?? fieldMeta?.defaultValue ?? "";
+		setValue(defaultValue);
+		setDataInitialized(true);
 	}
-	// WE get acsMeta here was we might get overrides from props later
-	const fieldMeta = useGetAcsMetaField(objectType, fieldName)
-
-	defaultValue = defaultValue ?? fieldMeta?.defaultValue ?? "";
-
 
 	label = propMode !== "view" ? label ?? fieldMeta?.prettyName : undefined
 	const componentType = fieldMeta?.component ?? "Text"
