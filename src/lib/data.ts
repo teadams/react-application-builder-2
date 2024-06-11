@@ -33,13 +33,18 @@ export const getById = async ({
   basePath = "acs"
 }: {
   objectType: string;
-  id: string;
+  id: any;
   filters?: { [index: string]: unknown };
   path?:string,
   basePath?:string
 }): Promise<Record<string, unknown>> => {
-  const apiResult = await get({ objectType, path, basePath, params: { id }, filters });
-  return apiResult[0];
+  path = path ?? basePath +"/" +  objectType + "/" + id; 
+
+  const apiResult = (await api.callAPI({ path })) as Promise<
+    Record<string, unknown>
+  >;
+  return apiResult;
+
 };
 
 export const getByField = async ({

@@ -72,6 +72,8 @@ const ACSField = ({
 	const [touched, setTouched] = usePropState(false);
 	const queryClient = useQueryClient();
 
+	const mounted = React.useRef(false);
+
 	// Props:
 	// For edit mode:
 	// data - Row data - If this is provided, no call to server necessary
@@ -96,7 +98,9 @@ const ACSField = ({
 	});
 
 	const fieldMeta = useGetAcsMetaField(objectType, fieldName)
+
 	const data = propData ?? fieldData?.[0] ?? idData ?? undefined
+
 	if (data && !dataInitialized) {
 		setValue(data[fieldName]);
 		setDataInitialized(true);
@@ -117,6 +121,8 @@ const ACSField = ({
 	const { mutate, isLoading: isMutating } = useUpdateRecord();
 
 	const handleBlur = (e: any, overrideTouched: boolean) => {
+		console.log("handle blur")
+		console.log("value is " + e?.target?.value)
 		if (!isMutating && mode === "edit" && !isInsideForm && (touched || overrideTouched)) {
 			setTouched(false);
 			mutate({ objectType, id, data: { [fieldName]: e?.target?.value }, queryClient, invalidateQueryKeys });
@@ -140,13 +146,15 @@ const ACSField = ({
 	}
 
 	const handleClick = () => {
-		if (canEdit && mode == "view") {
+		if (canEdit && mode === "view") {
 			setMode("edit");
 			if (componentType === "Avatar") {
 				setTouched(true);
 			}
 		}
 	}
+	console.log("value is " + value)
+	console.log("mode at bottome is	", mode)
 
 	const passthroughProps = {
 		index, componentType, objectType, fieldName, fieldMeta, mode, canEdit, data, value, isInsideForm, viewPlaceholder,
@@ -161,6 +169,7 @@ const ACSField = ({
 		)
 
 	} else {
+		console.log("pas	", passthroughProps)
 		return (
 			<FormWrapper mode={mode} isForm={mode === "edit" && !isInsideForm} onSubmit={handleBlur}>
 				<div key={index} className={layoutClassName} >
