@@ -4,7 +4,7 @@ import { QueryKey } from "react-query";
 
 import { useQueryClient } from "react-query";
 import { usePropState } from "../../hooks";
-import { Text, TextArea, Avatar, DateTime, BulletedList } from ".";
+import { Text, TextArea, Avatar, DateTime, BulletedList, Upload } from ".";
 import { FormWrapper, ACSSelect } from "./";
 
 import { useGetAcsMetaField, useGetDataByField, useUpdateRecord, useGetDataById } from "../../hooks";
@@ -115,6 +115,7 @@ const ACSField = ({
 	const id = propId ?? data?.id as string | number;
 
 	const { mutate, isLoading: isMutating } = useUpdateRecord();
+
 	const handleBlur = (e: any, overrideTouched: boolean) => {
 		if (!isMutating && mode === "edit" && !isInsideForm && (touched || overrideTouched)) {
 			setTouched(false);
@@ -124,6 +125,7 @@ const ACSField = ({
 			setMode("view");
 		}
 		if (isInsideForm && handleFormChange) {
+			console.log("BLUR " + e?.target?.value)
 			handleFormChange(fieldName, e?.target?.value);
 		}
 	};
@@ -199,6 +201,8 @@ const FieldComponent = (props: any) => {
 			return <DateTime {...rest} />;
 		case "BulletedList":
 			return <BulletedList {...rest} />;
+		case "Upload":
+			return <Upload {...rest} />;
 		default: {
 			return <Text {...rest} />;
 		}
