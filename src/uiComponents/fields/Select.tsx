@@ -12,7 +12,7 @@ const Select = ({
 	className = "border focus:outline-none  rounded-lg w-[100%]  p-2 text-sm disabled font-family-red",
 }: {
 	value?: unknown;
-	mode: string;
+	mode?: string;
 	index?: number;
 	options?: any[];
 	onChange?: (value: string) => void;
@@ -45,7 +45,6 @@ const Select = ({
 		return <>{value}</>
 	}
 	const width = "w-[300px]"
-
 
 	return (
 
