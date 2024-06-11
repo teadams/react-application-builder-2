@@ -7,6 +7,8 @@ import { Select } from "./"
 
 const ACSSelect = ({
 	objectType,
+	fieldName,
+	mode = "create",
 	value: propValue,
 	displayFields = ["name"],
 	label,
@@ -27,6 +29,8 @@ const ACSSelect = ({
 
 }: {
 	objectType: string,
+	fieldName: string,
+	mode?: string,
 	value?: string | number | readonly string[] | undefined,
 	displayFields?: string[],
 	label?: string,
@@ -45,7 +49,8 @@ const ACSSelect = ({
 	layoutClassName?: string,
 	fieldClassName?: string
 }) => {
-	const { data } = useGetData({ objectType, params, filters, sortBy, sortOrder });
+
+	const { data } = useGetData({ objectType, fieldName, params, filters, sortBy, sortOrder });
 	const [addObjectTypeModal, setAddObjectTypeModal] = useState(false);
 	const [value, setValue] = usePropState(propValue as any);
 
@@ -99,14 +104,19 @@ const ACSSelect = ({
 
 
 	return (
-		<div key={objectType} className={layoutClassName}>
-			{label && <label className={labelClassName}>{label}</label>}
-			<Select
-				options={options as any[]}
-				value={value}
-				className={`${fieldClassName}`}
-				onChange={handleChange}
-			/>
+		<>
+			<div key={objectType} className={layoutClassName}>
+				{label && <label className={labelClassName}>{label}</label>}
+				<Select
+					options={options as any[]}
+					mode={mode}
+					value={value}
+					className={`${fieldClassName}`}
+					onChange={handleChange}
+				/>
+
+			</div >
+
 			{
 				addObjectTypeModal && <Modal title={"Add New " + objectTypeMeta?.prettyName} key={"add" + objectType}
 					closeModal={() => { setAddObjectTypeModal(false) }}>
@@ -121,8 +131,7 @@ const ACSSelect = ({
 						fields={addNewFields} />
 				</Modal>
 			}
-		</div >
-
+		</>
 
 
 	);

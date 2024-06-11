@@ -4,18 +4,26 @@ import React from "react";
 
 const Select = ({
 	value,
+	mode = "view",
+	index,
 	options,
 	onChange,
 	onBlur,
 	className = "border focus:outline-none  rounded-lg w-[100%]  p-2 text-sm disabled font-family-red",
 }: {
 	value?: unknown;
+	mode: string;
+	index?: number;
 	options?: any[];
 	onChange?: (value: string) => void;
+	onBlur?: (e: any) => void;
 	className?: string;
 }) => {
 
 	if (!options) return null;
+
+	const autoFocus = index === 0;
+
 	const handleChange = (e: any) => {
 
 		if (onChange) {
@@ -32,7 +40,12 @@ const Select = ({
 
 	};
 
+
+	if (mode === "view") {
+		return <>{value}</>
+	}
 	const width = "w-[300px]"
+
 
 	return (
 

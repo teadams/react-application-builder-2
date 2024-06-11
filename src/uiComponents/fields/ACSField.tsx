@@ -4,7 +4,7 @@ import { QueryKey } from "react-query";
 
 import { useQueryClient } from "react-query";
 import { usePropState } from "../../hooks";
-import { Text, TextArea, Avatar, DateTime, BulletedList, Upload } from ".";
+import { Text, TextArea, Avatar, DateTime, BulletedList, Upload, Select } from ".";
 import { FormWrapper, ACSSelect } from "./";
 
 import { useGetAcsMetaField, useGetDataByField, useUpdateRecord, useGetDataById } from "../../hooks";
@@ -182,15 +182,26 @@ const FieldComponent = (props: any) => {
 		case "Text":
 			return <Text {...rest} />;
 		case "Select": {
-			const { referencesTable: objectType, referencesDisplayFields: displayFields,
-				referencesSortBy: sortBy, referencesSortOrder: sortOrder, referencesAddNew: addAddNew,
-				referencesAddNewFields: addNewFields
-			} = props.fieldMeta;
-			return <ACSSelect {...rest} objectType={objectType} displayFields={displayFields} sortBy={sortBy} sortOrder={sortOrder}
-				addAddNew={addAddNew} addNewFields={addNewFields}
-				onChange={(e: any, selectedValue: any, selectedRow: any) => { // Explicitly type 'selectedRow' as any
-					props.onChange(e)
-				}} />;
+			// REFERENCES another table
+			if (props.fieldMeta?.referencesTable !== undefined) {
+				const { referencesTable: objectType, referencesDisplayFields: displayFields,
+					referencesSortBy: sortBy, referencesSortOrder: sortOrder, referencesAddNew: addAddNew,
+					referencesAddNewFields: addNewFields
+				} = props.fieldMeta;
+
+				return <ACSSelect {...rest} objectType={objectType} displayFields={displayFields} sortBy={sortBy} sortOrder={sortOrder}
+					addAddNew={addAddNew} addNewFields={addNewFields}
+					onChange={(e: any, selectedValue: any, selectedRow: any) => { // Explicitly type 'selectedRow' as any
+						props.onChange(e)
+					}} />;
+			} else {
+				// PURE SELECT
+				const options = []
+				for (const option of props.fieldMeta?.validValues ?? []) {
+					options.push({ id: option, value: option })
+				}
+				return <Select {...rest} options={options} />;
+			}
 		}
 		case "TextArea":
 			return <TextArea {...rest} />;
