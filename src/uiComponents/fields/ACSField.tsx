@@ -1,10 +1,14 @@
 import React from "react";
+import { QueryKey } from "react-query";
+
+
 import { useQueryClient } from "react-query";
 import { usePropState } from "../../hooks";
 import { Text, TextArea, Avatar, DateTime, BulletedList } from ".";
 import { FormWrapper, ACSSelect } from "./";
 
 import { useGetAcsMetaField, useGetDataByField, useUpdateRecord, useGetDataById } from "../../hooks";
+import { over } from "lodash";
 
 
 const ACSField = ({
@@ -31,6 +35,7 @@ const ACSField = ({
 	fontSizeClass,
 	textColorClass,
 	fontWeightClass,
+	invalidateQueryKeys
 }: {
 	objectType: string;
 	id?: string | number;
@@ -53,6 +58,7 @@ const ACSField = ({
 	fontWeightClass?: string;
 	textColorClass?: string;
 	fontSizeClass?: string;
+	invalidateQueryKeys?: QueryKey[];
 }
 ) => {
 
@@ -109,10 +115,10 @@ const ACSField = ({
 	const id = propId ?? data?.id as string | number;
 
 	const { mutate, isLoading: isMutating } = useUpdateRecord();
-	const handleBlur = (e: any) => {
-		if (!isMutating && mode === "edit" && !isInsideForm && touched) {
+	const handleBlur = (e: any, overrideTouched: boolean) => {
+		if (!isMutating && mode === "edit" && !isInsideForm && (touched || overrideTouched)) {
 			setTouched(false);
-			mutate({ objectType, id, data: { [fieldName]: e?.target?.value }, queryClient });
+			mutate({ objectType, id, data: { [fieldName]: e?.target?.value }, queryClient, invalidateQueryKeys });
 		}
 		if (propMode === "view") {
 			setMode("view");
@@ -123,18 +129,25 @@ const ACSField = ({
 	};
 
 	const handleChange = (e: any) => {
-		setTouched(true);
+		handleTouched()
 		setValue(e.target.value as string)
+	}
+
+	const handleTouched = () => {
+		setTouched(true);
 	}
 
 	const handleClick = () => {
 		if (canEdit && mode == "view") {
 			setMode("edit");
+			if (componentType === "Avatar") {
+				setTouched(true);
+			}
 		}
 	}
 
 	const passthroughProps = {
-		index, componentType, fieldMeta, mode, data, value, isInsideForm, viewPlaceholder,
+		index, componentType, objectType, fieldName, fieldMeta, mode, canEdit, data, value, isInsideForm, viewPlaceholder,
 		className: fieldClassName, fontSizeClass, textColorClass, fontWeightClass
 	}
 	//onClick={handleClick} - TODO add a click wrapper
@@ -163,7 +176,6 @@ const FieldComponent = (props: any) => {
 	if (props.mode === "view" && !props?.value && props?.viewPlaceholder) {
 		return (<div className="w-full">{props?.fieldMeta?.viewPlaceholder as string}</div>)
 	}
-	console.log("PROPS IS 	", props)
 	switch (componentType) {
 		case "Text":
 			return <Text {...rest} />;
@@ -181,7 +193,8 @@ const FieldComponent = (props: any) => {
 		case "TextArea":
 			return <TextArea {...rest} />;
 		case "Avatar":
-			return <Avatar {...rest} />;
+			return <Avatar {...rest}
+			/>;
 		case "DateTime":
 			return <DateTime {...rest} />;
 		case "BulletedList":

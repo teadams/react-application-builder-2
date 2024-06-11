@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import { useQueryClient } from "react-query";
+import { useQueryClient, QueryKey } from "react-query";
 import {useGetAcsMetaFields, useCreateRecord, useUpdateRecord} from "./"
 import { cp } from "fs";
 
@@ -37,7 +37,7 @@ export const useForm = ({
       submitResult:Record<string,unknown>}) => any, // 
   closeModal?: () => void,
   data?: Record<string, unknown>
-  invalidateQueryKeys?: string[]
+  invalidateQueryKeys?:QueryKey[]
 }) => {
   //only create supported right now
   const acsMeta = useGetAcsMetaFields(objectType)
