@@ -108,7 +108,7 @@ const Avatar = ({
 	}
 
 	return (
-		<div>width={width} height={height}
+		<div>
 			<label htmlFor={fieldId}>
 				{isHovered && (mode !== "view" || canEdit) && (
 					<Image className={`justify-center absolute w-[${width}px] h-[${height}px] rounded-full`} src={imageHolder} alt="addImage" />
