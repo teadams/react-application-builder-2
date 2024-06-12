@@ -114,15 +114,15 @@ const Avatar = ({
 					<Image className={`justify-center absolute w-[${width}px] h-[${height}px] rounded-full`} src={imageHolder} alt="addImage" />
 				)}
 
-				<div className={`relative flex justify-center overflow-hidden text-3xl text-white bg-blue-400 items-center 
-					rounded-full w-[${width}px] h-[${height}px] cursor-pointer hover:opacity-30`}
+				<div className={` flex justify-center  text-3xl text-white bg-blue-400 items-center 
+					rounded-full w-[${width}px] h-[80px] h-[${height}px] cursor-pointer hover:opacity-30`}
 					onMouseEnter={() => setIsHovered(true)}
 					onMouseLeave={() => setIsHovered(false)}>
 
 					{
 						value ?
 							<Image src={value} alt="upload image" width={width} height={height} />
-							: <span>+</span>
+							: <span >+</span>
 					}
 				</div>
 			</label>
