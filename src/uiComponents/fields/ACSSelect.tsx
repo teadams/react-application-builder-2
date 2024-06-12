@@ -29,7 +29,7 @@ const ACSSelect = ({
 
 }: {
 	objectType: string,
-	fieldName: string,
+	fieldName?: string,
 	mode?: string,
 	value?: string | number | readonly string[] | undefined,
 	displayFields?: string[],
@@ -50,7 +50,7 @@ const ACSSelect = ({
 	fieldClassName?: string
 }) => {
 
-	const { data } = useGetData({ objectType, fieldName, params, filters, sortBy, sortOrder });
+	const { data } = useGetData({ objectType, params, filters, sortBy, sortOrder });
 	const [addObjectTypeModal, setAddObjectTypeModal] = useState(false);
 	const [value, setValue] = usePropState(propValue as any);
 
