@@ -84,8 +84,7 @@ export const useForm = ({
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             //@ts-ignore
              updateMutate({ objectType, id:values?.id, data:values, path, preSubmit, overrideSubmit, postSubmit, queryClient, invalidateQueryKeys});
-          }
-    		} 
+          }} 
         //THIS SHOULD BE ON SUCCESS
         if  (onSuccess) {
           onSuccess()

@@ -19,7 +19,7 @@ const getDeepValueFromString = (obj: Record<string, unknown>, path: string) => {
 }
 
 // TODO Use Lodash _.get
-const sort = (array: Record<string, unknown>[], sortBy: string | undefined, sortOrder: string = "asc") => {
+const sort = (array: Record<string, unknown>[], sortBy: string | undefined, sortOrder = "asc") => {
   if (!sortBy) return array
   const result =  array.sort((a: Record<string, unknown>, b: Record<string, unknown>) => {
       let aVal = getDeepValueFromString(a, sortBy) as string
