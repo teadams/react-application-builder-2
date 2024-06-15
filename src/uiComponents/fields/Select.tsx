@@ -10,6 +10,7 @@ const Select = ({
 	onChange,
 	onBlur,
 	className = "border focus:outline-none  rounded-lg w-[100%]  p-2 text-sm disabled font-family-red",
+	width = "w-[200px]"
 }: {
 	value?: unknown;
 	mode?: string;
@@ -18,6 +19,7 @@ const Select = ({
 	onChange?: (value: string) => void;
 	onBlur?: (e: any) => void;
 	className?: string;
+	width?: string;
 }) => {
 
 	if (!options) return null;
@@ -44,7 +46,6 @@ const Select = ({
 	if (mode === "view") {
 		return <>{value}</>
 	}
-	const width = "w-[300px]"
 
 	return (
 
