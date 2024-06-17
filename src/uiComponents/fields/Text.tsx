@@ -37,13 +37,10 @@ const Text = ({
 	const handleOnBlur = (e: unknown) => {
 		onBlur && onBlur(e);
 	}
-	console.log("after handile blur")
 
 	if (mode === "view") {
-		console.log("mod fvi")
 		return <>{value}</>
 	} else {
-		console.log("text   ccc value is ", value)
 		return (
 
 			<input type="text" autoFocus={autoFocus} value={value as string}

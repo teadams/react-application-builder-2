@@ -11,7 +11,7 @@ const getTenantSetupRecord = (tenantSetup: any, key: string) => {
 const ACSTenantField = ({
 	fieldKey,
 	label,
-	mode = "view",
+	mode = "edit",
 	canEdit = true,
 	labelClassName = "block mb-2 text-sm font-medium text-black-500 ",
 	fieldClassName = "bg-white border border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  ",
@@ -40,7 +40,8 @@ const ACSTenantField = ({
 
 	return (
 		<ACSField mode={mode} canEdit={canEdit} label={label as string} objectType="acsTenantSetup" fieldName="value" data={data}
-			labelClassName={labelClassName} fieldClassName={fieldClassName} fontSizeClass={fontSizeClass} textColorClass={textColorClass} fontWeightClass={fontWeightClass}
+			labelClassName={labelClassName} fieldClassName={fieldClassName} fontSizeClass={fontSizeClass} textColorClass={textColorClass}
+			fontWeightClass={fontWeightClass}
 		/>
 	);
 }
