@@ -10,10 +10,19 @@ export const useGetTenantParameter = ({
 }) => {
 
   const { data: acsTenantSetup } = useGetData({ objectType: "acsTenantSetup" });
+  console.log("acsTenantSetup", acsTenantSetup);
 
-	return  acsTenantSetup?.filter(
+  const parameterData = acsTenantSetup?.filter(
 		(setup: any) => setup?.parameter?.key === parameter
-	)[0]?.value;
+	)[0]
+  console.log("parameterData", parameterData)
+  if (parameterData) {
+    console.log("parameterData.value", parameterData.value)
+    return parameterData?.value;
+  } else {
+    console.log("returning empty string")
+    return ""
+  }
 
  };
 
