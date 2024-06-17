@@ -31,14 +31,12 @@ const DateTime = ({
 }) => {
 
 	const autoFocus = index === 0;
-	console.log("DATE VALUE ", value)
 	const dateValue = value ? moment(value).format("YYYY-MM-DD") : undefined;
 	const timeValue = value ? moment(value).format("h:mm A") : undefined;
 	const hourValue = value ? moment(value).format("h") : undefined;
 	const minValue = value ? moment(value).format("mm") : undefined;
 	const ampmValue = value ? moment(value).format("A") : undefined;
 
-	console.log("time values is " + timeValue)
 
 
 	const hourOptions = [{ value: "hr" as number | string, id: "" as number | string }]
@@ -104,26 +102,21 @@ const DateTime = ({
 
 
 
-	const handleTimeChange = (e: any) => {
-		const newTime = e.target.value
-		console.log("new time is " + newTime)
-		const newDateTime = new Date(dateValue + " " + newTime);
-		console.log("new date time " + newDateTime)
-		onChange && onChange({ target: { value: newDateTime } });
-		onBlur && onBlur({ target: { value: newDateTime } }, true);
-	}
-
-	const today = new Date();
-	const tomorrow = new Date(today)
-	tomorrow.setDate(tomorrow.getDate() + 1)
-	const dayAfterTomorrow = new Date(today)
-	dayAfterTomorrow.setDate(dayAfterTomorrow.getDate() + 2)
 
 
 	if (mode === "view") {
-		return <>{moment(value).format("dddd, MMMM Do YYYY, h:mm a")
-		}</>
+		if (!value) {
+			return null
+		} else {
+			return (<>{moment(value).format("dddd, MMMM Do YYYY, h:mm a")}</>)
+		}
 	} else {
+		const today = new Date();
+		const tomorrow = new Date(today)
+		tomorrow.setDate(tomorrow.getDate() + 1)
+		const dayAfterTomorrow = new Date(today)
+		dayAfterTomorrow.setDate(dayAfterTomorrow.getDate() + 2)
+
 		return (
 			<div className="flex flex-row justify-start items-start">
 				<div className="w-[200px] mr-2">

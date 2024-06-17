@@ -121,8 +121,6 @@ const ACSField = ({
 	const { mutate, isLoading: isMutating } = useUpdateRecord();
 
 	const handleBlur = (e: any, overrideTouched: boolean) => {
-		console.log("handle blur")
-		console.log("value is " + e?.target?.value)
 		if (!isMutating && mode === "edit" && !isInsideForm && (touched || overrideTouched)) {
 			setTouched(false);
 			mutate({ objectType, id, data: { [fieldName]: e?.target?.value }, queryClient, invalidateQueryKeys });
@@ -131,7 +129,6 @@ const ACSField = ({
 			setMode("view");
 		}
 		if (isInsideForm && handleFormChange) {
-			console.log("BLUR " + e?.target?.value)
 			handleFormChange(fieldName, e?.target?.value);
 		}
 	};
@@ -153,8 +150,6 @@ const ACSField = ({
 			}
 		}
 	}
-	console.log("value is " + value)
-	console.log("mode at bottome is	", mode)
 
 	const passthroughProps = {
 		index, componentType, objectType, fieldName, fieldMeta, mode, canEdit, data, value, isInsideForm, viewPlaceholder,
@@ -169,7 +164,6 @@ const ACSField = ({
 		)
 
 	} else {
-		console.log("pas	", passthroughProps)
 		return (
 			<FormWrapper mode={mode} isForm={mode === "edit" && !isInsideForm} onSubmit={handleBlur}>
 				<div key={index} className={layoutClassName} >
