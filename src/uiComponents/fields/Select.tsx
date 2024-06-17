@@ -52,6 +52,7 @@ const Select = ({
 		<div className={`${width}`} >
 			<select
 				value={value as string}
+				defaultValue="AM"
 				className={`w-full ${className}`}
 				onChange={handleChange}
 				onBlur={handleBlur}
@@ -60,9 +61,7 @@ const Select = ({
 
 				{
 					options.map((option: any) => {
-						return (<option key={option.id} value={option.id}>
-							{option.value}
-						</option>)
+						return (<option key={option.id} value={option.id}>{option.value}</option>)
 					})
 				}
 			</select >

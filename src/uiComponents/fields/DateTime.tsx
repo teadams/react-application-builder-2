@@ -1,7 +1,7 @@
 import React from "react";
 import moment from "moment";
+import Datepicker, { DateType } from "react-tailwindcss-datepicker";
 import { Select } from ".";
-import { usePropState } from "../../hooks";
 
 
 const DateTime = ({
@@ -20,7 +20,7 @@ const DateTime = ({
 	data?: Record<string, unknown>;
 	mode: string;
 	index?: number;
-	value?: Date;
+	value?: Date | undefined;
 	isForm?: boolean;
 	onBlur?: (e: unknown, mutatedValue: unknown) => void;
 	onChange?: (e: unknown) => void;
@@ -34,7 +34,27 @@ const DateTime = ({
 	console.log("DATE VALUE ", value)
 	const dateValue = value ? moment(value).format("YYYY-MM-DD") : undefined;
 	const timeValue = value ? moment(value).format("h:mm A") : undefined;
+	const hourValue = value ? moment(value).format("h") : undefined;
+	const minValue = value ? moment(value).format("mm") : undefined;
+	const ampmValue = value ? moment(value).format("A") : undefined;
+
 	console.log("time values is " + timeValue)
+
+
+	const hourOptions = [{ value: "hr" as number | string, id: "" as number | string }]
+	for (let i = 1; i <= 12; i++) {
+		hourOptions.push({ value: i, id: i });
+	}
+
+	const minOptions = [{ value: "min" as number | string, id: "" as number | string }]
+	minOptions.push({ value: "00", id: "00" });
+	minOptions.push({ value: "15", id: "15" });
+	minOptions.push({ value: "30", id: "30" });
+	minOptions.push({ value: "45", id: "45" });
+
+	const ampmOptions = []
+	ampmOptions.push({ value: "AM", id: "AM" });
+	ampmOptions.push({ value: "PM", id: "PM" });
 
 
 
@@ -48,14 +68,41 @@ const DateTime = ({
 		options.push({ value: hour + ":45 " + AMorPM, id: hour + ":45 " + AMorPM });
 	}
 
-	const handleDateChange = (e: any) => {
-		const newDate = e.target.value
-		const newT = timeValue ?? "1:00 AM"
-		const newDateTime = new Date(newDate + " " + (timeValue ?? "9:00 AM"));
+
+
+	const handleDateChange = (newDate: any) => {
+		newDate = newDate?.startDate
+		const foo = hourValue ?? "9"
+		const newDateTime = new Date(newDate + " " + (hourValue ?? "9") + ":" + (minValue ?? "00") + " " + (ampmValue ?? "AM"));
 		onChange && onChange({ target: { value: newDateTime } });
 		onBlur && onBlur({ target: { value: newDateTime } }, true);
 
 	}
+
+	const handleHourChange = (e: any) => {
+		const newHour = e.target.value
+		const newDateTime = new Date((dateValue ?? moment(new Date()).format("YYYY-MM-DD")) + " " + newHour + ":" + (minValue ?? "00") + " " + (ampmValue ?? "AM"));
+		onChange && onChange({ target: { value: newDateTime } });
+		onBlur && onBlur({ target: { value: newDateTime } }, true);
+	}
+
+	const handleMinChange = (e: any) => {
+		const newMin = e.target.value
+		const newDateTime = new Date((dateValue ?? moment(new Date()).format("YYYY-MM-DD")) + " " + (hourValue ?? "9") + ":" + newMin + " " + (ampmValue ?? "AM"));
+		onChange && onChange({ target: { value: newDateTime } });
+		onBlur && onBlur({ target: { value: newDateTime } }, true);
+	}
+
+
+	const handleAmPmChange = (e: any) => {
+		const newAmPm = e.target.value
+		const newDateTime = new Date((dateValue ?? moment(new Date()).format("YYYY-MM-DD")) + " " + (hourValue ?? "9") + ":" + (minValue ?? "00") + " " + newAmPm);
+		onChange && onChange({ target: { value: newDateTime } });
+		onBlur && onBlur({ target: { value: newDateTime } }, true);
+	}
+
+
+
 
 	const handleTimeChange = (e: any) => {
 		const newTime = e.target.value
@@ -66,21 +113,48 @@ const DateTime = ({
 		onBlur && onBlur({ target: { value: newDateTime } }, true);
 	}
 
+
 	if (mode === "view") {
 		return <>{moment(value).format("dddd, MMMM Do YYYY, h:mm a")
 		}</>
 	} else {
 		return (
-			<div className="flex flex-row">
+			<div className="flex flex-row justify-start items-start">
+				<div className="w-[200px] mr-2">
+					<Datepicker value={{ startDate: dateValue as DateType, endDate: dateValue as DateType }} asSingle={true} useRange={false} onChange={handleDateChange} autoFocus={autoFocus}
+						inputClassName={`w-[200px] ${className} ${fontSizeClass} ${textColorClass} ${fontWeightClass}`}
+					/>
+				</div>
+				{/* 
 				<input type="date" autoFocus={autoFocus}
 					onChange={handleDateChange}
 					value={dateValue}
-					className={`${className} ${fontSizeClass} ${textColorClass} ${fontWeightClass}`} />
-				<Select
-					onChange={handleTimeChange}
-					value={timeValue}
-					mode={mode} options={options} className={`${className} ${fontSizeClass} ${textColorClass} ${fontWeightClass}`} />
+					className={`${className} ${fontSizeClass} ${textColorClass} ${fontWeightClass}`} /> */}
+				<div className="flex flex-row justify-start items-center">
+					<div className="mr-2">
+						<Select
+							onChange={handleHourChange}
+							value={hourValue}
+							width="w-[100px]"
+							mode={mode} options={hourOptions} className={`${className} ${fontSizeClass} ${textColorClass} ${fontWeightClass} `} />
+					</div>
 
+					<div className="flex flex-row items-center mr-5">
+						: <Select
+							onChange={handleMinChange}
+							value={minValue}
+							width="w-[100px]"
+							mode={mode} options={minOptions} className={`${className} ${fontSizeClass} ${textColorClass} ${fontWeightClass} ml-2`} />
+					</div>
+
+					<div className="mr-5">
+						<Select
+							onChange={handleAmPmChange}
+							value={ampmValue}
+							width="w-[75 px]"
+							mode={mode} options={ampmOptions} className={`${className} ${fontSizeClass} ${textColorClass} ${fontWeightClass} `} />
+					</div>
+				</div>
 			</div>
 		)
 	}
