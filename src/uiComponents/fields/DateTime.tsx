@@ -113,6 +113,12 @@ const DateTime = ({
 		onBlur && onBlur({ target: { value: newDateTime } }, true);
 	}
 
+	const today = new Date();
+	const tomorrow = new Date(today)
+	tomorrow.setDate(tomorrow.getDate() + 1)
+	const dayAfterTomorrow = new Date(today)
+	dayAfterTomorrow.setDate(dayAfterTomorrow.getDate() + 2)
+
 
 	if (mode === "view") {
 		return <>{moment(value).format("dddd, MMMM Do YYYY, h:mm a")
@@ -121,7 +127,34 @@ const DateTime = ({
 		return (
 			<div className="flex flex-row justify-start items-start">
 				<div className="w-[200px] mr-2">
-					<Datepicker value={{ startDate: dateValue as DateType, endDate: dateValue as DateType }} asSingle={true} useRange={false} onChange={handleDateChange}
+					<Datepicker value={{ startDate: dateValue as DateType, endDate: dateValue as DateType }}
+						asSingle={true} useRange={false} onChange={handleDateChange}
+						showShortcuts={true}
+						configs={{
+							shortcuts: {
+								today: {
+									text: "Today",
+									period: {
+										start: moment(today).format("YYYY-MM-DD"),
+										end: moment(today).format("YYYY-MM-DD"),
+									},
+								},
+								tomorrow: {
+									text: "Tomorrow",
+									period: {
+										start: moment(tomorrow).format("YYYY-MM-DD"),
+										end: moment(tomorrow).format("YYYY-MM-DD"),
+									},
+								},
+								dayAfterTomorrow: {
+									text: "Day after Tomorrow",
+									period: {
+										start: moment(dayAfterTomorrow).format("YYYY-MM-DD"),
+										end: moment(dayAfterTomorrow).format("YYYY-MM-DD"),
+									},
+								}
+							}
+						}}
 
 						inputClassName={`w-[200px] ${className} ${fontSizeClass} ${textColorClass} ${fontWeightClass}`}
 					/>
