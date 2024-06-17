@@ -121,7 +121,8 @@ const DateTime = ({
 		return (
 			<div className="flex flex-row justify-start items-start">
 				<div className="w-[200px] mr-2">
-					<Datepicker value={{ startDate: dateValue as DateType, endDate: dateValue as DateType }} asSingle={true} useRange={false} onChange={handleDateChange} autoFocus={autoFocus}
+					<Datepicker value={{ startDate: dateValue as DateType, endDate: dateValue as DateType }} asSingle={true} useRange={false} onChange={handleDateChange}
+
 						inputClassName={`w-[200px] ${className} ${fontSizeClass} ${textColorClass} ${fontWeightClass}`}
 					/>
 				</div>
