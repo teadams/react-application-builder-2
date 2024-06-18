@@ -40,7 +40,7 @@ const TextArea = ({
 	}
 
 	if (mode === "view") {
-		return <>{value}</>
+		return <div className="whitespace-pre-wrap">{value}</div>
 	} else {
 		return (
 
