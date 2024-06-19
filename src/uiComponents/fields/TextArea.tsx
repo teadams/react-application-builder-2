@@ -25,35 +25,34 @@ const TextArea = ({
 	isForm?: boolean;
 	onBlur?: (e: unknown) => void;
 	onChange?: (e: unknown) => void;
-	className?: string
+	className?: string;
 	fontWeightClass?: string;
 	textColorClass?: string;
 	fontSizeClass?: string;
-}
-) => {
-
+}) => {
 	console.log("fieldMeta", fieldMeta);
 	const autoFocus = index === 0;
 
 	const handleOnBlur = (e: unknown) => {
 		onBlur && onBlur(e);
-	}
+	};
 
 	if (mode === "view") {
-		return <div className="whitespace-pre-wrap">{value}</div>
+		return <div className="whitespace-pre-wrap">{value as string}</div>;
 	} else {
 		return (
-
-			<textarea autoFocus={autoFocus} value={value as string}
+			<textarea
+				autoFocus={autoFocus}
+				value={value as string}
 				onChange={(e) => {
-					onChange && onChange(e)
+					onChange && onChange(e);
 				}}
 				onBlur={handleOnBlur}
 				rows={fieldMeta?.rows}
 				cols={fieldMeta?.cols}
-				className={`${className} ${fontSizeClass} ${textColorClass} ${fontWeightClass}`} />
-		)
-
+				className={`${className} ${fontSizeClass} ${textColorClass} ${fontWeightClass}`}
+			/>
+		);
 	}
-}
+};
 export { TextArea };
