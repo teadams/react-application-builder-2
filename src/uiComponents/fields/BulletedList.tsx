@@ -5,13 +5,13 @@ import { usePropState } from "../../hooks";
 const BulletListView = ({ list, introText }: { list: string[], introText: string }) => {
 	return (<>
 		{list && list.length > 0 &&
-			<div className="mt-2 text-colorTextPrimary">
-				<p className="text-colorTextPrimary text-base">
+			<div className="mt-2 ">
+				<p >
 					{introText && introText}
 				</p>
 				<ul className="mt-1">
 					{list.map((topic: string, index: number) => (
-						<li key={index} className="text-colorTextPrimary text-sm">
+						<li key={index} className="">
 							<span className="mr-1">👉</span> {topic as string}{" "}
 						</li>
 					))}
