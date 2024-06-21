@@ -44,7 +44,7 @@ const Avatar = ({
 	onBlur,
 	value: propValue = "", // need to default to "" or react will complain about controlled/uncontrolled input
 	isForm = false,
-	height = 40,
+	height = 80,
 	width = 80,
 	className,
 	fontSizeClass,
