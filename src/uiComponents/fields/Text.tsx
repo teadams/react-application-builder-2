@@ -32,7 +32,6 @@ const Text = ({
 
 
 	const autoFocus = index === 0;
-	console.log("text value is ", value)
 
 	const handleOnBlur = (e: unknown) => {
 		onBlur && onBlur(e);
