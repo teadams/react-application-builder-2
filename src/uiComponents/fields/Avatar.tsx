@@ -91,7 +91,7 @@ const Avatar = ({
 			return (
 				<>
 					<Image
-						className={` rounded-full`}
+						className={`w-[${width}px] h-[${height}px] rounded-full object-cover`}
 						src={value as string}
 						width={width}
 						height={height}
