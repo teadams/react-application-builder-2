@@ -3,10 +3,8 @@ import Image from "next/image";
 import * as api from "../../lib/api";
 import imageHolder from "../../../../../public/images/image-holder.svg";
 
-
 import { FormWrapper } from ".";
 import { usePropState } from "../../hooks";
-
 
 const getFileFromS3 = async (fileName: any) => {
 	const path = "recruiter_extension/getFileFromS3";
@@ -46,7 +44,7 @@ const Avatar = ({
 	onBlur,
 	value: propValue = "", // need to default to "" or react will complain about controlled/uncontrolled input
 	isForm = false,
-	height = 80,
+	height = 40,
 	width = 80,
 	className,
 	fontSizeClass,
@@ -54,7 +52,7 @@ const Avatar = ({
 	fontWeightClass,
 	fieldMeta,
 	objectType,
-	fieldName
+	fieldName,
 }: {
 	data?: Record<string, unknown>;
 	mode: string;
@@ -65,7 +63,7 @@ const Avatar = ({
 	height?: number;
 	width?: number;
 	onBlur?: (e: unknown, mutatedValue: unknown) => void;
-	className?: string
+	className?: string;
 	fontWeightClass?: string;
 	textColorClass?: string;
 	fontSizeClass?: string;
@@ -75,35 +73,34 @@ const Avatar = ({
 }) => {
 	const [isHovered, setIsHovered] = React.useState(false);
 	const [value, setValue] = usePropState(propValue);
-	const fieldId = "avatarUploader-" + objectType + "-" + fieldName + "-" + data?.id;
-
+	const fieldId =
+		"avatarUploader-" + objectType + "-" + fieldName + "-" + data?.id;
 
 	const handleFileAttach = async (file: any) => {
 		const uploadFile = file;
-		const uploadFileName = Date.now() + "-" + uploadFile.name.replace(/\s+/g, "");
-		const uploadS3Filename = await uploadFileToS3(
-			uploadFile,
-			uploadFileName
-		);
+		const uploadFileName =
+			Date.now() + "-" + uploadFile.name.replace(/\s+/g, "");
+		const uploadS3Filename = await uploadFileToS3(uploadFile, uploadFileName);
 		setValue(uploadS3Filename);
-		setIsHovered(false)
+		setIsHovered(false);
 		onBlur && onBlur({ target: { value: uploadS3Filename } }, uploadS3Filename);
-	}
+	};
 
 	if (mode === "view" && !canEdit) {
 		if (value) {
-			return (<>
-				<Image
-					className={` rounded-full`}
-					src={value as string}
-					width={width}
-					height={height}
-					alt="picture"
-				/>
-			</>
-			)
+			return (
+				<>
+					<Image
+						className={` rounded-full`}
+						src={value as string}
+						width={width}
+						height={height}
+						alt="picture"
+					/>
+				</>
+			);
 		} else {
-			return null
+			return null;
 		}
 	}
 
@@ -111,19 +108,29 @@ const Avatar = ({
 		<div>
 			<label htmlFor={fieldId}>
 				{isHovered && (mode !== "view" || canEdit) && (
-					<Image className={`justify-center absolute w-[${width}px] h-[${height}px] rounded-full`} src={imageHolder} alt="addImage" />
+					<Image
+						className={`justify-center absolute w-[${width}px] h-[${height}px] rounded-full`}
+						src={imageHolder}
+						alt="addImage"
+					/>
 				)}
 
-				<div className={` flex justify-center  text-3xl text-white bg-blue-400 items-center 
+				<div
+					className={` flex justify-center  text-3xl text-white bg-blue-400 items-center 
 					rounded-full w-[${width}px] h-[80px] h-[${height}px] cursor-pointer hover:opacity-30`}
 					onMouseEnter={() => setIsHovered(true)}
-					onMouseLeave={() => setIsHovered(false)}>
-
-					{
-						value ?
-							<Image src={value} alt="upload image" width={width} height={height} />
-							: <span >+</span>
-					}
+					onMouseLeave={() => setIsHovered(false)}
+				>
+					{value ? (
+						<Image
+							src={value}
+							alt="upload image"
+							width={width}
+							height={height}
+						/>
+					) : (
+						<span>+</span>
+					)}
 				</div>
 			</label>
 			<input
@@ -138,12 +145,8 @@ const Avatar = ({
 				}}
 				id={fieldId}
 			/>
-		</div >
-	)
-}
-
-
-
-
+		</div>
+	);
+};
 
 export { Avatar };

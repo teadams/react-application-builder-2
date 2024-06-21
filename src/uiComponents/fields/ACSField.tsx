@@ -39,6 +39,8 @@ const ACSField = ({
 	defaultValue,
 	lookupValue,
 	lookupField = "id",
+	height,
+	width,
 	labelClassName = "font-family-red-hat text-xs pl-1 text-[#18264C]",
 	layoutClassName = "flex gap-y-2 flex-col",
 	//	 focus:outline-none focus:ring-0
@@ -63,6 +65,8 @@ const ACSField = ({
 	label?: string | undefined;
 	value?: unknown;
 	defaultValue?: unknown;
+	height?: number;
+	width?: number;
 	lookupValue?: any;
 	lookupField?: string;
 	labelClassName?: string;
@@ -187,6 +191,8 @@ const ACSField = ({
 		objectType,
 		fieldName,
 		fieldMeta,
+		height,
+		width,
 		mode,
 		canEdit,
 		data,
