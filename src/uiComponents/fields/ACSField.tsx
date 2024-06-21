@@ -50,6 +50,7 @@ const ACSField = ({
 	textColorClass,
 	fontWeightClass,
 	invalidateQueryKeys,
+	passedProps,
 }: {
 	objectType: string;
 	id?: string | number;
@@ -76,6 +77,7 @@ const ACSField = ({
 	textColorClass?: string;
 	fontSizeClass?: string;
 	invalidateQueryKeys?: QueryKey[];
+	passedProps?: any;
 }) => {
 	propValue = propValue ?? propData?.[fieldName];
 	if (propMode === "create" && propValue === undefined) {
@@ -209,7 +211,8 @@ const ACSField = ({
 	if (mode === "view") {
 		return (
 			<div onClick={handleClick}>
-				<FieldComponent {...passthroughProps} />
+				{" "}
+				<FieldComponent {...passthroughProps} passedProps={passedProps} />
 			</div>
 		);
 	} else {
@@ -225,6 +228,7 @@ const ACSField = ({
 						onBlur={handleBlur}
 						onChange={handleChange}
 						{...passthroughProps}
+						assedProps={passedProps}
 					/>
 				</div>
 			</FormWrapper>
@@ -233,7 +237,7 @@ const ACSField = ({
 };
 
 const FieldComponent = (props: any) => {
-	const { componentType, ...rest } = props;
+	const { componentType, passedProps = {}, ...rest } = props;
 
 	if (props.mode === "view" && !props?.value && props?.viewPlaceholder) {
 		return (
@@ -290,7 +294,7 @@ const FieldComponent = (props: any) => {
 		case "DateTime":
 			return <DateTime {...rest} />;
 		case "BulletedList":
-			return <BulletedList {...rest} />;
+			return <BulletedList {...rest} {...passedProps} />;
 		case "Upload":
 			return <Upload {...rest} />;
 		default: {
