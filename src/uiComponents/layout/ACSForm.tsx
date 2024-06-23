@@ -43,8 +43,6 @@ const ACSForm = ({
 	const { handleSubmit, handleChange } = useForm({ objectType, fields, mode, path, onSuccess, closeModal, hiddenFields, data, preSubmit, postSubmit, overrideSubmit, invalidateQueryKeys })
 	const validated = true;
 
-	console.log("id", id)
-	console.log("objectType", objectType)
 
 	const { data: idData } = useGetDataById({
 		objectType,
@@ -52,17 +50,14 @@ const ACSForm = ({
 		enabled: mode === "edit" && !data
 	});
 
-	console.log("id", id)
-	console.log("idData is ", idData)
 	data = data ?? idData;
-	console.log("data is ", data)
 
 
 	if (mode === "edit" && !data) { return null }
 
 	return (
 		<>
-			<form className="flex flex-col gap-y-4 mt-8">
+			<div className="flex flex-col gap-y-4 mt-8">
 				{formComponent ? <FormComponent
 					testProp="testProp"
 					handleFormChange={handleChange}
@@ -89,13 +84,15 @@ const ACSForm = ({
 						})}
 					</>
 				}
-			</form >
-			<div className="flex justify-center w-full">
-				<button onClick={handleSubmit} disabled={!validated}
-					className={` mt-7  shrink ${validated ? "bg-[#18264C] text-white" : "bg-[#F3F3F3] text-[#808080]"}  py-3 px-10 rounded-md `}>
-					Submit
-				</button >
-			</div>
+				<div className="flex justify-center w-full">
+
+					<button onClick={handleSubmit} disabled={!validated}
+						className={` mt-7  shrink ${validated ? "bg-[#18264C] text-white" : "bg-[#F3F3F3] text-[#808080]"}  py-3 px-10 rounded-md `}>
+						Submit
+					</button >
+				</div>
+			</div >
+
 		</>
 	)
 }
