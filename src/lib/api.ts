@@ -62,7 +62,7 @@ export const getStage = () => {
 
 export const getServerDomainFromHostname = () => {
   const serverDomain = acsHooks.getServerDomain
-    ? acsHooks.getServerDomain()
+    ? acsHooks.getServerDomain(getHostname())
     : "";
 
   const domainFragmentsToRemove = acsHooks.getDomainFragmentsToRemove
