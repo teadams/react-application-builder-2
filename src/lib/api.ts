@@ -64,13 +64,15 @@ export const getServerDomainFromHostname = () => {
   const serverDomain = acsHooks.getServerDomain
     ? acsHooks.getServerDomain(getHostname())
     : "";
-
+  console.log("serveri domain is " + serverDomain)
   const domainFragmentsToRemove = acsHooks.getDomainFragmentsToRemove
     ? acsHooks.getDomainFragmentsToRemove()
     : "";
   const hostname = getHostname();
+  console.log("hostname is " + hostname)
 
   const localTenant = getTenant();
+  console.log("local tenant is " + localTenant)
   if (
     localTenant?.includes("localhost") ||
     (!localTenant &&
@@ -91,12 +93,14 @@ export const getServerDomainFromHostname = () => {
         }
       }
     }
-    const serverDomainLength = serverDomain?.split(".").length ?? 0;
+ //   const serverDomainLength = serverDomain?.split(".").length ?? 0;
+ //   console.log("server domain length is " + serverDomainLength)
 
     splicedHostname = hostnameSplit.slice(
       0,
-      hostnameSplit.length - serverDomainLength
+      hostnameSplit.length - 2
     );
+    console.log("spliced hostname is " + splicedHostname)
     if (localTenant) {
       // using local storage not hostname
       splicedHostname[0] = localTenant;
