@@ -81,9 +81,8 @@ export const getServerDomainFromHostname = () => {
     return "http://localhost:2000";
   }
   const hostnameSplit = hostname.split(".");
-  let splicedHostname;
   if (hostnameSplit.includes("vercel")) {
-    splicedHostname = ["vercel", "stage"];
+    hostnameSplit = ["vercel", "stage"];
   } else {
     if (domainFragmentsToRemove) {
       for (const fragment of domainFragmentsToRemove) {
@@ -96,28 +95,28 @@ export const getServerDomainFromHostname = () => {
  //   const serverDomainLength = serverDomain?.split(".").length ?? 0;
  //   console.log("server domain length is " + serverDomainLength)
 
-    splicedHostname = hostnameSplit.slice(
-      0,
-      hostnameSplit.length - 2
-    );
-    console.log("spliced hostname is " + splicedHostname)
+    // splicedHostname = hostnameSplit.slice(
+    //   0,
+    //   hostnameSplit.length - 2
+    // );
+    // console.log("spliced hostname is " + splicedHostname)
     if (localTenant) {
       // using local storage not hostname
-      splicedHostname[0] = localTenant;
+      hostnameSplit[0] = localTenant;
       const stage = getStage();
-      if (stage && !splicedHostname.includes("stage")) {
-        splicedHostname.push("stage");
+      if (stage && !hostnameSplit.includes("stage")) {
+        hostnameSplit.push("stage");
       } else {
-        const index = splicedHostname.indexOf("stage");
+        const index = hostnameSplit.indexOf("stage");
         if (index > -1) {
-          splicedHostname.splice(index, 1);
+          hostnameSplit.splice(index, 1);
         }
       }
     }
  
   }
 
-  const finalHostname = `https://${splicedHostname
+  const finalHostname = `https://${hostnameSplit
     .concat(serverDomain)
     .join(".")}`;
   return finalHostname;
