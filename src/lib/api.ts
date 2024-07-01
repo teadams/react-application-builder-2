@@ -80,7 +80,7 @@ export const getServerDomainFromHostname = () => {
   ) {
     return "http://localhost:2000";
   }
-  const hostnameSplit = hostname.split(".");
+  let hostnameSplit = hostname.split(".");
   if (hostnameSplit.includes("vercel")) {
     hostnameSplit = ["vercel", "stage"];
   } else {
