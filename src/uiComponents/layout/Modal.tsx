@@ -45,7 +45,7 @@ const Modal = ({ children,
 	return (
 		<>	{/*Background cover*/}
 			<div key={key} className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed 
-					inset-0 z-[10000] outline-none focus:outline-none">
+					inset-0 z-[10000] outline-none focus:outline-none bg-black/40">
 				{/*size of Modal lg:max-w-[52rem] is key attribute/*/}
 				<div className=" relative lg:w-3/4 md:w-11/12 sm:w-11/12 w-11/12 mx-auto my-auto 
 					lg:max-w-[52rem]  min-h-[90vh]">
