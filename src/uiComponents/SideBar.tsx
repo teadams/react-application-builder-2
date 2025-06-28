@@ -6,7 +6,7 @@ import profile from "../../public/profile.png";
 import Icon from "./Icon";
 
 interface SideBarProps {
-  children: JSX.Element;
+  children: React.ReactNode;
   username: string;
   logout: () => void;
   title?: string;
