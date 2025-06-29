@@ -32,6 +32,7 @@ const getHeaders = () => {
 };
 
 export const getDomain = () => {
+  console.log("environment var is",  process.env.NEXT_PUBLIC_API_LOCATION)
   return process.env.NEXT_PUBLIC_API_LOCATION
     ? process.env.NEXT_PUBLIC_API_LOCATION
     : getServerDomainFromHostname();
