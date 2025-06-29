@@ -129,9 +129,10 @@ export async function callAPI({
   data = {},
   method = "GET",
 }: API): Promise<unknown> {
-
+  console.log("call api domain", domain)
   if (!domain) domain = getDomain();
 
+  console.log("domain is " + domain )
   const headers = getHeaders();
 
   try {
