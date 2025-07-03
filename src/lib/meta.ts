@@ -5,12 +5,14 @@ import { ACSMetaModel } from "../types";
 import * as api from "./api";
 
 export async function load(type = "all"): Promise<ACSMetaModel> {
-  let metaResult;
+  let metaResult ={} as ACSMetaModel;
   if (process.env.NEXT_PUBLIC_LOCAL_META) {
     metaResult = require(`../../../meta/meta.json`);
   } else {
-    const path = "acs/acsMeta/" + type;
-    metaResult = await api.callAPI({ path });
+    if (process.env.NEXT_PUBLIC_FORGO_META !== "true") {
+     const path = "acs/acsMeta/" + type;
+     metaResult = await api.callAPI({ path }) as ACSMetaModel;
+    }
   }
   return metaResult as ACSMetaModel;
 }
